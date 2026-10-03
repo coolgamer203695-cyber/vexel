@@ -78,6 +78,24 @@ command on boot (`npm install -g .`), so collaborators can run
 models work on Replit; native GUI windows need a desktop OS, and the
 GPU path needs a machine with a GPU.
 
+### On Google Colab / Kaggle (notebook VMs)
+
+Open the ready-made notebook in Colab:
+
+https://colab.research.google.com/github/coolgamer203695-cyber/vexel/blob/main/notebooks/quickstart.ipynb
+
+Or in any Ubuntu notebook (Kaggle: enable **Settings → Internet**
+first) run this cell:
+
+```python
+!test -d vexel || git clone --depth 1 https://github.com/coolgamer203695-cyber/vexel
+!bash vexel/tools/install_notebook.sh vexel
+```
+
+The script installs Node + Rust only if missing, installs the `vexel`
+CLI, and self-tests — afterwards `!vexel run vexel/main.vxl` works in
+any later cell. Re-run it once per session (VMs are wiped).
+
 ### From source
 
 ```bash
