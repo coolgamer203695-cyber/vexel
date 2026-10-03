@@ -100,7 +100,16 @@ say "self-test"
 vexel version
 TEST_DIR=$(mktemp -d)
 printf 'print "vexel works on this VM!"\n' > "$TEST_DIR/hello.vxl"
-vexel run "$TEST_DIR/hello.vxl"
+say "compiling hello.vxl - the FIRST compile is silent and can take
+     30-90s on notebook VMs (cold rustc cache). Let it finish."
+START=$(date +%s)
+if ! timeout 300 vexel run "$TEST_DIR/hello.vxl"; then
+  echo ""
+  echo "self-test failed or timed out after 300s."
+  echo "Check manually:  !vexel run $TEST_DIR/hello.vxl"
+  exit 1
+fi
+say "self-test passed in $(($(date +%s) - START))s (warm runs are much faster)"
 rm -rf "$TEST_DIR"
 
 say "done - try:  !vexel run vexel/main.vxl"
