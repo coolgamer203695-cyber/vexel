@@ -1,0 +1,8 @@
+create a window titled "Ax Ask"
+
+asker = after 2 seconds {
+    answer = ask "Continue?"
+    json write answer to "ax_ask.json"
+}
+
+window.show

@@ -1,0 +1,18 @@
+// Vexel 2.9: terminal sessions keep one working directory
+// across cd and run commands.
+terminal {
+    cd "."
+    run "echo Hello from Vexel terminal"
+}
+
+out = run "echo captured output"
+print "got:" + out
+
+// Failures are catchable, never silent.
+try {
+    terminal {
+        cd "no-such-directory"
+    }
+} error {
+    print error.message
+}

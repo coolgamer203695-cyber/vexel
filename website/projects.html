@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build a Vexel Desktop Hub — Projects</title>
+<meta name="description" content="Course project: build a multi-tab Vexel desktop hub with calculator, notes, random generator, system utility and about page.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">2.2.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">☰</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap read">
+  <p class="eyebrow" style="margin-top:34px">Course project</p>
+  <h1 style="margin-top:0">Build a Vexel Desktop Hub</h1>
+  <p class="lead">Assemble everything from lessons 79–93 into one multi-tab desktop app: calculator, notes, random generator, system utility and about page. Each step below is a complete program — run it before moving on.</p>
+
+  <h2>Step 1 — Hub shell with five tabs</h2>
+  <p>Window, tab bar, five pages, and an about label. The skeleton every later step grows on.</p>
+  <pre data-vxl data-filename="hub.vxl">create a window titled "Desktop Hub"
+
+window.width = 560
+window.height = 480
+
+tabs = add a tab bar
+tabs.x = 20
+tabs.y = 20
+tabs.width = 520
+tabs.height = 440
+
+calc = tabs.add "Calculator"
+notes = tabs.add "Notes"
+dice = tabs.add "Random"
+system = tabs.add "System"
+about = tabs.add "About"
+
+info = add a text titled "Desktop Hub 2.2.0" to about
+info.x = 20
+info.y = 20
+info.width = 400
+info.height = 30
+
+motto = add a text titled "Build. Compile. Create." to about
+motto.x = 20
+motto.y = 60
+motto.width = 400
+motto.height = 30
+
+window.show</pre>
+
+  <h2>Step 2 — Calculator tab</h2>
+  <p>Display plus 7, + and = with the classic current/first/op state. Digits append, + stores, = computes safely.</p>
+  <pre data-vxl data-filename="hub.vxl">create a window titled "Desktop Hub"
+
+window.width = 560
+window.height = 480
+
+tabs = add a tab bar
+tabs.x = 20
+tabs.y = 20
+tabs.width = 520
+tabs.height = 440
+
+calc = tabs.add "Calculator"
+notes = tabs.add "Notes"
+dice = tabs.add "Random"
+system = tabs.add "System"
+about = tabs.add "About"
+
+calcDisplay = add an output box to calc
+calcDisplay.x = 20
+calcDisplay.y = 20
+calcDisplay.width = 440
+calcDisplay.height = 60
+
+seven = add a button titled "7" to calc
+seven.x = 20
+seven.y = 100
+seven.width = 130
+seven.height = 55
+
+plus = add a button titled "+" to calc
+plus.x = 160
+plus.y = 100
+plus.width = 130
+plus.height = 55
+
+equals = add a button titled "=" to calc
+equals.x = 300
+equals.y = 100
+equals.width = 130
+equals.height = 55
+
+current = ""
+first = ""
+op = ""
+
+seven.on click {
+    current = current + "7"
+    calcDisplay.text = current
+}
+
+plus.on click {
+    first = current
+    op = "+"
+    current = ""
+    calcDisplay.text = ""
+}
+
+equals.on click {
+    second = calcDisplay.text
+    try {
+        f = number of first
+        s = number of second
+        if op = "+" {
+            result = f + s
+        } else {
+            result = s
+        }
+        calcDisplay.text = result
+        current = calcDisplay.text
+    } error {
+        calcDisplay.text = error.message
+    }
+}
+
+window.show</pre>
+
+  <h2>Step 3 — Notes tab</h2>
+  <p>Input, Add button, task list, live count and status line — the lesson-92 pattern parented onto the notes page.</p>
+  <pre data-vxl data-filename="hub.vxl">create a window titled "Desktop Hub"
+
+window.width = 560
+window.height = 480
+
+tabs = add a tab bar
+tabs.x = 20
+tabs.y = 20
+tabs.width = 520
+tabs.height = 440
+
+calc = tabs.add "Calculator"
+notes = tabs.add "Notes"
+dice = tabs.add "Random"
+system = tabs.add "System"
+about = tabs.add "About"
+
+taskInput = add an input box titled "New note..." to notes
+taskInput.x = 20
+taskInput.y = 20
+taskInput.width = 280
+taskInput.height = 40
+
+addBtn = add a button titled "Add" to notes
+addBtn.x = 310
+addBtn.y = 20
+addBtn.width = 120
+addBtn.height = 40
+
+tasks = add a list to notes
+tasks.x = 20
+tasks.y = 75
+tasks.width = 410
+tasks.height = 220
+
+countLabel = add a text titled "0 notes" to notes
+countLabel.x = 20
+countLabel.y = 305
+countLabel.width = 410
+countLabel.height = 30
+
+count = 0
+
+addBtn.on click {
+    if taskInput.text = "" {
+        countLabel.text = "Type a note first!"
+    } else {
+        tasks.add taskInput.text
+        count = count + 1
+        countLabel.text = "Notes: " + count
+        taskInput.text = ""
+    }
+}
+
+window.show</pre>
+
+  <h2>Step 4 — Random generator and system utility</h2>
+  <p>A dice roller for the Random page, plus a volume slider with a live readout for the System page.</p>
+  <pre data-vxl data-filename="hub.vxl">create a window titled "Desktop Hub"
+
+window.width = 560
+window.height = 480
+
+tabs = add a tab bar
+tabs.x = 20
+tabs.y = 20
+tabs.width = 520
+tabs.height = 440
+
+calc = tabs.add "Calculator"
+notes = tabs.add "Notes"
+dice = tabs.add "Random"
+system = tabs.add "System"
+about = tabs.add "About"
+
+rollBtn = add a button titled "Roll a die" to dice
+rollBtn.x = 20
+rollBtn.y = 20
+rollBtn.width = 200
+rollBtn.height = 45
+
+rollOut = add an output box to dice
+rollOut.x = 20
+rollOut.y = 80
+rollOut.width = 410
+rollOut.height = 80
+
+rollBtn.on click {
+    roll = r from 1 to 6
+    rollOut.text = "Rolled: " + roll
+}
+
+vol = add a slider to system
+vol.x = 20
+vol.y = 20
+vol.width = 410
+vol.minimum = 0
+vol.maximum = 100
+vol.value = 50
+
+volLabel = add a text titled "Volume: 50" to system
+volLabel.x = 20
+volLabel.y = 70
+volLabel.width = 410
+volLabel.height = 30
+
+vol.on change {
+    volLabel.text = "Volume: " + vol.value
+}
+
+window.show</pre>
+
+  <h2>Step 5 — Polish: theme and status</h2>
+  <p>Night mode for the whole hub and a status output confirming the build. Combine steps 2–4 into this file for the finished hub.</p>
+  <pre data-vxl data-filename="hub.vxl">create a window titled "Desktop Hub"
+
+use theme "dark"
+
+window.width = 560
+window.height = 480
+
+tabs = add a tab bar
+tabs.x = 20
+tabs.y = 20
+tabs.width = 520
+tabs.height = 360
+
+calc = tabs.add "Calculator"
+notes = tabs.add "Notes"
+dice = tabs.add "Random"
+system = tabs.add "System"
+about = tabs.add "About"
+
+status = add an output box
+status.x = 20
+status.y = 395
+status.width = 520
+status.height = 55
+status.text = "Hub ready. Pick a tab!"
+
+rollBtn = add a button titled "Roll a die" to dice
+rollBtn.x = 20
+rollBtn.y = 20
+rollBtn.width = 200
+rollBtn.height = 45
+
+rollOut = add an output box to dice
+rollOut.x = 20
+rollOut.y = 80
+rollOut.width = 410
+rollOut.height = 80
+
+rollBtn.on click {
+    roll = r from 1 to 6
+    rollOut.text = "Rolled: " + roll
+    status.text = "Rolled a die."
+}
+
+window.show</pre>
+  <p>Run the hub with <code>vexel hub.vxl</code>, then extend it: clear buttons, JSON note saving (lesson 99), a stopwatch timer (lesson 95).</p>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 2.2.0 — a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 2.2.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examples…" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/lessons-7.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

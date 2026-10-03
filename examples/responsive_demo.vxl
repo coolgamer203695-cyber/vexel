@@ -1,0 +1,27 @@
+// Vexel 2.9: responsive layout with percent sizing,
+// edge anchoring and manual positioning side by side.
+create a window titled "Responsive Demo"
+
+window.width = 640
+window.height = 480
+
+title = add a text titled "Resize me"
+title.x = 20
+title.y = 20
+title.height = 40
+set title width to 90 percent
+
+side = add a button titled "Pinned"
+side.width = 140
+side.height = 45
+side.x = 20
+side.y = 80
+side.anchor = "bottom right"
+
+wide = add a button titled "Half"
+wide.x = 20
+wide.y = 140
+wide.height = 45
+set wide width to 50 percent
+
+window.show

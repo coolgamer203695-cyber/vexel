@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentation — Vexel 2.2.0</title>
+<meta name="description" content="Vexel 2.2.0 language reference: syntax, examples and notes for every feature. Searchable, local, no account.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">2.2.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">☰</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="docs.html" aria-current="page">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+  <div class="docs-layout" style="padding-top:30px">
+    <nav class="side-nav" aria-label="Documentation sections" id="docsNav"></nav>
+    <div>
+      <p class="eyebrow">Docs · Vexel 2.2.0</p>
+      <h1 style="margin-top:0">Language reference</h1>
+      <p class="lead">Reference-style documentation: syntax, description, examples, notes and related topics. New here? Start with the <a href="learn.html">course</a> instead.</p>
+      <label class="sr-only" for="docFilter">Filter documentation</label>
+      <input id="docFilter" type="search" placeholder="Filter: print, button, json…" autocomplete="off" style="width:100%;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 15px;font-size:.95rem;font-family:var(--font)">
+      <div id="docsGroups"></div>
+    </div>
+    <aside class="toc-right" aria-label="On this page">
+      <h4>On this page</h4>
+      <div id="docsToc"></div>
+    </aside>
+  </div>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 2.2.0 — a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 2.2.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examples…" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/lessons-7.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var groups = document.getElementById("docsGroups");
+  var nav = document.getElementById("docsNav");
+  var toc = document.getElementById("docsToc");
+  var filter = document.getElementById("docFilter");
+  var cats = [];
+  window.DOCS.forEach(function (d) { if (cats.indexOf(d.category) < 0) cats.push(d.category); });
+  function render(q) {
+    groups.innerHTML = "";
+    nav.innerHTML = "";
+    toc.innerHTML = "";
+    cats.forEach(function (c) {
+      var items = window.DOCS.filter(function (d) {
+        if (d.category !== c) return false;
+        if (!q) return true;
+        return (d.title + " " + d.desc).toLowerCase().indexOf(q) >= 0;
+      });
+      if (!items.length) return;
+      var nh = document.createElement("h4");
+      nh.textContent = c;
+      nav.appendChild(nh);
+      var th = document.createElement("h4");
+      th.textContent = c;
+      toc.appendChild(th);
+      var sec = document.createElement("section");
+      var h2 = document.createElement("h2");
+      h2.textContent = c;
+      sec.appendChild(h2);
+      items.forEach(function (d) {
+        var a = document.createElement("a");
+        a.href = "doc.html?t=" + d.slug;
+        a.textContent = d.title;
+        nav.appendChild(a);
+        var t2 = document.createElement("a");
+        t2.href = "doc.html?t=" + d.slug;
+        t2.textContent = d.title;
+        toc.appendChild(t2);
+        var card = document.createElement("div");
+        card.className = "card";
+        card.style.margin = "12px 0";
+        var h3 = document.createElement("h3");
+        h3.style.margin = "0 0 6px";
+        var link = document.createElement("a");
+        link.href = "doc.html?t=" + d.slug;
+        link.textContent = d.title;
+        link.style.color = "var(--text)";
+        h3.appendChild(link);
+        if (d.since) {
+          var b = document.createElement("span");
+          b.className = "badge since";
+          b.style.marginLeft = "10px";
+          b.textContent = "Available since " + d.since;
+          h3.appendChild(b);
+        }
+        var p = document.createElement("p");
+        p.style.margin = "0";
+        p.style.color = "var(--muted)";
+        p.textContent = d.desc;
+        card.appendChild(h3);
+        card.appendChild(p);
+        sec.appendChild(card);
+      });
+      groups.appendChild(sec);
+    });
+    if (!groups.children.length) groups.innerHTML = "<p>No topics match. Try “button”, “json” or “error”.</p>";
+  }
+  filter.addEventListener("input", function () { render(filter.value.trim().toLowerCase()); });
+  render("");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learn Vexel — 106-lesson course</title>
+<meta name="description" content="Learn Vexel 2.2.0 from zero to desktop apps: 106 real lessons with examples, exercises and progress tracking. No account needed.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">2.2.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">☰</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="learn.html" aria-current="page">Learn</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap read">
+  <p class="eyebrow" style="margin-top:34px">Learn</p>
+  <h1 style="margin-top:0">The Vexel course</h1>
+  <p class="lead">106 lessons from your first <code>print</code> to timers, tasks, HTTP and desktop apps. Every lesson has real examples, common mistakes and an exercise. Progress is stored in your browser — no account needed.</p>
+  <div class="card" style="margin:20px 0" aria-label="Overall progress">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+      <strong id="overallLabel">0 / 106 completed</strong>
+      <a class="btn small ghost" id="continueBtn" href="lesson.html?n=1">Start at Lesson 1</a>
+    </div>
+    <div class="progress" style="margin-top:12px" role="progressbar" aria-label="Course progress" aria-valuemin="0" aria-valuemax="106" aria-valuenow="0" id="overallBarWrap"><i id="overallBar" style="width:0%"></i></div>
+  </div>
+  <div id="levels"></div>
+  <section class="section">
+    <h2>Finish with a real project</h2>
+    <p>After the course, build the <a href="projects.html">Vexel Desktop Hub</a>: calculator, notes, random generator, system utility and about page in one multi-tab app.</p>
+  </section>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 2.2.0 — a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 2.2.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examples…" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/lessons-7.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var ORDER = ["Getting Started", "Logic", "Loops", "Input & Data", "Functions", "Collections", "Strings", "Structured Data", "Modules", "Error Handling", "Desktop UI", "Advanced Vexel"];
+  var LABEL = { "Structured Data": "Structs" };
+  var host = document.getElementById("levels");
+  var total = window.LESSONS.length, doneAll = 0;
+  var firstOpen = 1;
+  ORDER.forEach(function (level) {
+    var lessons = window.LESSONS.filter(function (l) { return l.level === level; });
+    if (!lessons.length) return;
+    var nums = lessons.map(function (l) { return l.n; });
+    var done = window.VexelProgress.countDone(nums);
+    doneAll += done;
+    if (done < lessons.length && firstOpen === 1) firstOpen = lessons[0].n;
+    var block = document.createElement("section");
+    block.className = "level-block";
+    var head = document.createElement("div");
+    head.className = "level-head";
+    var h2 = document.createElement("h2");
+    h2.textContent = LABEL[level] || level;
+    var meta = document.createElement("span");
+    meta.className = "meta";
+    meta.textContent = lessons.length + " lessons · " + done + " / " + lessons.length + " completed";
+    var bar = document.createElement("div");
+    bar.className = "progress";
+    bar.style.marginTop = "8px";
+    bar.setAttribute("role", "progressbar");
+    bar.setAttribute("aria-label", (LABEL[level] || level) + " progress");
+    var fill = document.createElement("i");
+    fill.style.width = (100 * done / lessons.length) + "%";
+    bar.appendChild(fill);
+    head.appendChild(h2);
+    head.appendChild(meta);
+    block.appendChild(head);
+    block.appendChild(bar);
+    lessons.forEach(function (l) {
+      var a = document.createElement("a");
+      a.className = "lesson-row";
+      a.href = "lesson.html?n=" + l.n;
+      var num = document.createElement("span");
+      num.className = "num";
+      num.textContent = l.n;
+      var t = document.createElement("span");
+      t.className = "t";
+      t.textContent = l.title;
+      a.appendChild(num);
+      a.appendChild(t);
+      if (window.VexelProgress.isDone(l.n)) {
+        var m = document.createElement("span");
+        m.className = "done-mark";
+        m.textContent = "✓ Completed";
+        a.appendChild(m);
+      }
+      block.appendChild(a);
+    });
+    host.appendChild(block);
+  });
+  document.getElementById("overallLabel").textContent = doneAll + " / " + total + " completed";
+  document.getElementById("overallBar").style.width = (100 * doneAll / total) + "%";
+  document.getElementById("overallBarWrap").setAttribute("aria-valuenow", doneAll);
+  var next = 1;
+  for (var i = 1; i <= total; i++) { if (!window.VexelProgress.isDone(i)) { next = i; break; } next = i + 1; }
+  if (next > total) next = 1;
+  var cb = document.getElementById("continueBtn");
+  cb.href = "lesson.html?n=" + next;
+  cb.textContent = doneAll === 0 ? "Start at Lesson 1" : "Continue at Lesson " + next;
+})();
+</script>
+</body>
+</html>

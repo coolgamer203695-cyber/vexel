@@ -1,0 +1,7 @@
+// types test: inference (integer, string, boolean, decimal)
+age = 25
+name = "Zen"
+ready = true
+price = 19.99
+print age
+print name

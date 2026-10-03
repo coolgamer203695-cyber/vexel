@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vexel Docs — CLI reference and language index</title>
+<meta name="description" content="Vexel documentation index: every command and language feature with links, plus live search.">
+<meta property="og:title" content="Vexel Docs">
+<meta property="og:description" content="CLI reference, language index, and search.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f6feb'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='monospace'%3EV%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--border:#30363d;--text:#e6edf3;--muted:#9aa4b2;--accent:#58a6ff;--green:#3fb950;--code-bg:#0a0d12;--kw:#ff7b72;--str:#a5d6ff;--num:#79c0ff;--com:#8b949e;--bool:#d2a8ff}
+[data-theme="light"]{--bg:#fff;--panel:#f6f8fa;--panel2:#eaeef2;--border:#d0d7de;--text:#1f2328;--muted:#59636e;--accent:#0969da;--green:#1a7f37;--code-bg:#f6f8fa;--kw:#cf222e;--str:#0a3069;--num:#0550ae;--com:#59636e;--bool:#8250df}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--accent)}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:8px;top:8px;background:var(--accent);color:#fff;padding:8px 12px;border-radius:6px}
+nav.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+nav.top a.brand{font-weight:700;color:var(--text);text-decoration:none}
+nav.top a.link{color:var(--muted);text-decoration:none}
+nav.top a.link:hover{color:var(--accent)}
+nav.top .spacer{flex:1}
+button.theme{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer}
+main{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+h1{font-size:2.2rem}h2{border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:40px}
+pre.code{position:relative;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px;padding-top:40px;overflow-x:auto;font-family:Consolas,Menlo,monospace;font-size:.9rem}
+pre.code code{white-space:pre}
+button.copy-btn{position:absolute;top:8px;right:8px;background:var(--panel2);color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:.8rem;cursor:pointer}
+button.copy-btn:hover{color:var(--text)}
+.tok-kw{color:var(--kw)}.tok-str{color:var(--str)}.tok-num{color:var(--num)}.tok-com{color:var(--com);font-style:italic}.tok-bool{color:var(--bool)}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:var(--panel)}
+code.inline{background:var(--panel2);padding:2px 6px;border-radius:4px;font-size:.88em}
+input.search{width:100%;padding:10px 14px;font-size:1rem;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--text)}
+ul.results{list-style:none;padding:0}
+ul.results li{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:8px 0}
+ul.results small{color:var(--muted)}
+footer{text-align:center;color:var(--muted);padding:28px;border-top:1px solid var(--border);font-size:.9rem}
+@media (max-width:600px){h1{font-size:1.7rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="top" aria-label="Site">
+  <a class="brand" href="index.html">Vexel <span id="ver"></span></a>
+  <a class="link" href="learn.html">Learn</a>
+  <a class="link" href="docs.html">Docs</a>
+  <a class="link" href="examples.html">Examples</a>
+  <a class="link" href="download.html">Download</a>
+  <span class="spacer"></span>
+  <button class="theme" id="themeBtn" aria-label="Toggle light and dark mode">Light mode</button>
+</nav>
+<main id="main">
+<h1>Documentation</h1>
+<p>Full guides live with the project: <code class="inline">docs/language.md</code>,
+<code class="inline">docs/ui.md</code>, <code class="inline">docs/v2.md</code>,
+<code class="inline">docs/compiler.md</code>. Below: search plus the CLI reference.</p>
+
+<h2>Search</h2>
+<label for="q" style="display:block;margin-bottom:8px;color:var(--muted)">Try: button, function, list, window, event, import, error, theme…</label>
+<input class="search" id="q" type="search" placeholder="Search the docs…" autocomplete="off">
+<ul class="results" id="res" aria-live="polite"></ul>
+
+<h2>CLI reference</h2>
+<table>
+<tr><th>Command</th><th>Description</th></tr>
+<tr><td><code class="inline">vexel file.vxl</code></td><td>Compile and run a program (console or GUI).</td></tr>
+<tr><td><code class="inline">vexel run [file.vxl]</code></td><td>Same; with no file, runs the project entry (<code class="inline">./main.vxl</code>).</td></tr>
+<tr><td><code class="inline">vexel build [file.vxl]</code></td><td>Compile to a native executable next to the source.</td></tr>
+<tr><td><code class="inline">vexel check file.vxl</code></td><td>Type-check only, including UI codegen validation.</td></tr>
+<tr><td><code class="inline">vexel debug file.vxl</code></td><td>Static view: AST counts, symbols, types, modules, UI tree. Nothing runs.</td></tr>
+<tr><td><code class="inline">vexel create name</code></td><td>Scaffold <code class="inline">name/</code> with <code class="inline">vexel.project</code>.</td></tr>
+<tr><td><code class="inline">vexel clean</code></td><td>Remove built <code class="inline">.exe</code> files here.</td></tr>
+<tr><td><code class="inline">vexel version</code></td><td>Show the version (also <code class="inline">--version</code>).</td></tr>
+<tr><td><code class="inline">vexel help</code></td><td>Show help (also <code class="inline">--help</code>).</td></tr>
+</table>
+<pre class="code"><code>$ vexel version
+vexel 2.0.0</code></pre>
+
+<h2>Language index</h2>
+<table id="indexTable">
+<tr><th>Topic</th><th>Where</th></tr>
+<tr><td>Variables, types, math</td><td>learn.html lessons 2–4</td></tr>
+<tr><td>Functions, lists, structs</td><td>learn.html lessons 5–7</td></tr>
+<tr><td>Modules, imports, public</td><td>learn.html lesson 8</td></tr>
+<tr><td>Errors, try/error</td><td>learn.html lesson 9</td></tr>
+<tr><td>Windows, widgets, layout</td><td>docs: UI guide sections 1–14</td></tr>
+<tr><td>Events, event object</td><td>docs: UI guide section 15</td></tr>
+<tr><td>Themes, styles, animations</td><td>docs: UI guide sections 14, 19–20</td></tr>
+<tr><td>JSON, objects, null</td><td>docs: v2 guide</td></tr>
+<tr><td>Projects, debugging</td><td>docs: v2 guide</td></tr>
+</table>
+</main>
+<footer>Vexel <span class="ver-foot"></span> — Build. Create. Simplify.</footer>
+<script>
+(function(){
+  var root=document.documentElement;
+  function paint(){var t=root.getAttribute('data-theme')||'dark';document.getElementById('themeBtn').textContent=t==='dark'?'Light mode':'Dark mode';}
+  try{var s=localStorage.getItem('vexel-theme');if(s)root.setAttribute('data-theme',s);}catch(e){}
+  paint();
+  document.getElementById('themeBtn').addEventListener('click',function(){var n=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('vexel-theme',n);}catch(e){}paint();});
+  function setVer(v){document.getElementById('ver').textContent=v;var f=document.querySelector('.ver-foot');if(f)f.textContent=v;}
+  fetch('version.json').then(function(r){return r.json();}).then(function(j){if(j&&j.version)setVer('v'+j.version);}).catch(function(){});
+  var INDEX=[
+    {k:"button click press hover event",t:"Buttons & events",d:"add a button, on click, event object",h:"learn.html#l11"},
+    {k:"window title size show",t:"Windows",d:"create a window, show/hide/close",h:"learn.html#l10"},
+    {k:"function return",t:"Functions",d:"function greet name, return values",h:"learn.html#l5"},
+    {k:"list add remove index length",t:"Lists",d:"literals, index, add, remove, length",h:"learn.html#l6"},
+    {k:"struct",t:"Structs",d:"struct Player, fields, instances",h:"learn.html#l7"},
+    {k:"import module public",t:"Modules",d:"import paths, namespaces, public/private",h:"learn.html#l8"},
+    {k:"error try",t:"Errors",d:"try/error blocks, error object",h:"learn.html#l9"},
+    {k:"input output",t:"Input",d:"add input, set output, number of",h:"learn.html#l13"},
+    {k:"theme dark light style",t:"Themes & styles",d:"use theme, style blocks",h:"docs.html"},
+    {k:"slider checkbox dropdown progress list",t:"Widgets",d:"checkbox, slider, progress, dropdown, list",h:"examples.html"},
+    {k:"table tree tabs menu toolbar",t:"Advanced widgets",d:"table, tree, tabs, menu, toolbar",h:"examples.html"},
+    {k:"container layout center grid",t:"Layout",d:"containers, center, spacing, percent",h:"docs.html"},
+    {k:"animation animate fade timer wait",t:"Animation & timers",d:"animate, every/after/wait",h:"docs.html"},
+    {k:"component",t:"Components",d:"reusable component blocks",h:"learn.html#l12"},
+    {k:"json object null",t:"JSON",d:"json read/write, objects, null",h:"docs.html"},
+    {k:"cli run build check debug create clean version help",t:"CLI",d:"every command with examples",h:"docs.html"},
+    {k:"calculator",t:"Calculator example",d:"full GUI calculator source",h:"examples.html"},
+    {k:"download install windows linux mac",t:"Download",d:"platform instructions",h:"download.html"}
+  ];
+  var q=document.getElementById('q'),res=document.getElementById('res');
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function render(list){
+    if(!list.length){res.innerHTML='<li>No matches. Try: button, list, event, theme, cli.</li>';return;}
+    res.innerHTML=list.map(function(r){return '<li><a href="'+r.h+'">'+esc(r.t)+'</a><br><small>'+esc(r.d)+'</small></li>';}).join('');
+  }
+  render([]);
+  q.addEventListener('input',function(){
+    var w=q.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    if(!w.length){render([]);return;}
+    render(INDEX.filter(function(r){var hay=(r.k+' '+r.t+' '+r.d).toLowerCase();return w.every(function(x){return hay.indexOf(x)>=0;});}).slice(0,12));
+  });
+  document.querySelectorAll('pre.code').forEach(function(pre){
+    var code=pre.querySelector('code');var text=code?code.textContent:pre.textContent;
+    var btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+    btn.addEventListener('click',function(){
+      function done(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy';},1500);}
+      function fb(){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){btn.textContent='Select manually';}document.body.removeChild(ta);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fb);}else{fb();}
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

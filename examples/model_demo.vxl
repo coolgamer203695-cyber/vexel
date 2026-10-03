@@ -1,0 +1,69 @@
+// Vexel 3.7 — Atlas v0.5 model demo.
+// Creates, trains, saves, and loads a real model. Everything here is
+// computed from files and configs — nothing is simulated.
+// Run: vexel run examples/model_demo.vxl
+
+import atlas
+
+// A config is a plain object; the helper builds a 2-layer MLP.
+cfg = atlas.default_config 3, 5, 1
+print ["config:", cfg.name, cfg.arch]
+
+// Create: deterministic random weights (fixed seed), train mode.
+m = create model cfg
+print ["mode:", m.mode]
+print ["parameters:", m.parameters.length]
+print ["describe:", atlas.describe(m.info)]
+
+// Forward: rank-1 squeezes to [out], rank-2 keeps the batch.
+x1 = tensor [0.5, 0.25, 0.75]
+y1 = m.forward x1
+print ["rank-1 out shape:", y1.shape]
+
+xb = tensor [[0.5, 0.25, 0.75], [0.1, 0.2, 0.3]]
+yb = m.forward xb
+print ["batch out shape:", yb.shape]
+
+// Train mode records the graph; backward fills real gradients.
+loss = y1.sum
+loss.backward
+print ["first weight grad sum:", m.parameters[0].grad.sum]
+print ["first bias grad sum:", m.parameters[1].grad.sum]
+
+// eval is inference mode: same numbers, no graph.
+// with inference runs any block the same way.
+m.eval
+print ["mode:", m.mode]
+with inference {
+    print ["inference out:", m.forward x1]
+}
+m.train
+
+// Save writes config.json + model.atlas + metadata.json atomically.
+save model m to "model_demo_out"
+print ["saved:", atlas.exists("model_demo_out")]
+
+// Load restores the weights, starts in eval, and round-trips exactly.
+back = load model "model_demo_out"
+print ["loaded mode:", back.mode]
+print ["roundtrip equal:", (m.forward x1) == (back.forward x1)]
+print ["info:", atlas.describe(model info "model_demo_out")]
+
+// Model folders can also come from SafeTensors — priority is native
+// first, then sharded index, then a single file (docs/model_format.md).
+// Hugging Face folders and repo ids fail loudly: Atlas never fetches.
+
+// Moving a model moves its parameters; forward then places inputs
+// on the model's device automatically.
+if gpu available {
+    move m to gpu
+    z = m.forward x1
+    print ["gpu out device:", z.device]
+    // GPU and CPU shaders can differ in the last float ulp — compare
+    // within a tolerance instead of bitwise equality.
+    move z to cpu
+    delta = z[0] - (back.forward x1)[0]
+    print ["gpu agrees with cpu within 1e-3:", delta < 0.001, delta > -0.001]
+} else {
+    print ["gpu:", "not available on this machine — skipped (nothing faked)"]
+}

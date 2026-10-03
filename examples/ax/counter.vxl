@@ -1,0 +1,23 @@
+create a window titled "Ax Counter"
+
+count = 0
+
+display = add an output box
+display.x = 20
+display.y = 20
+display.width = 200
+display.height = 60
+display.text = "0"
+
+go = add a button titled "Count"
+go.x = 20
+go.y = 100
+go.width = 120
+go.height = 50
+
+go.on click {
+    count = count + 1
+    display.text = "" + count
+}
+
+window.show

@@ -1,0 +1,5 @@
+create a window titled "Hello Vexel"
+
+text = add a text titled "Hello World!"
+
+window.show

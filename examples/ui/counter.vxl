@@ -1,0 +1,16 @@
+create a window titled "Counter"
+
+set window width to 500
+set window height to 400
+
+count = 0
+
+label = add a text titled "Count: 0"
+button = add a button titled "Increase"
+
+button.on click {
+    count = count + 1
+    label.text = "Count: " + count
+}
+
+window.show

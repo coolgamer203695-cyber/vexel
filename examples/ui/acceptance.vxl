@@ -1,0 +1,22 @@
+create a window titled "Vexel 1.1.0"
+
+set window width to 800
+set window height to 600
+
+title = add a text titled "Welcome to Vexel!"
+
+name = add an input box titled "Enter your name"
+
+button = add a button titled "Say Hello"
+
+output = add an output box
+
+button.on click {
+    if name.text = "" {
+        output.text = "Please enter your name."
+    } else {
+        output.text = "Hello " + name.text + "!"
+    }
+}
+
+window.show

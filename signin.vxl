@@ -1,0 +1,102 @@
+// Cool animated sign-in page — light theme.
+create a window titled "Sign In"
+
+use theme "light"
+
+set window position to 200, 80
+window.width = 560
+window.height = 620
+
+fade window
+    duration 0.5 seconds
+
+card = add a panel
+card.x = 70
+card.y = 60
+card.width = 420
+card.height = 480
+
+logo = add a text titled "Welcome back" to card
+logo.x = 40
+logo.y = 30
+logo.width = 340
+logo.height = 50
+logo.font_size = 30
+logo.bold = true
+logo.alignment = "center"
+
+sub = add a text titled "Sign in to continue to Vexel Hub" to card
+sub.x = 40
+sub.y = 85
+sub.width = 340
+sub.height = 30
+sub.alignment = "center"
+
+userLabel = add a text titled "Username" to card
+userLabel.x = 40
+userLabel.y = 135
+userLabel.width = 340
+userLabel.height = 25
+userLabel.bold = true
+
+user = add an input box titled "you@example.com" to card
+user.x = 40
+user.y = 165
+user.width = 340
+user.height = 45
+
+passLabel = add a text titled "Password" to card
+passLabel.x = 40
+passLabel.y = 225
+passLabel.width = 340
+passLabel.height = 25
+passLabel.bold = true
+
+pw = add an input box to card
+pw.x = 40
+pw.y = 255
+pw.width = 340
+pw.height = 45
+pw.password = true
+
+go = add a button titled "Sign In" to card
+go.x = 40
+go.y = 325
+go.width = 340
+go.height = 55
+go.font_size = 18
+go.background = "blue"
+go.text_color = "white"
+go.border_radius = 12
+
+msg = add an output box to card
+msg.x = 40
+msg.y = 395
+msg.width = 340
+msg.height = 60
+
+animate card {
+    move to y 60
+    duration 1 second
+}
+
+animate go {
+    move to y 325
+    duration 1 second
+}
+
+go.on click {
+    if user.text = "" {
+        msg.text = "Please enter your username."
+    } else if pw.text = "" {
+        msg.text = "Please enter your password."
+    } else if user.text = "admin" and pw.text = "secret" {
+        msg.text = "Welcome back, admin! Signed in."
+        go.title = "Signed In!"
+        go.enabled = false
+    } else {
+        msg.text = "Hmm, those details do not match. Try admin / secret."
+    }
+}
+
+window.show

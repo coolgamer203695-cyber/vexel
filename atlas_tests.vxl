@@ -1,0 +1,228 @@
+// Atlas native tests — run: vexel test atlas_tests.vxl
+// Uses Vexel's own test blocks (no external runner needed).
+
+import nn
+
+function addem p, q {
+    return p + q
+}
+
+function matmul2 p, q {
+    return p @ q
+}
+
+test "creation" {
+    x = tensor [1,2,3]
+    assert x.size = 3
+    assert x.rank = 1
+    s = tensor 5
+    assert s.rank = 0
+    assert s.size = 1
+}
+
+test "shapes" {
+    m = tensor [[1,2,3],[4,5,6]]
+    assert m.rank = 2
+    assert m.size = 6
+    assert m.dtype = "float32"
+    assert m.device = "cpu"
+}
+
+test "indexing" {
+    x = tensor [[10,20],[30,40]]
+    v = x[1][0]
+    assert v = 30
+    row = x[0]
+    assert row.sum = 30
+}
+
+test "math" {
+    a = tensor [1,2,3]
+    b = tensor [4,5,6]
+    s = a + b
+    assert s.sum = 21
+    d = b - a
+    assert d.sum = 9
+    m = a * b
+    assert m.sum = 32
+}
+
+test "scalar math" {
+    m = tensor [1.5,2.5]
+    t = m * 2
+    assert t.sum = 8
+    u = 10 - m
+    assert u.sum = 16
+}
+
+test "matmul" {
+    a = tensor [[1,2],[3,4]]
+    b = tensor [[5,6],[7,8]]
+    c = a @ b
+    assert c.sum = 134
+}
+
+test "utilities" {
+    x = tensor [[10,20],[30,40]]
+    assert x.flatten.sum = 100
+    rr = x.reshape [4]
+    assert rr.size = 4
+    t = x.transpose
+    assert t.sum = 100
+}
+
+test "reductions" {
+    x = tensor [1,2,3,4]
+    assert x.sum = 10
+    assert x.mean = 2.5
+    assert x.max = 4
+    assert x.min = 1
+}
+
+test "constructors" {
+    z = zeros [2,2]
+    assert z.sum = 0
+    o = ones [1,3]
+    assert o.sum = 3
+    t = random tensor [2,2]
+    assert t.size = 4
+    lo = t.min >= 0
+    assert lo = true
+    hi = t.max < 1
+    assert hi = true
+}
+
+test "equality" {
+    a = tensor [1,2]
+    b = tensor [1,2]
+    e = a == b
+    assert e = true
+    c = tensor [1,3]
+    f = a == c
+    assert f = false
+}
+
+test "shape errors" {
+    a = tensor [1,2]
+    b = tensor [1,2,3]
+    try {
+        c = addem a, b
+    } error {
+        assert error.type = "ShapeError"
+    }
+}
+
+test "matmul errors" {
+    a = tensor [[1,2,3],[4,5,6]]
+    b = tensor [[1,2],[3,4]]
+    try {
+        c = matmul2 a, b
+    } error {
+        assert error.type = "ShapeError"
+    }
+}
+
+test "bounds errors" {
+    x = tensor [1,2]
+    try {
+        v = x[9]
+    } error {
+        assert error.type = "IndexError"
+    }
+}
+
+test "autograd leaf grad" {
+    x = tensor [2, 3]
+    make x require gradients
+    loss = (x * x).sum
+    loss.backward
+    g = x.grad
+    assert g[0] = 4
+    assert g[1] = 6
+    x.zero_grad
+    assert x.grad = null
+}
+
+test "autograd chain + accumulate" {
+    x = tensor [2, 3]
+    make x require gradients
+    a = x + x
+    loss = (a * a).sum
+    loss.backward
+    g = x.grad
+    assert g[0] = 16
+    assert g[1] = 24
+    loss.backward
+    g2 = x.grad
+    assert g2[0] = 32
+    x.zero_grad
+    loss.backward
+    g3 = x.grad
+    assert g3[0] = 16
+}
+
+test "activations forward" {
+    neg = tensor [-1, 2]
+    h = relu neg
+    assert h.sum = 2
+    s = tensor [0]
+    g = sigmoid s
+    assert g.sum = 0.5
+    t = tensor [0]
+    th = tanh t
+    assert th.sum = 0
+}
+
+test "activation gradients" {
+    x = tensor [-1, 2]
+    make x require gradients
+    h = relu x
+    loss = h.sum
+    loss.backward
+    g = x.grad
+    assert g[0] = 0
+    assert g[1] = 1
+    x.zero_grad
+    s = tensor [0]
+    make s require gradients
+    ls = (sigmoid s).sum
+    ls.backward
+    sg = s.grad
+    assert sg[0] = 0.25
+}
+
+test "finite difference matches autograd" {
+    base = tensor [0.3, -0.7]
+    make base require gradients
+    fdv = (sigmoid base * base).sum
+    fdv.backward
+    g = base.grad
+    xp = tensor [0.301, -0.7]
+    xm = tensor [0.299, -0.7]
+    fp = (sigmoid xp * xp).sum
+    fm = (sigmoid xm * xm).sum
+    n0 = (fp - fm) / 0.002
+    d0 = n0 - g[0]
+    a0 = d0 < 0.001
+    b0 = d0 > -0.001
+    assert a0
+    assert b0
+}
+
+test "nn module trains one step" {
+    layer = nn.linear 1, 1
+    x = tensor [[3]]
+    t = tensor [[6]]
+    p = nn.forward layer, x
+    assert p.rank = 2
+    loss = nn.mse p, t
+    loss.backward
+    g = layer.w.grad
+    assert g.rank = 2
+    before = loss.detach.sum
+    nn.step layer, 0.05
+    p2 = nn.forward layer, x
+    loss2 = nn.mse p2, t
+    after = loss2.detach.sum
+    assert after < before
+}

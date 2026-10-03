@@ -1,0 +1,25 @@
+entrypoint = "main.vxl"
+run = "node bin/vexel.js run main.vxl"
+modules = ["nodejs-20"]
+hidden = [".config", ".vexel-cache", "gpu/target", "node_modules"]
+
+# Vexel has zero npm dependencies; this just puts the `vexel` command
+# on PATH inside the Repl (Run itself uses the local checkout).
+onBoot = "npm install -g . || true"
+
+[nix]
+channel = "stable-24_05"
+
+[packager]
+language = "nodejs"
+
+  [packager.features]
+  packageSearch = true
+  guessImports = false
+  enabledForHosting = false
+
+[languages.vexel]
+pattern = "**/*.vxl"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix"]

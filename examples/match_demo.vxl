@@ -1,0 +1,47 @@
+// Vexel 2.9: pattern matching with match.
+enum State {
+    idle
+    running
+    finished
+}
+
+state = State.running
+
+match state {
+    idle {
+        print "Waiting"
+    }
+    running {
+        print "Running"
+    }
+    finished {
+        print "Done"
+    }
+}
+
+// Value matching with a default arm.
+score = 85
+
+match score {
+    100 {
+        print "Perfect"
+    }
+    85 {
+        print "Great"
+    }
+    _ {
+        print "Keep going"
+    }
+}
+
+// Null matching.
+maybe = null
+
+match maybe {
+    null {
+        print "nothing here"
+    }
+    _ {
+        print "something"
+    }
+}

@@ -1,0 +1,42 @@
+create a window titled "Ax Boxes"
+
+p = create a container
+p.x = 50
+p.y = 50
+p.width = 300
+p.height = 200
+
+inner = add a button titled "In"
+inner.x = 20
+inner.y = 20
+inner.width = 100
+inner.height = 40
+
+add inner to p
+
+v = create a vertical container
+v.x = 400
+v.y = 50
+
+btnA = add a button titled "A"
+add btnA to v
+
+btnB = add a button titled "B"
+add btnB to v
+
+g = create a grid container
+g.x = 50
+g.y = 300
+g.width = 300
+g.height = 120
+
+c1 = add a button titled "C1" to g
+c2 = add a button titled "C2" to g
+c3 = add a button titled "C3" to g
+
+below = add a text titled "low"
+below.y = inner.y + inner.height + 10
+below.x = 400
+json write below.y to "ax_boxes_rel.json"
+
+window.show

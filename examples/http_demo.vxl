@@ -1,0 +1,30 @@
+// Vexel 2.9: HTTP with methods, bodies, headers and timeouts.
+// Runs offline too: failures are catchable and clearly reported.
+http timeout 10
+
+try {
+    response = http get "https://example.com"
+    print response.status
+} error {
+    print error.message
+}
+
+try {
+    created = http post "https://example.com/items", "name=zen"
+    print created.status
+} error {
+    print error.message
+}
+
+// Objects send as JSON; headers ride along.
+payload = {
+    name = "Zen"
+}
+
+try {
+    sent = http put "https://example.com/items/1", payload, { token = "abc" }
+    print sent.status
+    print sent.text
+} error {
+    print error.message
+}

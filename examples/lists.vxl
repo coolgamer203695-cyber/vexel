@@ -1,0 +1,10 @@
+names = ["Zen", "Alex", "John"]
+print names[0]
+names[1] = "Mike"
+print names[1]
+names.add "Sarah"
+print names[3]
+print names.length
+names.remove 0
+print names[0]
+print names.length

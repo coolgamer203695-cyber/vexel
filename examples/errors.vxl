@@ -1,0 +1,18 @@
+function divide a, b {
+    if b = 0 {
+        error "Cannot divide by zero"
+    }
+    return a / b
+}
+try {
+    result = divide 10, 0
+    print result
+} error {
+    print error
+}
+try {
+    result = divide 10, 2
+    print result
+} error {
+    print error
+}

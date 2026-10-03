@@ -1,0 +1,74 @@
+create a window titled "Ax Widgets"
+
+name = add an input box titled "Name"
+name.x = 20
+name.y = 20
+name.width = 200
+name.height = 30
+
+hello = add a text titled "Hello"
+hello.x = 20
+hello.y = 60
+hello.width = 200
+hello.height = 30
+
+agree = add a checkbox titled "I agree"
+agree.x = 20
+agree.y = 100
+agree.width = 200
+agree.height = 30
+
+volume = add a slider
+volume.x = 20
+volume.y = 140
+volume.width = 200
+volume.minimum = 0
+volume.maximum = 10
+volume.value = 3
+
+bar = add a progress bar
+bar.x = 20
+bar.y = 180
+bar.width = 200
+bar.value = 30
+
+choice = add a dropdown
+choice.x = 240
+choice.y = 20
+choice.add "Red"
+choice.add "Green"
+choice.add "Blue"
+choice.selected_index = 1
+
+items = add a list
+items.x = 240
+items.y = 100
+items.add "One"
+items.add "Two"
+
+spin = add a spinner
+spin.x = 240
+spin.y = 230
+
+report = add an output box
+report.x = 20
+report.y = 320
+report.width = 420
+report.height = 60
+
+go = add a button titled "Report"
+go.x = 20
+go.y = 400
+go.width = 120
+go.height = 50
+
+go.on click {
+    report.text = name.text + " picked " + choice.selected + " at " + volume.value
+    bar.value = volume.value * 10
+}
+
+name.on change {
+    hello.text = "Hello " + name.text
+}
+
+window.show

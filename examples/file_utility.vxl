@@ -1,0 +1,15 @@
+// Vexel 2.9: file utilities — write, read, append,
+// exists, size, copy, move, delete.
+file write "Hello" to "demo.txt"
+file append ", Vexel!" to "demo.txt"
+print file read "demo.txt"
+print file size "demo.txt"
+print file exists "demo.txt"
+
+file copy "demo.txt" to "demo.bak"
+file move "demo.bak" to "demo.final"
+print file read "demo.final"
+
+file delete "demo.txt"
+file delete "demo.final"
+print file exists "demo.txt"

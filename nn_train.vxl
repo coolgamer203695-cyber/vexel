@@ -1,0 +1,28 @@
+import nn
+
+layer = nn.linear 1, 1
+
+i = 0
+repeat 500 {
+    x = tensor [[1]]
+    target = tensor [[2]]
+    if i % 2 = 1 {
+        x = tensor [[3]]
+        target = tensor [[6]]
+    }
+    pred = nn.forward layer, x
+    loss = nn.mse pred, target
+    if i % 60 = 0 {
+        print ["step", i, "loss", loss]
+    }
+    loss.backward
+    nn.step layer, 0.02
+    i = i + 1
+}
+p1 = nn.forward layer, tensor [[1]]
+p3 = nn.forward layer, tensor [[3]]
+print ["final loss", nn.mse p3, tensor [[6]]]
+print ["prediction for 1", p1]
+print ["prediction for 3", p3]
+print ["learned w", layer.w]
+print ["learned b", layer.b]

@@ -1,0 +1,5 @@
+public name = "Zen"
+
+public function greet {
+    print "Hello, hero!"
+}

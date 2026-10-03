@@ -1,0 +1,9 @@
+public name = "Zen"
+
+public function greet {
+    print "Hello from player module"
+}
+
+function secret {
+    print "Secret"
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playground — Vexel 2.2.0</title>
+<meta name="description" content="Vexel playground: write Vexel code with highlighting, copy it or download it as .vxl.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">2.2.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">☰</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+  <p class="eyebrow" style="margin-top:34px">Playground</p>
+  <h1 style="margin-top:0">Try Vexel here</h1>
+  <p class="lead">Draft Vexel code with highlighting, then copy it or download it as a <code>.vxl</code> file to run locally.</p>
+  <div class="notice" role="note"><strong>Execution status: unavailable in this static build.</strong> No compiler is connected to this page, so Run cannot execute code here. To run your program, save it and use your local Vexel install: <code>vexel hello.vxl</code>. See the <a href="download.html">download page</a> for setup.</div>
+  <div class="btn-row" style="margin-bottom:14px">
+    <button class="btn primary small" id="pgRun" type="button">Run</button>
+    <button class="btn ghost small" id="pgCopy" type="button">Copy code</button>
+    <button class="btn ghost small" id="pgDownload" type="button">Download .vxl</button>
+    <button class="btn ghost small" id="pgClear" type="button">Clear</button>
+  </div>
+  <div class="pg-grid">
+    <div>
+      <label for="pgEditor"><strong>Editor</strong></label>
+      <textarea class="pg-editor" id="pgEditor" spellcheck="false">print "Hello Vexel!"
+
+name = "Zen"
+age = 25
+
+if age >= 18 {
+    print "Hello " + name
+}</textarea>
+    </div>
+    <div>
+      <label for="pgOutput"><strong>Output</strong></label>
+      <div class="pg-output" id="pgOutput" role="status" aria-live="polite">Press Run to check execution status.</div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 2.2.0 — a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 2.2.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examples…" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/lessons-7.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var editor = document.getElementById("pgEditor");
+  var output = document.getElementById("pgOutput");
+  document.getElementById("pgRun").addEventListener("click", function () {
+    output.textContent = "No execution backend is connected in this static build — nothing ran.\n\nTo execute this code locally:\n  1. Save the editor content as hello.vxl (use Download .vxl).\n  2. Run: vexel hello.vxl\n\nSee the download page for installing Vexel 2.2.0.";
+  });
+  document.getElementById("pgClear").addEventListener("click", function () {
+    editor.value = "";
+    output.textContent = "Editor cleared. Press Run to check execution status.";
+    editor.focus();
+  });
+  document.getElementById("pgCopy").addEventListener("click", function () {
+    var done = function () { output.textContent = "Code copied to clipboard."; };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(editor.value).then(done, function () {
+        output.textContent = "Copy failed — select the editor text manually.";
+      });
+    } else { output.textContent = "Clipboard unavailable — select the editor text manually."; }
+  });
+  document.getElementById("pgDownload").addEventListener("click", function () {
+    var blob = new Blob([editor.value], { type: "text/plain" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "hello.vxl";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    output.textContent = "Downloaded hello.vxl — run it with: vexel hello.vxl";
+  });
+})();
+</script>
+</body>
+</html>

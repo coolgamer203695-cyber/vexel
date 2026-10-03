@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog — Vexel</title>
+<meta name="description" content="Vexel version history: what shipped in 2.2.0, 2.0.0 and 1.x.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">2.2.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">☰</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap read">
+  <p class="eyebrow" style="margin-top:34px">Changelog</p>
+  <h1 style="margin-top:0">Version history</h1>
+  <p class="lead">Current stable release: <strong>Vexel 2.2.0</strong>.</p>
+
+  <div class="changelog-item">
+    <h2>Vexel 2.2.0 <span class="badge">current</span></h2>
+    <p>The real-applications release: the desktop UI moved to a new native backend (Avalonia), and the runtime was pinned down and proven with live programs.</p>
+    <ul class="checklist">
+      <li>Multi-window support with per-window size, controls, events and lifecycle</li>
+      <li>Cancellable timer handles (<code>ticker = every 1 second { ... }</code> plus <code>ticker.cancel</code>)</li>
+      <li>Background tasks with <code>pending / running / completed / failed / cancelled</code> states</li>
+      <li>HTTP requests with catchable errors (<code>http get "url"</code>)</li>
+      <li>Per-control opacity and non-blocking 60fps animations</li>
+      <li>Exact manual coordinates with parent-relative container children</li>
+      <li>Responsive edge anchoring (<code>b.anchor = "bottom right"</code>)</li>
+      <li>Truly modal dialogs, file/folder/color pickers, clipboard round-trip</li>
+      <li>Rich errors: <code>error.message / error.type / error.file / error.line / error.column</code></li>
+      <li>Project tooling: <code>vexel create / run / build / clean / debug</code></li>
+    </ul>
+  </div>
+
+  <div class="changelog-item">
+    <h2>Vexel 2.0.0</h2>
+    <p>The UI-depth release on top of the 1.x language: manual positioning, new widgets, styles and themes, the event object, timers, JSON, projects and richer errors — with no syntax breaks.</p>
+    <ul class="checklist">
+      <li>Manual positioning (<code>x / y / width / height</code>) and panels, scroll areas, forms</li>
+      <li>Reusable styles and <code>dark / light / custom</code> themes</li>
+      <li>Event object (<code>event.x</code>, <code>event.key</code>, <code>event.value</code>)</li>
+      <li>Timers (<code>every / after / wait</code>) and dynamic show/hide/remove</li>
+      <li>Anonymous objects, JSON read/write, <code>null</code></li>
+      <li><code>make x number / string / boolean</code> conversions</li>
+      <li>Import aliases and the project system</li>
+    </ul>
+  </div>
+
+  <div class="changelog-item">
+    <h2>Vexel 1.x</h2>
+    <p>The foundation: readable English-like syntax, automatic type inference with strict checking, and native executables. The 1.1 series added native desktop GUI apps — windows, widgets, layouts, styling, events, dialogs and animations — in the same simple style.</p>
+    <ul class="checklist">
+      <li>Console language: variables, conditions, loops, functions, lists, strings, structs, modules, errors</li>
+      <li>Compiled to native executables; running never interprets <code>.vxl</code> line by line</li>
+      <li>1.1: desktop apps with windows, buttons, inputs, lists, menus, tabs, tables and events</li>
+    </ul>
+  </div>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 2.2.0 — a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 2.2.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examples…" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/lessons-7.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

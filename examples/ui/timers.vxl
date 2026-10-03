@@ -1,0 +1,26 @@
+create a window titled "Timers"
+
+count = 0
+
+display = add an output box
+display.x = 20
+display.y = 20
+display.width = 360
+display.height = 60
+display.text = "0"
+
+ticker = every 1 second {
+    count = count + 1
+    display.text = "" + count
+}
+
+stopper = after 5 seconds {
+    ticker.cancel
+    display.text = "stopped at " + display.text
+}
+
+window.on close {
+    ticker.cancel
+}
+
+window.show

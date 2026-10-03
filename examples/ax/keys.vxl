@@ -1,0 +1,14 @@
+create a window titled "Ax Keys"
+
+display = add an output box
+display.x = 20
+display.y = 20
+display.width = 200
+display.height = 60
+display.text = "press a key"
+
+window.on key press {
+    display.text = key
+}
+
+window.show

@@ -1,0 +1,17 @@
+// Vexel 2.9: directory utilities — create, list,
+// exists, copy, move, delete.
+dir create "workspace/shapes"
+print dir exists "workspace"
+print dir list "workspace"
+
+file write "circle" to "workspace/shapes/one.txt"
+
+dir copy "workspace" to "backup"
+print dir list "backup/shapes"
+
+dir move "backup" to "archive"
+print dir exists "archive"
+
+dir delete "workspace"
+dir delete "archive"
+print dir exists "workspace"

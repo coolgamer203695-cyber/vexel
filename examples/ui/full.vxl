@@ -1,0 +1,18 @@
+create a window titled "My App"
+
+set window width to 800
+set window height to 600
+
+title = add a text titled "Welcome to Vexel!"
+
+input = add an input box titled "Enter your name"
+
+button = add a button titled "Say Hello"
+
+output = add an output box
+
+button.on click {
+    output.text = "Hello " + input.text
+}
+
+window.show

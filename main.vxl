@@ -1,0 +1,16 @@
+// Vexel starter for Replit — press Run.
+// The compiler ships in this Repl (bin/ + compiler/ + runtime/),
+// so no npm download is needed to build and run programs.
+
+print "Hello from Vexel 3.7!"
+
+function greet name {
+    print "Hey " + name + "!"
+}
+
+greet "Replit"
+
+// Tensors and the Atlas ML engine work too:
+weights = tensor [0.5, -0.25, 1.0]
+print weights.shape
+print weights.sum

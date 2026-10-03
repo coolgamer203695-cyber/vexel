@@ -1,0 +1,38 @@
+create a window titled "Ax Events"
+
+display = add an output box
+display.x = 20
+display.y = 20
+display.width = 360
+display.height = 60
+display.text = "interact..."
+
+name = add an input box titled "Name"
+name.x = 20
+name.y = 100
+name.width = 200
+name.height = 30
+
+go = add a button titled "Go"
+go.x = 240
+go.y = 100
+go.width = 140
+go.height = 30
+
+go.on click {
+    display.text = "clicked: " + name.text
+}
+
+name.on change {
+    display.text = "typing: " + name.text
+}
+
+window.on key press {
+    display.text = "key: " + key
+}
+
+window.on resize {
+    display.text = "resized"
+}
+
+window.show

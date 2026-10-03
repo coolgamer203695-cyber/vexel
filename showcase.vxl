@@ -1,0 +1,362 @@
+create a window titled "Praxis Showcase — Vexel 3.0"
+
+use theme "dark"
+
+window.width = 1000
+window.height = 750
+
+title = add a text titled "Praxis Showcase — every engine section in one app"
+title.x = 20
+title.y = 10
+title.width = 960
+title.height = 36
+title.font_size = 22
+title.bold = true
+
+bar = add a toolbar
+bar.x = 20
+bar.y = 55
+bar.width = 960
+bar.height = 44
+fileBtn = bar.add a button titled "File"
+fileBtn.tooltip = "File actions"
+bar.add separator
+grp = bar.add group "Edit"
+cutBtn = grp.add a button titled "Cut"
+pasteBtn = grp.add a button titled "Paste"
+
+tabs = add a tab bar
+tabs.x = 20
+tabs.y = 110
+tabs.width = 960
+tabs.height = 560
+
+home = tabs.add "Controls"
+data = tabs.add "Data"
+praxis = tabs.add "Praxis"
+layout = tabs.add "Layout"
+
+name = add an input box titled "Type your name..." to home
+name.x = 20
+name.y = 15
+name.width = 300
+name.height = 38
+name.description = "Your display name"
+
+greetBtn = add a button titled "Greet" to home
+greetBtn.x = 330
+greetBtn.y = 15
+greetBtn.width = 120
+greetBtn.height = 38
+greetBtn.shortcut = "Ctrl+G"
+greetBtn.icon = "play"
+greetBtn.tooltip = "Greet the user"
+
+check = add a checkbox titled "Subscribe to news" to home
+check.x = 20
+check.y = 65
+check.width = 300
+check.height = 30
+
+vol = add a slider to home
+vol.x = 20
+vol.y = 105
+vol.width = 300
+vol.minimum = 0
+vol.maximum = 100
+vol.value = 50
+
+prog = add a progress bar to home
+prog.x = 20
+prog.y = 145
+prog.width = 300
+prog.minimum = 0
+prog.maximum = 100
+prog.value = 30
+
+pick = add a dropdown to home
+pick.x = 20
+pick.y = 185
+pick.width = 300
+pick.add "Red"
+pick.add "Green"
+pick.add "Blue"
+
+out = add an output box to home
+out.x = 470
+out.y = 15
+out.width = 350
+out.height = 200
+out.text = "Event log ready."
+
+spin = add a spinner to home
+spin.x = 470
+spin.y = 225
+spin.width = 40
+spin.height = 40
+
+focusBtn = add a button titled "Focus name" to home
+focusBtn.x = 470
+focusBtn.y = 275
+focusBtn.width = 150
+focusBtn.height = 32
+
+grid = add a table to data
+grid.x = 20
+grid.y = 15
+grid.width = 500
+grid.height = 220
+grid.add column "Name"
+grid.add column "Level"
+grid.add row ["Zen", 10]
+grid.add row ["Alex", 7]
+grid.add row ["Jo", 12]
+
+fruits = add a list to data
+fruits.x = 540
+fruits.y = 15
+fruits.width = 280
+fruits.height = 220
+fruits.add "Apple"
+fruits.add "Pear"
+fruits.add "Plum"
+fruits.multiple = true
+
+tree = add a tree to data
+tree.x = 20
+tree.y = 250
+tree.width = 300
+tree.height = 180
+proj = tree.add "Project"
+proj.add "src"
+proj.add "docs"
+
+sw = add a switch titled "Power" to praxis
+sw.x = 20
+sw.y = 15
+sw.width = 200
+sw.height = 32
+sw.checked = true
+sw.tooltip = "Toggle power"
+sw.description = "Power switch"
+
+rb1 = add a radio button titled "Option A" to praxis
+rb1.x = 20
+rb1.y = 55
+rb1.width = 200
+rb1.height = 30
+rb1.group = "choice"
+
+rb2 = add a radio button titled "Option B" to praxis
+rb2.x = 20
+rb2.y = 90
+rb2.width = 200
+rb2.height = 30
+rb2.group = "choice"
+
+num = add a numeric input to praxis
+num.x = 20
+num.y = 130
+num.width = 200
+num.height = 32
+num.minimum = 0
+num.maximum = 100
+num.value = 42
+
+sbox = add a search box titled "Search..." to praxis
+sbox.x = 20
+sbox.y = 175
+sbox.width = 300
+sbox.height = 34
+
+card = add a card titled "Card" to praxis
+card.x = 350
+card.y = 15
+card.width = 400
+card.height = 180
+cardNote = add a text titled "Card child here" to card
+cardNote.x = 12
+cardNote.y = 50
+cardNote.width = 300
+cardNote.height = 30
+
+sep = add a separator to praxis
+sep.x = 350
+sep.y = 205
+sep.width = 400
+sep.height = 2
+
+status = add a status bar titled "Ready" to praxis
+status.text = "All systems go"
+
+ctx = add a context menu
+ctxItem = ctx.add "About Praxis"
+
+dlgBtn = add a button titled "Dialogs" to praxis
+dlgBtn.x = 350
+dlgBtn.y = 225
+dlgBtn.width = 150
+dlgBtn.height = 34
+
+noteBtn = add a button titled "Notify" to praxis
+noteBtn.x = 510
+noteBtn.y = 225
+noteBtn.width = 150
+noteBtn.height = 34
+noteBtn.icon = "info"
+
+scroll = add a scroll area to layout
+scroll.x = 20
+scroll.y = 15
+scroll.width = 450
+scroll.height = 220
+sInner = add a button titled "Inside scroll" to scroll
+sInner.x = 10
+sInner.y = 10
+sInner.width = 160
+sInner.height = 32
+
+panel = add a panel to layout
+panel.x = 490
+panel.y = 15
+panel.width = 330
+panel.height = 220
+note = add a text titled "Panel child here" to panel
+note.x = 10
+note.y = 10
+note.width = 300
+note.height = 30
+
+animBtn = add a button titled "Slide me" to layout
+animBtn.x = 20
+animBtn.y = 250
+animBtn.width = 150
+animBtn.height = 36
+
+respBtn = add a button titled "Responsive" to layout
+respBtn.x = 200
+respBtn.y = 250
+respBtn.width = 150
+respBtn.height = 36
+set respBtn width to 50 percent
+
+menu = add a menu titled "Help"
+aboutItem = menu.add "About"
+
+win2 = create a window titled "Second"
+win2.width = 400
+win2.height = 300
+
+openWin = add a button titled "Open second" to home
+openWin.x = 20
+openWin.y = 230
+openWin.width = 150
+openWin.height = 32
+
+count = 0
+
+greetBtn.on click {
+    out.text = "Hello " + name.text
+}
+
+vol.on change {
+    prog.value = vol.value
+    out.text = "Volume: " + vol.value
+}
+
+pick.on change {
+    out.text = "Picked: " + pick.selected
+}
+
+fruits.on change {
+    out.text = "Fruit: " + event.value
+}
+
+grid.on change {
+    out.text = "Row " + event.value
+}
+
+check.on change {
+    out.text = "Subscribed: " + check.checked
+}
+
+sw.on change {
+    out.text = "Power: " + sw.checked
+}
+
+rb1.on change {
+    out.text = "Choice A"
+}
+
+num.on change {
+    out.text = "Number: " + num.value
+}
+
+sbox.on change {
+    out.text = "Search: " + sbox.text
+}
+
+sbox.on key press {
+    out.text = "Key: " + key
+}
+
+fileBtn.on click {
+    out.text = "File clicked"
+}
+
+cutBtn.on click {
+    copy name.text
+    out.text = "Cut to clipboard"
+}
+
+pasteBtn.on click {
+    clip = paste
+    out.text = "Clip: " + clip
+}
+
+aboutItem.on click {
+    show message "Praxis Showcase 3.0"
+}
+
+ctxItem.on click {
+    show message "Praxis context item"
+}
+
+dlgBtn.on click {
+    show confirmation "Delete this file?"
+    show input dialog "Enter your name"
+    ok = confirm "Are you sure?"
+    typed = prompt "Your name?"
+    out.text = "Dialogs done"
+}
+
+noteBtn.on click {
+    show notification "File saved"
+    show notification success "Done" for 2 seconds
+}
+
+focusBtn.on click {
+    name.focus
+}
+
+openWin.on click {
+    win2.show
+}
+
+animBtn.on click {
+    animate animBtn {
+        move to x 200
+        duration 1 second
+    }
+}
+
+name.on key press {
+    out.text = "Key: " + key
+}
+
+ticker = every 2 seconds {
+    count = count + 1
+    title.text = "Tick " + count
+}
+
+window.show

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Vexel 2.2.0</title>
+<meta name="description" content="Get Vexel 2.2.0 for your platform, verify the install, and run your first program.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">2.2.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">☰</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html" aria-current="page">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap read">
+  <p class="eyebrow" style="margin-top:34px">Download</p>
+  <h1 style="margin-top:0">Vexel 2.2.0</h1>
+  <p class="lead">The current stable release. Pick your platform below.</p>
+
+  <div class="platforms" style="grid-template-columns:repeat(3,1fr)">
+    <div class="card">
+      <h3>Windows</h3>
+      <p>Vexel compiler and tools for Windows.</p>
+      <button class="btn primary small" type="button" disabled>Coming soon</button>
+      <p style="color:var(--faint);font-size:.85rem">Packaged downloads are not published yet — no fake links here.</p>
+    </div>
+    <div class="card">
+      <h3>Linux</h3>
+      <p>Vexel compiler and tools for Linux.</p>
+      <button class="btn primary small" type="button" disabled>Coming soon</button>
+      <p style="color:var(--faint);font-size:.85rem">Packaged downloads are not published yet — no fake links here.</p>
+    </div>
+    <div class="card">
+      <h3>Other platforms</h3>
+      <p>macOS and other systems.</p>
+      <button class="btn primary small" type="button" disabled>Coming soon</button>
+      <p style="color:var(--faint);font-size:.85rem">Platform support is announced in the <a href="changelog.html">changelog</a>.</p>
+    </div>
+  </div>
+
+  <h2>Install from source today</h2>
+  <p>Vexel runs from its source folder with zero dependencies. Requirements: <strong>Node.js 18 or newer</strong> and the <strong>native compiler toolchain</strong> for your system (used by <code>vexel build</code> to produce native executables).</p>
+  <ol class="steps">
+    <li>Get the Vexel 2.2.0 source folder on your machine.</li>
+    <li>Open a terminal inside the <code>vexel</code> folder.</li>
+    <li>Run <code>node bin/vexel.js --help</code> (Windows: <code>vexel.cmd</code>, Unix: <code>./vexel</code>). Add the folder to <code>PATH</code> to use the short <code>vexel</code> command.</li>
+  </ol>
+
+  <h2>Verify installation</h2>
+  <pre data-plain data-filename="terminal">node --version
+vexel version</pre>
+  <p>You should see Node.js 18 or newer, and Vexel 2.2.0.</p>
+
+  <h2>Running your first program</h2>
+  <p>Save this as <code>hello.vxl</code>:</p>
+  <pre data-vxl data-filename="hello.vxl">print "Hello World!"</pre>
+  <p>Then run it:</p>
+  <pre data-plain data-filename="terminal">vexel hello.vxl
+vexel check hello.vxl
+vexel build hello.vxl</pre>
+  <p><code>vexel hello.vxl</code> compiles and runs. <code>vexel check</code> verifies types only. <code>vexel build</code> keeps a native executable next to your source. Continue with <a href="learn.html">Lesson 1</a>.</p>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 2.2.0 — a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 2.2.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examples…" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/lessons-7.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

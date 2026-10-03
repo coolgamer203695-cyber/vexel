@@ -1,0 +1,14 @@
+create a window titled "Ax Dialog"
+
+n = 0
+
+ticker = every 1 second {
+    n = n + 1
+}
+
+pop = after 2 seconds {
+    show a message "Hello"
+    json write n to "ax_dialog.json"
+}
+
+window.show

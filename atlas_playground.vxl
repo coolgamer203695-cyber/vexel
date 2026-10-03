@@ -1,0 +1,84 @@
+// Atlas Playground — the official Atlas v0.1 showcase (Vexel 3.4).
+// Run: vexel atlas_playground.vxl
+// Every section runs for real; errors are caught and shown.
+
+print "== Tensor Creation =="
+a = tensor [1,2,3]
+print a
+m = tensor [[1,2],[3,4]]
+print m
+d = tensor 5
+print d
+e = tensor []
+print e
+
+print "== Shapes =="
+print m.shape
+print m.rank
+print m.size
+print m.dtype
+print m.device
+
+print "== Indexing =="
+print m[1][0]
+print m[0]
+
+print "== Math =="
+b = tensor [[5,6],[7,8]]
+print a + tensor [4,5,6]
+print m * 2
+print 100 - m
+
+print "== Matrix Multiplication =="
+print m @ b
+
+print "== Utilities =="
+print m.transpose
+print m.flatten
+rr = m.reshape [4]
+print rr
+print rr.reshape [2,2]
+
+print "== Reductions =="
+s = tensor [1,2,3,4]
+print s.sum
+print s.mean
+print s.max
+print s.min
+
+print "== Random Tensors =="
+t = random tensor [2,2]
+print t.shape
+print t.size
+print t.min >= 0
+print t.max < 1
+print zeros [2,2]
+print ones [1,3]
+
+print "== Errors (caught live) =="
+function addem p, q {
+    return p + q
+}
+try {
+    print addem a, tensor [1,2]
+} error {
+    print error.message
+}
+try {
+    print m[9]
+} error {
+    print error.message
+}
+n = 3
+try {
+    print m.reshape [n]
+} error {
+    print error.message
+}
+
+print "== Performance =="
+big = ones [30,30]
+print big.size
+print big @ big
+print big.sum
+print "Playground complete."

@@ -1,0 +1,8 @@
+repeat 5 {
+    print "Hello"
+}
+x = 0
+repeat till x = 5 {
+    print x
+    x = x + 1
+}

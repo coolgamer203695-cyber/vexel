@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vexel Examples — real downloadable .vxl programs</title>
+<meta name="description" content="Real Vexel example programs: Hello World, calculator, rock paper scissors, counter, timer, file reader, GUI apps, login UI. Every file downloadable as .vxl.">
+<meta property="og:title" content="Vexel Examples">
+<meta property="og:description" content="Copy or download real .vxl programs.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f6feb'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='monospace'%3EV%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--border:#30363d;--text:#e6edf3;--muted:#9aa4b2;--accent:#58a6ff;--green:#3fb950;--code-bg:#0a0d12;--kw:#ff7b72;--str:#a5d6ff;--num:#79c0ff;--com:#8b949e;--bool:#d2a8ff}
+[data-theme="light"]{--bg:#fff;--panel:#f6f8fa;--panel2:#eaeef2;--border:#d0d7de;--text:#1f2328;--muted:#59636e;--accent:#0969da;--green:#1a7f37;--code-bg:#f6f8fa;--kw:#cf222e;--str:#0a3069;--num:#0550ae;--com:#59636e;--bool:#8250df}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--accent)}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:8px;top:8px;background:var(--accent);color:#fff;padding:8px 12px;border-radius:6px}
+nav.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+nav.top a.brand{font-weight:700;color:var(--text);text-decoration:none}
+nav.top a.link{color:var(--muted);text-decoration:none}
+nav.top a.link:hover{color:var(--accent)}
+nav.top .spacer{flex:1}
+button.theme{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer}
+main{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+h1{font-size:2.2rem}h2{border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:40px}
+pre.code{position:relative;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px;padding-top:40px;overflow-x:auto;font-family:Consolas,Menlo,monospace;font-size:.9rem}
+pre.code code{white-space:pre}
+button.copy-btn{position:absolute;top:8px;right:8px;background:var(--panel2);color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:.8rem;cursor:pointer}
+button.copy-btn:hover{color:var(--text)}
+a.dl-btn{display:inline-block;margin:8px 12px 8px 0;padding:6px 14px;border:1px solid var(--border);border-radius:6px;color:var(--text);text-decoration:none;background:var(--panel);font-size:.9rem}
+a.dl-btn:hover{border-color:var(--accent)}
+.tok-kw{color:var(--kw)}.tok-str{color:var(--str)}.tok-num{color:var(--num)}.tok-com{color:var(--com);font-style:italic}.tok-bool{color:var(--bool)}
+code.inline{background:var(--panel2);padding:2px 6px;border-radius:4px;font-size:.88em}
+footer{text-align:center;color:var(--muted);padding:28px;border-top:1px solid var(--border);font-size:.9rem}
+@media (max-width:600px){h1{font-size:1.7rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="top" aria-label="Site">
+  <a class="brand" href="index.html">Vexel <span id="ver"></span></a>
+  <a class="link" href="learn.html">Learn</a>
+  <a class="link" href="docs.html">Docs</a>
+  <a class="link" href="examples.html">Examples</a>
+  <a class="link" href="download.html">Download</a>
+  <span class="spacer"></span>
+  <button class="theme" id="themeBtn" aria-label="Toggle light and dark mode">Light mode</button>
+</nav>
+<main id="main">
+<h1>Examples</h1>
+<p>Real programs from the Vexel repo. Open any <code class="inline">.vxl</code> file
+directly (paths are relative to this site folder), or copy the code below.
+Run with <code class="inline">vexel file.vxl</code>.</p>
+
+<h2>Hello World</h2>
+<a class="dl-btn" href="../examples/hello.vxl" download>Download hello.vxl</a>
+<pre class="code"><code class="vex">print "Hello World!"</code></pre>
+
+<h2>Counter (GUI)</h2>
+<a class="dl-btn" href="../examples/ui/counter.vxl" download>Download counter.vxl</a>
+<pre class="code"><code class="vex">create a window titled "Counter"
+
+count = 0
+label = add a text titled "Count: 0"
+button = add a button titled "Increase"
+
+button.on click {
+    count = count + 1
+    label.text = "Count: " + count
+}
+
+window.show</code></pre>
+
+<h2>Calculator (GUI)</h2>
+<a class="dl-btn" href="../examples/ui/calculator.vxl" download>Download calculator.vxl</a>
+<p>Full 17-button calculator with manual positioning — see the file for the
+complete source.</p>
+
+<h2>Rock Paper Scissors</h2>
+<a class="dl-btn" href="../examples/lists.vxl" download>Lists primer</a>
+<pre class="code"><code class="vex">moves = ["rock", "paper", "scissors"]
+roll = r from 0 to 2
+print moves[roll]</code></pre>
+
+<h2>Todo app</h2>
+<pre class="code"><code class="vex">tasks = ["Write code", "Test app"]
+tasks.add "Ship it"
+tasks.remove 0
+print tasks[0]
+print tasks.length</code></pre>
+
+<h2>Timer</h2>
+<pre class="code"><code class="vex">create a window titled "Timer"
+
+label = add a text titled "waiting..."
+
+after 3 seconds {
+    label.text = "Done!"
+}
+
+every 1 second {
+    print "tick"
+}
+
+window.show</code></pre>
+
+<h2>File reader</h2>
+<pre class="code"><code class="vex">print data/info.txt
+
+try {
+    print data/missing.txt
+} error {
+    print error
+}</code></pre>
+
+<h2>Simple GUI</h2>
+<a class="dl-btn" href="../examples/ui/hello.vxl" download>Download hello.vxl</a>
+<pre class="code"><code class="vex">create a window titled "Hello Vexel"
+
+text = add a text titled "Hello World!"
+
+window.show</code></pre>
+
+<h2>Login UI</h2>
+<a class="dl-btn" href="../examples/ui/login.vxl" download>Download login.vxl</a>
+<pre class="code"><code class="vex">create a window titled "Login"
+
+component login_box {
+    add a text titled "Login"
+    add an input box
+    add a button titled "Login"
+}
+
+add login_box
+
+window.show</code></pre>
+
+<h2>Text editor (mini)</h2>
+<pre class="code"><code class="vex">create a window titled "Notes"
+
+box = add an output box
+box.width = 500
+box.height = 300
+
+save = add a button titled "Save"
+
+save.on click {
+    json write box.text to "notes.json"
+    show a message "Saved!"
+}
+
+window.show</code></pre>
+</main>
+<footer>Vexel <span class="ver-foot"></span> — Build. Create. Simplify.</footer>
+<script>
+(function(){
+  var root=document.documentElement;
+  function paint(){var t=root.getAttribute('data-theme')||'dark';document.getElementById('themeBtn').textContent=t==='dark'?'Light mode':'Dark mode';}
+  try{var s=localStorage.getItem('vexel-theme');if(s)root.setAttribute('data-theme',s);}catch(e){}
+  paint();
+  document.getElementById('themeBtn').addEventListener('click',function(){var n=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('vexel-theme',n);}catch(e){}paint();});
+  function setVer(v){document.getElementById('ver').textContent=v;var f=document.querySelector('.ver-foot');if(f)f.textContent=v;}
+  fetch('version.json').then(function(r){return r.json();}).then(function(j){if(j&&j.version)setVer('v'+j.version);}).catch(function(){});
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function hi(code){
+    return esc(code).replace(/(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|\b(\d+\.\d+|\d+)\b|\b(print|if|else|repeat|till|add|input|set|output|function|return|r|from|to|true|false|and|or|not|make|upper|lower|length|number|of|struct|import|public|try|error)\b/g,
+      function(m,com,str,num,kw){
+        if(com)return '<span class="tok-com">'+com+'</span>';
+        if(str)return '<span class="tok-str">'+str+'</span>';
+        if(num)return '<span class="tok-num">'+num+'</span>';
+        if(kw==='true'||kw==='false')return '<span class="tok-bool">'+kw+'</span>';
+        return '<span class="tok-kw">'+kw+'</span>';
+      });
+  }
+  document.querySelectorAll('pre.code').forEach(function(pre){
+    var code=pre.querySelector('code');var text=code?code.textContent:pre.textContent;
+    var btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+    btn.addEventListener('click',function(){
+      function done(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy';},1500);}
+      function fb(){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){btn.textContent='Select manually';}document.body.removeChild(ta);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fb);}else{fb();}
+    });
+    pre.appendChild(btn);
+    if(code&&code.classList.contains('vex'))code.innerHTML=hi(text);
+  });
+})();
+</script>
+</body>
+</html>

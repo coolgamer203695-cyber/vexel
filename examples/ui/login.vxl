@@ -1,0 +1,26 @@
+create a window titled "Login"
+
+set window width to 400
+set window height to 350
+
+component login_box {
+    heading = add a text titled "Login"
+    nameBox = add an input box titled "Name"
+    passBox = add an input box titled "Password"
+    passBox.password = true
+    go = add a button titled "Login"
+    msg = add an output box
+
+    go.on click {
+        if nameBox.text = "" {
+            msg.text = "Name is required"
+        } else {
+            msg.text = "Welcome " + nameBox.text
+        }
+    }
+}
+
+add login_box
+add login_box
+
+window.show

@@ -1,0 +1,11 @@
+create a window titled "Greeting App"
+
+input = add an input box titled "Your name"
+button = add a button titled "Greet"
+output = add an output box
+
+button.on click {
+    output.text = "Hello " + input.text
+}
+
+window.show

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Vexel 2.2 — install, CLI, version</title>
+<meta name="description" content="Get Vexel 2.2.0: install steps, project commands, run, build, clean, debug.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><b>Vexel</b> 2.2</a>
+    <span class="badge">2.2.0</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html" class="active">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Get Vexel 2.2.0</h1>
+    <p class="lead">One toolchain: edit <kbd>.vxl</kbd> files, run them natively, or build shareable apps.</p>
+  </div>
+
+  <section class="block">
+    <h2>Install</h2>
+    <pre><code>rem Windows — add Vexel to your PATH, then:
+vexel version</code></pre>
+    <p>Expected output: <code>2.2.0</code>. If the command isn't found, re-open your terminal after install.</p>
+  </section>
+
+  <section class="block">
+    <h2>Project workflow</h2>
+    <pre><code>vexel project create
+vexel run
+vexel build
+vexel clean
+vexel debug hello.vxl</code></pre>
+    <table>
+      <tr><th>Command</th><th>Does</th></tr>
+      <tr><td><code>vexel project create</code></td><td>Scaffolds <code>vexel.project</code> + folders</td></tr>
+      <tr><td><code>vexel run</code></td><td>Runs the project natively</td></tr>
+      <tr><td><code>vexel build</code></td><td>Validates (parse &rarr; UI checks &rarr; codegen) and builds</td></tr>
+      <tr><td><code>vexel clean</code></td><td>Removes build artifacts</td></tr>
+      <tr><td><code>vexel debug</code></td><td>Shows AST, symbols, UI tree, tasks, timers, events</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2>Compatibility</h2>
+    <div class="notice"><b>2.2 keeps your code working:</b> 2.0/2.1 syntax, semantics, UI code, projects, CLI commands, and standard-library APIs are preserved. Only internals got more reliable.</div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Vexel 2.2.0 — English-like, strongly typed, compiled.</div>
+</footer>
+<script src="site.js"></script>
+</body>
+</html>

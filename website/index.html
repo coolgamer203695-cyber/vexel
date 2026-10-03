@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vexel â€” Build software with a language designed to stay simple</title>
+<meta name="description" content="Vexel 3.7.0 is a readable, English-like, statically typed compiled programming language with native desktop UI. Learn, read the docs, download.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">3.7.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">â˜°</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+  <section class="hero">
+    <span class="kicker">Vexel 3.7.0 Â· stable</span>
+    <div class="hero-grid">
+      <div>
+        <h1><span class="v">VEXEL</span></h1>
+        <p class="tag">Build software with a language designed to stay simple.</p>
+        <p class="lead">Vexel is a readable, English-like programming language. It is <strong>strongly typed with automatic type inference</strong>, <strong>compiled to native executables</strong>, and it builds <strong>real desktop apps</strong> with the same simple syntax.</p>
+        <div class="btn-row">
+          <a class="btn primary" href="learn.html">Start Learning</a>
+          <a class="btn ghost" href="docs.html">Read the Docs</a>
+          <a class="btn ghost" href="download.html">Download Vexel</a>
+        </div>
+      </div>
+      <div>
+        <pre data-vxl data-filename="hello.vxl">print "Hello World!"</pre>
+        <p style="color:var(--muted);font-size:.95rem">Run it:</p>
+        <pre data-plain data-filename="terminal">vexel hello.vxl</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="why">
+    <p class="eyebrow">Why Vexel</p>
+    <h2 id="why">Readable first. Simple on purpose.</h2>
+    <p class="lead">No parentheses around calls. No semicolons. Types are inferred automatically, then checked strictly before your program ever runs.</p>
+    <div class="grid-3">
+      <div class="card"><div class="icon" aria-hidden="true">ðŸ“–</div><h3>Readable syntax</h3><p>Plain words do the work: <code>and</code>, <code>or</code>, <code>not</code>, <code>repeat</code>, <code>make upper</code>. Code reads like instructions, not puzzles.</p></div>
+      <div class="card"><div class="icon" aria-hidden="true">âš™ï¸</div><h3>Compiled, native executables</h3><p><code>vexel build</code> produces a real native program. Running never interprets your <code>.vxl</code> file line by line.</p></div>
+      <div class="card"><div class="icon" aria-hidden="true">ðŸªŸ</div><h3>Desktop UI built in</h3><p>Windows, buttons, inputs, lists and events use the same English-like style. No UI framework to learn â€” just Vexel.</p></div>
+      <div class="card"><div class="icon" aria-hidden="true">ðŸ”’</div><h3>Strong, inferred types</h3><p><code>age = 25</code> is an integer automatically. Reassigning it a string fails at compile time, with a clear message.</p></div>
+      <div class="card"><div class="icon" aria-hidden="true">ðŸ§°</div><h3>Batteries included</h3><p>Files, random numbers, JSON, timers, background tasks, HTTP, clipboard, dialogs and project tooling come with the language.</p></div>
+      <div class="card"><div class="icon" aria-hidden="true">ðŸ’¬</div><h3>Clear errors</h3><p>Compiler and runtime errors explain what went wrong, where, and what was expected â€” with fields your code can inspect.</p></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="taste">
+    <p class="eyebrow">A taste of Vexel</p>
+    <h2 id="taste">Variables, decisions, functions</h2>
+    <div class="grid-2">
+      <div>
+        <pre data-vxl data-filename="basics.vxl">name = "Zen"
+age = 25
+
+if age >= 18 {
+    print "Adult"
+} else {
+    print "Minor"
+}</pre>
+      </div>
+      <div>
+        <pre data-vxl data-filename="functions.vxl">function greet name {
+    print "Hello " + name
+}
+
+greet "Zen"
+
+function add a, b {
+    return a + b
+}
+
+result = add 10, 20
+print result</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="ui">
+    <p class="eyebrow">Desktop apps</p>
+    <h2 id="ui">UI without learning a UI framework</h2>
+    <p class="lead">Describe the window and its controls in Vexel. Positioning, styling, events and dialogs are all plain Vexel statements.</p>
+    <pre data-vxl data-filename="hello_ui.vxl">create a window titled "Hello Vexel"
+
+button = add a button titled "Click Me"
+
+button.on click {
+    print "Hello!"
+}
+
+window.show</pre>
+    <div class="btn-row"><a class="btn ghost" href="learn.html">Learn UI in lessons 79â€“93</a><a class="btn ghost" href="example.html?e=desktop-notes">See a notes app</a></div>
+  </section>
+
+  <section class="section" aria-labelledby="tooling">
+    <p class="eyebrow">Beyond the basics</p>
+    <h2 id="tooling">Made for real programs</h2>
+    <div class="grid-3">
+      <div class="card"><h3>Modules</h3><p>Split code across files with <code>import</code>, share with <code>public</code>, shorten with aliases. Circular imports are rejected.</p><pre data-vxl data-filename="mods.vxl">import entities/player
+import entities/player as p
+
+player.greet
+p.greet</pre></div>
+      <div class="card"><h3>Events &amp; timers</h3><p>React to clicks, keys and mouse movement. Run repeating work and delayed actions without blocking.</p><pre data-vxl data-filename="timers.vxl">create a window titled "Clock"
+
+ticker = every 1 second {
+    print "tick"
+}
+
+ticker.cancel
+
+window.show</pre></div>
+      <div class="card"><h3>Tasks, HTTP &amp; JSON</h3><p>Fetch the web on background workers, poll safely from timers, save structured data to disk.</p><pre data-vxl data-filename="data.vxl">try {
+    response = http get "https://example.com"
+    print response.status
+} error {
+    print error.message
+}
+
+player = {
+    name = "Zen"
+    level = 10
+}
+
+json write player to "player.json"</pre></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="start">
+    <h2 id="start">Start in minutes</h2>
+    <ol class="steps">
+      <li>Install Vexel 3.7.0 on your platform â€” see the <a href="download.html">download page</a>.</li>
+      <li>Check it works: <code>vexel version</code>.</li>
+      <li>Save <code>print "Hello World!"</code> as <code>hello.vxl</code> and run <code>vexel hello.vxl</code>.</li>
+      <li>Follow the <a href="learn.html">106-lesson course</a> from zero to desktop apps.</li>
+    </ol>
+    <div class="btn-row"><a class="btn primary" href="learn.html">Start Learning</a><a class="btn ghost" href="docs.html">Read the Docs</a></div>
+  </section>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 3.7.0 â€” a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 3.7.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examplesâ€¦" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

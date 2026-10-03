@@ -1,0 +1,6 @@
+// parser test: AST nodes
+x = 10
+print x + 1
+if x > 5 {
+    print "big"
+}

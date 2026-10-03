@@ -1,0 +1,12 @@
+// Variables + print + expressions
+name = "Zen"
+print name
+x = 10
+y = 20
+print x + y
+age = 25
+ready = true
+price = 19.99
+print age
+print ready
+print price

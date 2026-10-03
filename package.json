@@ -1,0 +1,43 @@
+{
+  "name": "vexel-lang",
+  "version": "3.7.0",
+  "description": "Vexel — a readable, statically compiled programming language with native desktop UI and a built-in tensor/ML engine (Vexel -> Rust -> native)",
+  "type": "commonjs",
+  "bin": {
+    "vexel": "./bin/vexel.js"
+  },
+  "files": [
+    "bin",
+    "compiler",
+    "runtime",
+    "gpu/Cargo.toml",
+    "gpu/Cargo.lock",
+    "gpu/src",
+    "atlas.vxl",
+    "nn.vxl",
+    "docs"
+  ],
+  "keywords": [
+    "compiler",
+    "programming-language",
+    "language",
+    "statically-typed",
+    "rust",
+    "codegen",
+    "native",
+    "gui",
+    "avalonia",
+    "tensor",
+    "autograd",
+    "machine-learning",
+    "gpu"
+  ],
+  "scripts": {
+    "test": "node tests/run_tests.js && node tests/ui/run_ui_tests.js && node tests/v29/run_v29_tests.js && node tests/praxis/run_praxis_tests.js && node tests/atlas/run_atlas_tests.js && node tests/gpu/run_gpu_tests.js && node tests/docs/run_docs_tests.js && node tests/model/run_model_tests.js",
+    "test:fast": "node tests/praxis/run_praxis_tests.js && node tests/atlas/run_atlas_tests.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

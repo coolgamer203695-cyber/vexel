@@ -1,0 +1,5 @@
+// lexer test: comments are ignored, positions tracked
+// This is a comment
+print "lexer ok" // trailing comment
+x = 123
+y = 45.67

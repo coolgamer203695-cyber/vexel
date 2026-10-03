@@ -1,0 +1,895 @@
+create a window titled "Vexel Chess"
+window.width = 640
+window.height = 680
+
+status = add a text titled "White to move"
+status.x = 20
+status.y = 20
+status.width = 600
+status.height = 30
+status.font_size = 16
+status.bold = true
+
+// 8x8 board - 64 buttons, 70px each with 2px gap = 576 + margins
+board = []
+i = 0
+repeat 64 {
+    board.add " "
+    i = i + 1
+}
+
+// initial position
+// black back rank 0-7
+board[0] = "r"
+board[1] = "n"
+board[2] = "b"
+board[3] = "q"
+board[4] = "k"
+board[5] = "b"
+board[6] = "n"
+board[7] = "r"
+// black pawns 8-15
+i = 8
+repeat till i = 16 {
+    board[i] = "p"
+    i = i + 1
+}
+// white pawns 48-55
+i = 48
+repeat till i = 56 {
+    board[i] = "P"
+    i = i + 1
+}
+// white back rank 56-63
+board[56] = "R"
+board[57] = "N"
+board[58] = "B"
+board[59] = "Q"
+board[60] = "K"
+board[61] = "B"
+board[62] = "N"
+board[63] = "R"
+
+selected = -1
+turn = "white"
+
+function pieceColor p {
+    if p = " " {
+        return "none"
+    }
+    if p = "K" {
+        return "white"
+    }
+    if p = "Q" {
+        return "white"
+    }
+    if p = "R" {
+        return "white"
+    }
+    if p = "B" {
+        return "white"
+    }
+    if p = "N" {
+        return "white"
+    }
+    if p = "P" {
+        return "white"
+    }
+    return "black"
+}
+
+function isWhite p {
+    c = pieceColor p
+    if c = "white" {
+        return true
+    }
+    return false
+}
+
+function isBlack p {
+    c = pieceColor p
+    if c = "black" {
+        return true
+    }
+    return false
+}
+
+function absVal n {
+    if n < 0 {
+        return 0 - n
+    }
+    return n
+}
+
+function validMove src, dst {
+    piece = board[src]
+    target = board[dst]
+    if piece = " " {
+        return false
+    }
+    // cannot capture own piece
+    if pieceColor piece = pieceColor target {
+        if target != " " {
+            return false
+        }
+    }
+    // must be correct turn
+    if turn = "white" {
+        if isBlack piece {
+            return false
+        }
+    } else {
+        if isWhite piece {
+            return false
+        }
+    }
+    fr = src / 8
+    make fr number
+    fc = src % 8
+    tr = dst / 8
+    make tr number
+    tc = dst % 8
+    dr = tr - fr
+    dc = tc - fc
+    adr = absVal dr
+    adc = absVal dc
+    // pawn
+    if piece = "P" {
+        // white pawn moves up (decreasing row)
+        if dc = 0 {
+            if dr = -1 {
+                if target = " " {
+                    return true
+                }
+            }
+            if dr = -2 {
+                if fr = 6 {
+                    if target = " " {
+                        mid = src - 8
+                        if board[mid] = " " {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        if adc = 1 {
+            if dr = -1 {
+                if target != " " {
+                    if isBlack target {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    if piece = "p" {
+        if dc = 0 {
+            if dr = 1 {
+                if target = " " {
+                    return true
+                }
+            }
+            if dr = 2 {
+                if fr = 1 {
+                    if target = " " {
+                        mid = src + 8
+                        if board[mid] = " " {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        if adc = 1 {
+            if dr = 1 {
+                if target != " " {
+                    if isWhite target {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    // knight
+    if piece = "N" {
+        if piece = "n" {
+            // fallthrough handled by lower
+        }
+    }
+    lp = piece
+    make lp lower
+    if lp = "n" {
+        if adr = 2 {
+            if adc = 1 {
+                return true
+            }
+        }
+        if adr = 1 {
+            if adc = 2 {
+                return true
+            }
+        }
+        return false
+    }
+    if lp = "b" {
+        if adr = adc {
+            if adr > 0 {
+                stepR = 1
+                if dr < 0 {
+                    stepR = -1
+                }
+                stepC = 1
+                if dc < 0 {
+                    stepC = -1
+                }
+                rr = fr + stepR
+                cc = fc + stepC
+                blocked = false
+                repeat till rr = tr {
+                    idx = rr * 8 + cc
+                    if board[idx] != " " {
+                        blocked = true
+                    }
+                    rr = rr + stepR
+                    cc = cc + stepC
+                }
+                if blocked {
+                    return false
+                }
+                return true
+            }
+        }
+        return false
+    }
+    if lp = "r" {
+        if dr = 0 {
+            if adc > 0 {
+                step = 1
+                if dc < 0 {
+                    step = -1
+                }
+                c = fc + step
+                blocked = false
+                repeat till c = tc {
+                    idx = fr * 8 + c
+                    if board[idx] != " " {
+                        blocked = true
+                    }
+                    c = c + step
+                }
+                if blocked {
+                    return false
+                }
+                return true
+            }
+        }
+        if dc = 0 {
+            if adr > 0 {
+                step = 1
+                if dr < 0 {
+                    step = -1
+                }
+                r = fr + step
+                blocked = false
+                repeat till rr = tr {
+                    idx = rr * 8 + cc
+                    // c is still fc
+                    idx2 = r * 8 + fc
+                    if board[idx2] != " " {
+                        blocked = true
+                    }
+                    r = r + step
+                }
+                if blocked {
+                    return false
+                }
+                return true
+            }
+        }
+        return false
+    }
+    if lp = "q" {
+        // queen = bishop or rook
+        if adr = adc {
+            if adr > 0 {
+                stepR = 1
+                if dr < 0 {
+                    stepR = -1
+                }
+                stepC = 1
+                if dc < 0 {
+                    stepC = -1
+                }
+                rr = fr + stepR
+                cc = fc + stepC
+                blocked = false
+                repeat till rr = tr {
+                    idx = rr * 8 + cc
+                    if board[idx] != " " {
+                        blocked = true
+                    }
+                    rr = rr + stepR
+                    cc = cc + stepC
+                }
+                if blocked {
+                    return false
+                }
+                return true
+            }
+        }
+        if dr = 0 {
+            if adc > 0 {
+                step = 1
+                if dc < 0 {
+                    step = -1
+                }
+                c = fc + step
+                blocked = false
+                repeat till c = tc {
+                    idx = fr * 8 + c
+                    if board[idx] != " " {
+                        blocked = true
+                    }
+                    c = c + step
+                }
+                if blocked {
+                    return false
+                }
+                return true
+            }
+        }
+        if dc = 0 {
+            if adr > 0 {
+                step = 1
+                if dr < 0 {
+                    step = -1
+                }
+                r = fr + step
+                blocked = false
+                repeat till rr = tr {
+                    idx2 = r * 8 + fc
+                    if board[idx2] != " " {
+                        blocked = true
+                    }
+                    r = r + step
+                }
+                if blocked {
+                    return false
+                }
+                return true
+            }
+        }
+        return false
+    }
+    if lp = "k" {
+        if adr <= 1 {
+            if adc <= 1 {
+                if adr + adc > 0 {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    return false
+}
+
+// create 64 buttons
+b0 = add a button titled "r"
+b0.x = 20
+b0.y = 60
+b0.width = 70
+b0.height = 70
+b1 = add a button titled "n"
+b1.x = 90
+b1.y = 60
+b1.width = 70
+b1.height = 70
+b2 = add a button titled "b"
+b2.x = 160
+b2.y = 60
+b2.width = 70
+b2.height = 70
+b3 = add a button titled "q"
+b3.x = 230
+b3.y = 60
+b3.width = 70
+b3.height = 70
+b4 = add a button titled "k"
+b4.x = 300
+b4.y = 60
+b4.width = 70
+b4.height = 70
+b5 = add a button titled "b"
+b5.x = 370
+b5.y = 60
+b5.width = 70
+b5.height = 70
+b6 = add a button titled "n"
+b6.x = 440
+b6.y = 60
+b6.width = 70
+b6.height = 70
+b7 = add a button titled "r"
+b7.x = 510
+b7.y = 60
+b7.width = 70
+b7.height = 70
+b8 = add a button titled "p"
+b8.x = 20
+b8.y = 130
+b8.width = 70
+b8.height = 70
+b9 = add a button titled "p"
+b9.x = 90
+b9.y = 130
+b9.width = 70
+b9.height = 70
+b10 = add a button titled "p"
+b10.x = 160
+b10.y = 130
+b10.width = 70
+b10.height = 70
+b11 = add a button titled "p"
+b11.x = 230
+b11.y = 130
+b11.width = 70
+b11.height = 70
+b12 = add a button titled "p"
+b12.x = 300
+b12.y = 130
+b12.width = 70
+b12.height = 70
+b13 = add a button titled "p"
+b13.x = 370
+b13.y = 130
+b13.width = 70
+b13.height = 70
+b14 = add a button titled "p"
+b14.x = 440
+b14.y = 130
+b14.width = 70
+b14.height = 70
+b15 = add a button titled "p"
+b15.x = 510
+b15.y = 130
+b15.width = 70
+b15.height = 70
+b16 = add a button titled " "
+b16.x = 20
+b16.y = 200
+b16.width = 70
+b16.height = 70
+b17 = add a button titled " "
+b17.x = 90
+b17.y = 200
+b17.width = 70
+b17.height = 70
+b18 = add a button titled " "
+b18.x = 160
+b18.y = 200
+b18.width = 70
+b18.height = 70
+b19 = add a button titled " "
+b19.x = 230
+b19.y = 200
+b19.width = 70
+b19.height = 70
+b20 = add a button titled " "
+b20.x = 300
+b20.y = 200
+b20.width = 70
+b20.height = 70
+b21 = add a button titled " "
+b21.x = 370
+b21.y = 200
+b21.width = 70
+b21.height = 70
+b22 = add a button titled " "
+b22.x = 440
+b22.y = 200
+b22.width = 70
+b22.height = 70
+b23 = add a button titled " "
+b23.x = 510
+b23.y = 200
+b23.width = 70
+b23.height = 70
+b24 = add a button titled " "
+b24.x = 20
+b24.y = 270
+b24.width = 70
+b24.height = 70
+b25 = add a button titled " "
+b25.x = 90
+b25.y = 270
+b25.width = 70
+b25.height = 70
+b26 = add a button titled " "
+b26.x = 160
+b26.y = 270
+b26.width = 70
+b26.height = 70
+b27 = add a button titled " "
+b27.x = 230
+b27.y = 270
+b27.width = 70
+b27.height = 70
+b28 = add a button titled " "
+b28.x = 300
+b28.y = 270
+b28.width = 70
+b28.height = 70
+b29 = add a button titled " "
+b29.x = 370
+b29.y = 270
+b29.width = 70
+b29.height = 70
+b30 = add a button titled " "
+b30.x = 440
+b30.y = 270
+b30.width = 70
+b30.height = 70
+b31 = add a button titled " "
+b31.x = 510
+b31.y = 270
+b31.width = 70
+b31.height = 70
+b32 = add a button titled " "
+b32.x = 20
+b32.y = 340
+b32.width = 70
+b32.height = 70
+b33 = add a button titled " "
+b33.x = 90
+b33.y = 340
+b33.width = 70
+b33.height = 70
+b34 = add a button titled " "
+b34.x = 160
+b34.y = 340
+b34.width = 70
+b34.height = 70
+b35 = add a button titled " "
+b35.x = 230
+b35.y = 340
+b35.width = 70
+b35.height = 70
+b36 = add a button titled " "
+b36.x = 300
+b36.y = 340
+b36.width = 70
+b36.height = 70
+b37 = add a button titled " "
+b37.x = 370
+b37.y = 340
+b37.width = 70
+b37.height = 70
+b38 = add a button titled " "
+b38.x = 440
+b38.y = 340
+b38.width = 70
+b38.height = 70
+b39 = add a button titled " "
+b39.x = 510
+b39.y = 340
+b39.width = 70
+b39.height = 70
+b40 = add a button titled " "
+b40.x = 20
+b40.y = 410
+b40.width = 70
+b40.height = 70
+b41 = add a button titled " "
+b41.x = 90
+b41.y = 410
+b41.width = 70
+b41.height = 70
+b42 = add a button titled " "
+b42.x = 160
+b42.y = 410
+b42.width = 70
+b42.height = 70
+b43 = add a button titled " "
+b43.x = 230
+b43.y = 410
+b43.width = 70
+b43.height = 70
+b44 = add a button titled " "
+b44.x = 300
+b44.y = 410
+b44.width = 70
+b44.height = 70
+b45 = add a button titled " "
+b45.x = 370
+b45.y = 410
+b45.width = 70
+b45.height = 70
+b46 = add a button titled " "
+b46.x = 440
+b46.y = 410
+b46.width = 70
+b46.height = 70
+b47 = add a button titled " "
+b47.x = 510
+b47.y = 410
+b47.width = 70
+b47.height = 70
+b48 = add a button titled "P"
+b48.x = 20
+b48.y = 480
+b48.width = 70
+b48.height = 70
+b49 = add a button titled "P"
+b49.x = 90
+b49.y = 480
+b49.width = 70
+b49.height = 70
+b50 = add a button titled "P"
+b50.x = 160
+b50.y = 480
+b50.width = 70
+b50.height = 70
+b51 = add a button titled "P"
+b51.x = 230
+b51.y = 480
+b51.width = 70
+b51.height = 70
+b52 = add a button titled "P"
+b52.x = 300
+b52.y = 480
+b52.width = 70
+b52.height = 70
+b53 = add a button titled "P"
+b53.x = 370
+b53.y = 480
+b53.width = 70
+b53.height = 70
+b54 = add a button titled "P"
+b54.x = 440
+b54.y = 480
+b54.width = 70
+b54.height = 70
+b55 = add a button titled "P"
+b55.x = 510
+b55.y = 480
+b55.width = 70
+b55.height = 70
+b56 = add a button titled "R"
+b56.x = 20
+b56.y = 550
+b56.width = 70
+b56.height = 70
+b57 = add a button titled "N"
+b57.x = 90
+b57.y = 550
+b57.width = 70
+b57.height = 70
+b58 = add a button titled "B"
+b58.x = 160
+b58.y = 550
+b58.width = 70
+b58.height = 70
+b59 = add a button titled "Q"
+b59.x = 230
+b59.y = 550
+b59.width = 70
+b59.height = 70
+b60 = add a button titled "K"
+b60.x = 300
+b60.y = 550
+b60.width = 70
+b60.height = 70
+b61 = add a button titled "B"
+b61.x = 370
+b61.y = 550
+b61.width = 70
+b61.height = 70
+b62 = add a button titled "N"
+b62.x = 440
+b62.y = 550
+b62.width = 70
+b62.height = 70
+b63 = add a button titled "R"
+b63.x = 510
+b63.y = 550
+b63.width = 70
+b63.height = 70
+
+function updateBoard {
+    b0.text = board[0]
+    b1.text = board[1]
+    b2.text = board[2]
+    b3.text = board[3]
+    b4.text = board[4]
+    b5.text = board[5]
+    b6.text = board[6]
+    b7.text = board[7]
+    b8.text = board[8]
+    b9.text = board[9]
+    b10.text = board[10]
+    b11.text = board[11]
+    b12.text = board[12]
+    b13.text = board[13]
+    b14.text = board[14]
+    b15.text = board[15]
+    b16.text = board[16]
+    b17.text = board[17]
+    b18.text = board[18]
+    b19.text = board[19]
+    b20.text = board[20]
+    b21.text = board[21]
+    b22.text = board[22]
+    b23.text = board[23]
+    b24.text = board[24]
+    b25.text = board[25]
+    b26.text = board[26]
+    b27.text = board[27]
+    b28.text = board[28]
+    b29.text = board[29]
+    b30.text = board[30]
+    b31.text = board[31]
+    b32.text = board[32]
+    b33.text = board[33]
+    b34.text = board[34]
+    b35.text = board[35]
+    b36.text = board[36]
+    b37.text = board[37]
+    b38.text = board[38]
+    b39.text = board[39]
+    b40.text = board[40]
+    b41.text = board[41]
+    b42.text = board[42]
+    b43.text = board[43]
+    b44.text = board[44]
+    b45.text = board[45]
+    b46.text = board[46]
+    b47.text = board[47]
+    b48.text = board[48]
+    b49.text = board[49]
+    b50.text = board[50]
+    b51.text = board[51]
+    b52.text = board[52]
+    b53.text = board[53]
+    b54.text = board[54]
+    b55.text = board[55]
+    b56.text = board[56]
+    b57.text = board[57]
+    b58.text = board[58]
+    b59.text = board[59]
+    b60.text = board[60]
+    b61.text = board[61]
+    b62.text = board[62]
+    b63.text = board[63]
+}
+
+function handleClick idx {
+    if selected = -1 {
+        p = board[idx]
+        if p = " " {
+            return 1
+        }
+        if turn = "white" {
+            if isBlack p {
+                status.text = "Not your piece!"
+                return 1
+            }
+        } else {
+            if isWhite p {
+                status.text = "Not your piece!"
+                return 1
+            }
+        }
+        selected = idx
+        status.text = "Selected " + p + " at " + idx
+    } else {
+        if selected = idx {
+            selected = -1
+            status.text = turn + " to move"
+            return 1
+        }
+        ok = validMove selected, idx
+        if ok {
+            moving = board[selected]
+            board[idx] = moving
+            board[selected] = " "
+            updateBoard
+            if turn = "white" {
+                turn = "black"
+            } else {
+                turn = "white"
+            }
+            status.text = turn + " to move"
+            // pawn promotion
+            toRow = idx / 8
+            make toRow number
+            if moving = "P" {
+                if toRow = 0 {
+                    board[idx] = "Q"
+                    updateBoard
+                }
+            }
+            if moving = "p" {
+                if toRow = 7 {
+                    board[idx] = "q"
+                    updateBoard
+                }
+            }
+        } else {
+            status.text = "Invalid move!"
+        }
+        selected = -1
+    }
+    return 1
+}
+
+b0.on click { handleClick 0 }
+b1.on click { handleClick 1 }
+b2.on click { handleClick 2 }
+b3.on click { handleClick 3 }
+b4.on click { handleClick 4 }
+b5.on click { handleClick 5 }
+b6.on click { handleClick 6 }
+b7.on click { handleClick 7 }
+b8.on click { handleClick 8 }
+b9.on click { handleClick 9 }
+b10.on click { handleClick 10 }
+b11.on click { handleClick 11 }
+b12.on click { handleClick 12 }
+b13.on click { handleClick 13 }
+b14.on click { handleClick 14 }
+b15.on click { handleClick 15 }
+b16.on click { handleClick 16 }
+b17.on click { handleClick 17 }
+b18.on click { handleClick 18 }
+b19.on click { handleClick 19 }
+b20.on click { handleClick 20 }
+b21.on click { handleClick 21 }
+b22.on click { handleClick 22 }
+b23.on click { handleClick 23 }
+b24.on click { handleClick 24 }
+b25.on click { handleClick 25 }
+b26.on click { handleClick 26 }
+b27.on click { handleClick 27 }
+b28.on click { handleClick 28 }
+b29.on click { handleClick 29 }
+b30.on click { handleClick 30 }
+b31.on click { handleClick 31 }
+b32.on click { handleClick 32 }
+b33.on click { handleClick 33 }
+b34.on click { handleClick 34 }
+b35.on click { handleClick 35 }
+b36.on click { handleClick 36 }
+b37.on click { handleClick 37 }
+b38.on click { handleClick 38 }
+b39.on click { handleClick 39 }
+b40.on click { handleClick 40 }
+b41.on click { handleClick 41 }
+b42.on click { handleClick 42 }
+b43.on click { handleClick 43 }
+b44.on click { handleClick 44 }
+b45.on click { handleClick 45 }
+b46.on click { handleClick 46 }
+b47.on click { handleClick 47 }
+b48.on click { handleClick 48 }
+b49.on click { handleClick 49 }
+b50.on click { handleClick 50 }
+b51.on click { handleClick 51 }
+b52.on click { handleClick 52 }
+b53.on click { handleClick 53 }
+b54.on click { handleClick 54 }
+b55.on click { handleClick 55 }
+b56.on click { handleClick 56 }
+b57.on click { handleClick 57 }
+b58.on click { handleClick 58 }
+b59.on click { handleClick 59 }
+b60.on click { handleClick 60 }
+b61.on click { handleClick 61 }
+b62.on click { handleClick 62 }
+b63.on click { handleClick 63 }
+
+window.show
+

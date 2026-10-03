@@ -1,0 +1,13 @@
+player = {
+    name = "Zen"
+    level = 10
+    tags = ["hero", "dawn"]
+}
+
+json write player to "player.json"
+
+back = json read "player.json"
+
+print back.name
+print back.level
+print [0] from back.tags

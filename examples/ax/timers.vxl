@@ -1,0 +1,15 @@
+create a window titled "Ax Timers"
+
+count = 0
+
+ticker = every 1 second {
+    count = count + 1
+    json write count to "ax_tick.json"
+}
+
+stopper = after 3 seconds {
+    ticker.cancel
+    json write count to "ax_final.json"
+}
+
+window.show

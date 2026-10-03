@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vexel 2.2 Docs — coordinates, windows, events, tasks, diagnostics</title>
+<meta name="description" content="Vexel 2.2 documentation: UI coordinate system, containers, multiple windows, events, tasks, timers, networking, errors, debugging, projects.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><b>Vexel</b> 2.2</a>
+    <span class="badge">2.2.0</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="docs.html" class="active">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Documentation</h1>
+    <p class="lead">Everything 2.2 promises, precisely stated. Nothing here redesigns the language — it pins down behavior.</p>
+  </div>
+
+  <section class="block">
+    <h2>1. UI coordinate system</h2>
+    <ul>
+      <li><code>x</code> = pixels from the left edge of the parent content area.</li>
+      <li><code>y</code> = pixels from the top edge of the parent content area.</li>
+      <li>Direct children of a window use the window's <b>client area</b> (below the title bar).</li>
+      <li>Children of a container are relative to that container: <code>screen = parent + child</code>.</li>
+      <li><code>right = x + width</code>, <code>bottom = y + height</code>. Never cumulative across siblings.</li>
+    </ul>
+    <pre><code>button.x = 100
+button.width = 80
+rem left is 100, right is 180
+
+panel.x = 50
+panel.y = 50
+button.x = 20
+button.y = 20
+rem on screen: x 70, y 70</code></pre>
+    <h3>DPI</h3>
+    <p>Vexel coordinates &rarr; UI coordinate system &rarr; one DPI conversion &rarr; native pixels. Never scaled twice. Tested at 100%, 125%, 150%, 200%.</p>
+    <h3>Priority</h3>
+    <p>Explicit <code>x/y</code> &gt; explicit size &gt; explicit anchoring &gt; explicit container layout &gt; backend defaults. An explicit position is never overridden silently.</p>
+  </section>
+
+  <section class="block">
+    <h2>2. Containers and clipping</h2>
+    <p>Manual positioning is the default. Layout only happens inside containers you create: <code>panel</code>, vertical/horizontal containers, grid, scroll area, form.</p>
+    <pre><code>panel = add a panel
+panel.x = 20
+panel.y = 20
+panel.width = 200
+panel.height = 200</code></pre>
+    <p>Children that overflow a panel are clipped (or scrollable in a scroll area) — never silently repositioned.</p>
+  </section>
+
+  <section class="block">
+    <h2>3. Multiple windows</h2>
+    <pre><code>main = create a window titled "Main"
+settings = create a window titled "Settings"
+
+main.width = 600
+main.height = 400
+settings.width = 400
+settings.height = 300
+
+main.show
+settings.show</code></pre>
+    <p>Each window has its own controls, events, dimensions, position, visibility, and lifecycle. Methods: <code>show</code>, <code>hide</code>, <code>close</code>, <code>minimize</code>, <code>maximize</code>, <code>restore</code>. Events: <code>close</code>, <code>resize</code>, <code>move</code>, <code>focus</code>, <code>blur</code>.</p>
+    <pre><code>window.on resize {
+    print "Window resized"
+}</code></pre>
+  </section>
+
+  <section class="block">
+    <h2>4. Events</h2>
+    <p>The event object exposes <code>x</code>, <code>y</code>, <code>button</code>, <code>key</code>, <code>value</code>, <code>target</code> — validated per event type (keyboard events carry <code>key</code>, mouse events carry <code>x/y/button</code>).</p>
+    <pre><code>input.on key press {
+    print event.key
+}</code></pre>
+    <p>Mouse coordinates use the Vexel UI coordinate system. Removing a control (<code>remove button</code>) disconnects its handlers, drops its registry id, and frees its resources.</p>
+  </section>
+
+  <section class="block">
+    <h2>5. Tasks and timers</h2>
+    <pre><code>task load_data {
+    data = http get "https://example.com/data"
+}</code></pre>
+    <p>Task states: <code>pending</code>, <code>running</code>, <code>completed</code>, <code>failed</code>, <code>cancelled</code>. Failures arrive as normal error objects — never silently dropped. <code>task.cancel</code> is cooperative: cancelled work stops touching app state.</p>
+    <pre><code>timer = every 1 second {
+    print "tick"
+}
+
+timer.cancel</code></pre>
+    <p>Cancelled timers never fire again, leave the schedule, release resources, and don't keep the app alive. UI stays responsive during network work because I/O never blocks the event loop.</p>
+  </section>
+
+  <section class="block">
+    <h2>6. Networking and JSON</h2>
+    <pre><code>try {
+    response = http get "https://example.com"
+    print response.status
+    print response.text
+}
+error {
+    print error.message
+}</code></pre>
+    <p>Timeouts, DNS failures, and bad URLs become catchable errors. JSON read/write errors include location and context.</p>
+  </section>
+
+  <section class="block">
+    <h2>7. Errors and diagnostics</h2>
+    <p>Errors carry <code>message</code>, <code>type</code>, <code>file</code>, <code>line</code>, <code>column</code> — and still print as a human-readable message.</p>
+    <pre><code>Type Error
+
+calculator.vxl:42:15
+
+result = number + name
+               ^
+
+Cannot add a number and a string.</code></pre>
+    <p><code>vexel debug</code> inspects AST, symbols, modules, UI tree, windows, controls, tasks, timers, and events — and flags controls outside their parent, negative sizes, duplicate ids, and dangling references.</p>
+  </section>
+
+  <section class="block">
+    <h2>8. Styles, themes, animation</h2>
+    <pre><code>style primary_button {
+    background = "blue"
+    text_color = "white"
+    border_radius = 8
+}
+
+button.opacity = 0.5</code></pre>
+    <p>Priority: default &rarr; theme &rarr; reusable style &rarr; explicit control property. Opacity is per-control; a backend that can't do it must say so, not fake it. Animations (<code>move</code>, <code>fade</code>, <code>size</code>, durations, easing) keep existing 2.x syntax.</p>
+  </section>
+
+  <section class="block">
+    <h2>9. Projects and builds</h2>
+    <pre><code>vexel project create
+vexel run
+vexel build
+vexel clean</code></pre>
+    <p>Builds validate in order: parse &rarr; semantic analysis &rarr; project validation &rarr; UI validation &rarr; codegen &rarr; build. Malformed projects produce clear errors, never backend stack traces. Shutdown is deterministic: stop timers, cancel tasks, close windows, release everything.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Vexel 2.2.0 docs — coordinate system, windows, events, tasks, timers, diagnostics.</div>
+</footer>
+<script src="site.js"></script>
+</body>
+</html>

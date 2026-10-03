@@ -1,0 +1,11 @@
+{
+  "name": "Vexel",
+  "tagline": "Build. Create. Simplify.",
+  "version": "2.0.0",
+  "previous": ["1.1.0", "1.0.0"],
+  "requires": {
+    "node": ">= 18",
+    "rustc": "any recent stable (console programs)",
+    "csc": "inbox .NET Framework C# compiler on Windows (UI programs)"
+  }
+}

@@ -1,0 +1,30 @@
+// Vexel 2.9: native test suite. Run: vexel test math_tests.vxl
+function add a, b {
+    return a + b
+}
+
+function divide a, b {
+    if b = 0 {
+        error "Cannot divide by zero"
+    }
+    return a / b
+}
+
+test "addition" {
+    result = add 5, 3
+    assert result = 8
+}
+
+test "division" {
+    half = divide 10, 2
+    assert half = 5
+}
+
+test "divide by zero" {
+    try {
+        print divide 10, 0
+        assert false
+    } error {
+        assert error.message = "Cannot divide by zero"
+    }
+}

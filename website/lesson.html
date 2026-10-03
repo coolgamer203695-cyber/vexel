@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson — Learn Vexel</title>
+<meta name="description" content="Vexel lesson with examples, common mistakes and an exercise.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">2.2.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">☰</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="learn.html" aria-current="page">Learn</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap read" id="lessonHost" style="padding-top:26px;padding-bottom:20px"></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 2.2.0 — a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 2.2.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examples…" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/lessons-7.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  function param(name) {
+    var m = new RegExp("[?&]" + name + "=([^&]*)").exec(location.search);
+    return m ? decodeInt(m[1]) : NaN;
+    function decodeInt(s) { var v = parseInt(decodeURIComponent(s), 10); return isNaN(v) ? NaN : v; }
+  }
+  var host = document.getElementById("lessonHost");
+  var total = window.LESSONS.length;
+  var n = param("n");
+  if (isNaN(n) || n < 1 || n > total) {
+    host.innerHTML = '<p class="eyebrow">Learn</p><h1>Lesson not found</h1><p>Pick a lesson from the <a href="learn.html">course overview</a>.</p>';
+    return;
+  }
+  var L = window.LESSONS[n - 1];
+  document.title = "Lesson " + L.n + " — " + L.title + " · Learn Vexel";
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function codeBlock(code, file) {
+    var pre = document.createElement("pre");
+    pre.setAttribute("data-vxl", "");
+    pre.setAttribute("data-filename", file || "program.vxl");
+    pre.textContent = code;
+    return pre;
+  }
+  var crumb = el("p", "eyebrow", "Learn · " + L.level + " · Lesson " + L.n + " / " + total);
+  host.appendChild(crumb);
+  var h1 = el("h1", null, "Lesson " + L.n + ": " + L.title);
+  h1.style.marginTop = "0";
+  host.appendChild(h1);
+  var bar = el("div", "progress");
+  bar.setAttribute("role", "progressbar");
+  bar.setAttribute("aria-label", "Course progress");
+  var fill = el("i");
+  var doneCount = 0;
+  for (var i = 1; i <= total; i++) if (window.VexelProgress.isDone(i)) doneCount++;
+  fill.style.width = (100 * doneCount / total) + "%";
+  bar.appendChild(fill);
+  host.appendChild(bar);
+  host.appendChild(el("p", "lead", L.intro));
+  (L.points || []).forEach(function (p) {
+    var li = el("p", null, "•  " + p);
+    host.appendChild(li);
+  });
+  if (L.syntax && L.syntax.length) {
+    host.appendChild(el("h2", null, "Syntax"));
+    host.appendChild(codeBlock(L.syntax.join("\n"), "syntax.vxl"));
+  }
+  if (L.examples && L.examples.length) {
+    host.appendChild(el("h2", null, "Examples"));
+    L.examples.forEach(function (ex, ix) {
+      host.appendChild(el("h3", null, "Example " + (ix + 1)));
+      host.appendChild(codeBlock(ex.code, ex.file || "program.vxl"));
+      host.appendChild(el("p", null, ex.note));
+    });
+  }
+  if (L.mistakes && L.mistakes.length) {
+    host.appendChild(el("h2", null, "Common mistakes"));
+    L.mistakes.forEach(function (m) {
+      var box = el("div", "mistake");
+      box.appendChild(codeBlock(m.code, "mistake.vxl"));
+      var w = el("p", null, m.why);
+      box.appendChild(w);
+      host.appendChild(box);
+    });
+  }
+  host.appendChild(el("h2", null, "Try it yourself"));
+  var ex2 = el("div", "exercise");
+  ex2.appendChild(el("p", null, L.exercise));
+  host.appendChild(ex2);
+  var btn = el("button", "complete-btn", "");
+  function paintBtn() {
+    var done = window.VexelProgress.isDone(L.n);
+    btn.textContent = done ? "✓ Completed — click to undo" : "Mark as completed";
+    btn.classList.toggle("done", done);
+  }
+  paintBtn();
+  btn.addEventListener("click", function () {
+    window.VexelProgress.setDone(L.n, !window.VexelProgress.isDone(L.n));
+    paintBtn();
+  });
+  host.appendChild(btn);
+  var nav = el("div", "lesson-nav");
+  if (L.n > 1) {
+    var prev = el("a", "btn ghost", "← Lesson " + (L.n - 1));
+    prev.href = "lesson.html?n=" + (L.n - 1);
+    nav.appendChild(prev);
+  } else {
+    var sp = el("span", null, "");
+    nav.appendChild(sp);
+  }
+  if (L.n < total) {
+    var next = el("a", "btn primary", "Lesson " + (L.n + 1) + " →");
+    next.href = "lesson.html?n=" + (L.n + 1);
+    nav.appendChild(next);
+  } else {
+    var fin = el("a", "btn primary", "Finish: Desktop Hub project →");
+    fin.href = "projects.html";
+    nav.appendChild(fin);
+  }
+  host.appendChild(nav);
+  window.VexelEnhanceCode(host);
+})();
+</script>
+</body>
+</html>

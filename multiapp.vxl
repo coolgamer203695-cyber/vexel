@@ -1,0 +1,914 @@
+// Vexel MultiApp: sign-in gate + 10 mini apps with a browser-like tab bar.
+create a window titled "Vexel MultiApp"
+
+use theme "dark"
+
+window.width = 780
+window.height = 660
+
+fade window
+    duration 0.5 seconds
+
+// ================= tab bar (browser tabs) =================
+tabCalc = add a button titled "Calc"
+tabCalc.x = 12
+tabCalc.y = 8
+tabCalc.width = 70
+tabCalc.height = 34
+
+tabNotes = add a button titled "Notes"
+tabNotes.x = 85
+tabNotes.y = 8
+tabNotes.width = 70
+tabNotes.height = 34
+
+tabDice = add a button titled "Dice"
+tabDice.x = 158
+tabDice.y = 8
+tabDice.width = 70
+tabDice.height = 34
+
+tabTimer = add a button titled "Timer"
+tabTimer.x = 231
+tabTimer.y = 8
+tabTimer.width = 70
+tabTimer.height = 34
+
+tabCount = add a button titled "Count"
+tabCount.x = 304
+tabCount.y = 8
+tabCount.width = 70
+tabCount.height = 34
+
+tabUnits = add a button titled "Units"
+tabUnits.x = 377
+tabUnits.y = 8
+tabUnits.width = 70
+tabUnits.height = 34
+
+tabPass = add a button titled "Pass"
+tabPass.x = 450
+tabPass.y = 8
+tabPass.width = 70
+tabPass.height = 34
+
+tabGrade = add a button titled "Grade"
+tabGrade.x = 523
+tabGrade.y = 8
+tabGrade.width = 70
+tabGrade.height = 34
+
+tabClick = add a button titled "Click"
+tabClick.x = 596
+tabClick.y = 8
+tabClick.width = 70
+tabClick.height = 34
+
+tabAbout = add a button titled "About"
+tabAbout.x = 669
+tabAbout.y = 8
+tabAbout.width = 70
+tabAbout.height = 34
+
+// ================= app 1: calculator =================
+pageCalc = add a panel
+pageCalc.x = 12
+pageCalc.y = 52
+pageCalc.width = 756
+pageCalc.height = 540
+
+calcDisplay = add an output box to pageCalc
+calcDisplay.x = 20
+calcDisplay.y = 15
+calcDisplay.width = 420
+calcDisplay.height = 60
+calcDisplay.font_size = 22
+
+b1 = add a button titled "1" to pageCalc
+b1.x = 20
+b1.y = 90
+b1.width = 130
+b1.height = 60
+
+b2 = add a button titled "2" to pageCalc
+b2.x = 160
+b2.y = 90
+b2.width = 130
+b2.height = 60
+
+b3 = add a button titled "3" to pageCalc
+b3.x = 300
+b3.y = 90
+b3.width = 130
+b3.height = 60
+
+bPlus = add a button titled "+" to pageCalc
+bPlus.x = 20
+bPlus.y = 160
+bPlus.width = 130
+bPlus.height = 60
+
+bEq = add a button titled "=" to pageCalc
+bEq.x = 160
+bEq.y = 160
+bEq.width = 130
+bEq.height = 60
+bEq.background = "blue"
+bEq.text_color = "white"
+
+bClr = add a button titled "C" to pageCalc
+bClr.x = 300
+bClr.y = 160
+bClr.width = 130
+bClr.height = 60
+bClr.background = "red"
+bClr.text_color = "white"
+
+current = ""
+first = ""
+op = ""
+
+b1.on click {
+    current = current + "1"
+    calcDisplay.text = current
+}
+
+b2.on click {
+    current = current + "2"
+    calcDisplay.text = current
+}
+
+b3.on click {
+    current = current + "3"
+    calcDisplay.text = current
+}
+
+bPlus.on click {
+    first = current
+    op = "+"
+    current = ""
+    calcDisplay.text = ""
+}
+
+bEq.on click {
+    second = calcDisplay.text
+    try {
+        f = number of first
+        s = number of second
+        if op = "+" {
+            result = f + s
+        } else {
+            result = s
+        }
+        calcDisplay.text = result
+        current = calcDisplay.text
+    } error {
+        calcDisplay.text = error.message
+    }
+}
+
+bClr.on click {
+    calcDisplay.text = ""
+    first = ""
+    op = ""
+    current = ""
+}
+
+// ================= app 2: notes =================
+pageNotes = add a panel
+pageNotes.x = 12
+pageNotes.y = 52
+pageNotes.width = 756
+pageNotes.height = 540
+pageNotes.hide
+
+noteInput = add an input box titled "New note..." to pageNotes
+noteInput.x = 20
+noteInput.y = 15
+noteInput.width = 440
+noteInput.height = 42
+
+addNoteBtn = add a button titled "Add" to pageNotes
+addNoteBtn.x = 470
+addNoteBtn.y = 15
+addNoteBtn.width = 120
+addNoteBtn.height = 42
+addNoteBtn.background = "green"
+addNoteBtn.text_color = "white"
+
+noteList = add a list to pageNotes
+noteList.x = 20
+noteList.y = 70
+noteList.width = 570
+noteList.height = 330
+
+noteCount = add a text titled "0 notes" to pageNotes
+noteCount.x = 20
+noteCount.y = 415
+noteCount.width = 280
+noteCount.height = 30
+
+clearNotesBtn = add a button titled "Clear" to pageNotes
+clearNotesBtn.x = 320
+clearNotesBtn.y = 415
+clearNotesBtn.width = 270
+clearNotesBtn.height = 40
+
+notesTotal = 0
+
+addNoteBtn.on click {
+    if noteInput.text = "" {
+        noteCount.text = "Type a note first!"
+    } else {
+        noteList.add noteInput.text
+        notesTotal = notesTotal + 1
+        noteCount.text = "Notes: " + notesTotal
+        noteInput.text = ""
+    }
+}
+
+clearNotesBtn.on click {
+    noteList.clear
+    notesTotal = 0
+    noteCount.text = "0 notes"
+}
+
+// ================= app 3: dice =================
+pageDice = add a panel
+pageDice.x = 12
+pageDice.y = 52
+pageDice.width = 756
+pageDice.height = 540
+pageDice.hide
+
+diceTitle = add a text titled "Roll the dice!" to pageDice
+diceTitle.x = 20
+diceTitle.y = 15
+diceTitle.width = 550
+diceTitle.height = 45
+diceTitle.font_size = 26
+diceTitle.bold = true
+
+rollBtn = add a button titled "Roll D6" to pageDice
+rollBtn.x = 20
+rollBtn.y = 75
+rollBtn.width = 270
+rollBtn.height = 65
+rollBtn.font_size = 18
+
+roll20Btn = add a button titled "Roll D20" to pageDice
+roll20Btn.x = 320
+roll20Btn.y = 75
+roll20Btn.width = 270
+roll20Btn.height = 65
+roll20Btn.font_size = 18
+
+diceOut = add an output box to pageDice
+diceOut.x = 20
+diceOut.y = 160
+diceOut.width = 570
+diceOut.height = 150
+diceOut.text = "No rolls yet."
+
+rollBtn.on click {
+    roll = r from 1 to 6
+    diceOut.text = "D6: " + roll
+}
+
+roll20Btn.on click {
+    big = r from 1 to 20
+    if big = 20 {
+        diceOut.text = "D20: 20 CRITICAL!"
+    } else {
+        diceOut.text = "D20: " + big
+    }
+}
+
+// ================= app 4: stopwatch =================
+pageTimer = add a panel
+pageTimer.x = 12
+pageTimer.y = 52
+pageTimer.width = 756
+pageTimer.height = 540
+pageTimer.hide
+
+watchLabel = add a text titled "0s" to pageTimer
+watchLabel.x = 20
+watchLabel.y = 15
+watchLabel.width = 570
+watchLabel.height = 90
+watchLabel.font_size = 52
+watchLabel.bold = true
+watchLabel.alignment = "center"
+
+startBtn = add a button titled "Start" to pageTimer
+startBtn.x = 20
+startBtn.y = 125
+startBtn.width = 280
+startBtn.height = 60
+startBtn.background = "green"
+startBtn.text_color = "white"
+
+stopBtn = add a button titled "Stop" to pageTimer
+stopBtn.x = 310
+stopBtn.y = 125
+stopBtn.width = 280
+stopBtn.height = 60
+stopBtn.background = "red"
+stopBtn.text_color = "white"
+
+resetBtn = add a button titled "Reset" to pageTimer
+resetBtn.x = 20
+resetBtn.y = 200
+resetBtn.width = 570
+resetBtn.height = 55
+
+secs = 0
+ticking = false
+
+ticker = every 1 second {
+    if ticking {
+        secs = secs + 1
+        watchLabel.text = "" + secs + "s"
+    }
+}
+
+startBtn.on click {
+    ticking = true
+}
+
+stopBtn.on click {
+    ticking = false
+}
+
+resetBtn.on click {
+    secs = 0
+    ticking = false
+    watchLabel.text = "0s"
+}
+
+// ================= app 5: counter =================
+pageCount = add a panel
+pageCount.x = 12
+pageCount.y = 52
+pageCount.width = 756
+pageCount.height = 540
+pageCount.hide
+
+countLabel = add a text titled "0" to pageCount
+countLabel.x = 20
+countLabel.y = 15
+countLabel.width = 570
+countLabel.height = 90
+countLabel.font_size = 52
+countLabel.bold = true
+countLabel.alignment = "center"
+
+plusOne = add a button titled "+1" to pageCount
+plusOne.x = 20
+plusOne.y = 125
+plusOne.width = 180
+plusOne.height = 60
+plusOne.font_size = 20
+
+minusOne = add a button titled "-1" to pageCount
+minusOne.x = 215
+minusOne.y = 125
+minusOne.width = 180
+minusOne.height = 60
+minusOne.font_size = 20
+
+zeroOne = add a button titled "Reset" to pageCount
+zeroOne.x = 410
+zeroOne.y = 125
+zeroOne.width = 180
+zeroOne.height = 60
+
+clicks = 0
+
+plusOne.on click {
+    clicks = clicks + 1
+    countLabel.text = "" + clicks
+}
+
+minusOne.on click {
+    clicks = clicks - 1
+    countLabel.text = "" + clicks
+}
+
+zeroOne.on click {
+    clicks = 0
+    countLabel.text = "0"
+}
+
+// ================= app 6: unit converter =================
+pageUnits = add a panel
+pageUnits.x = 12
+pageUnits.y = 52
+pageUnits.width = 756
+pageUnits.height = 540
+pageUnits.hide
+
+unitsTitle = add a text titled "cm to inches" to pageUnits
+unitsTitle.x = 20
+unitsTitle.y = 15
+unitsTitle.width = 550
+unitsTitle.height = 45
+unitsTitle.font_size = 26
+unitsTitle.bold = true
+
+cmInput = add an input box titled "Centimeters..." to pageUnits
+cmInput.x = 20
+cmInput.y = 75
+cmInput.width = 350
+cmInput.height = 45
+
+convBtn = add a button titled "Convert" to pageUnits
+convBtn.x = 385
+convBtn.y = 75
+convBtn.width = 205
+convBtn.height = 45
+convBtn.background = "blue"
+convBtn.text_color = "white"
+
+unitsOut = add an output box to pageUnits
+unitsOut.x = 20
+unitsOut.y = 140
+unitsOut.width = 570
+unitsOut.height = 90
+unitsOut.text = "Type a number and convert."
+
+convBtn.on click {
+    try {
+        cm = number of cmInput.text
+        inches = cm / 2.54
+        unitsOut.text = cmInput.text + " cm = " + inches + " in"
+    } error {
+        unitsOut.text = "That is not a number."
+    }
+}
+
+// ================= app 7: password generator =================
+pagePass = add a panel
+pagePass.x = 12
+pagePass.y = 52
+pagePass.width = 756
+pagePass.height = 540
+pagePass.hide
+
+passTitle = add a text titled "Password generator" to pagePass
+passTitle.x = 20
+passTitle.y = 15
+passTitle.width = 550
+passTitle.height = 45
+passTitle.font_size = 26
+passTitle.bold = true
+
+genBtn = add a button titled "Generate" to pagePass
+genBtn.x = 20
+genBtn.y = 75
+genBtn.width = 250
+genBtn.height = 55
+genBtn.font_size = 18
+genBtn.background = "green"
+genBtn.text_color = "white"
+
+passOut = add an output box to pagePass
+passOut.x = 20
+passOut.y = 150
+passOut.width = 570
+passOut.height = 90
+passOut.font_size = 20
+passOut.text = "Press Generate."
+
+chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!?#"
+top = length of chars - 1
+
+genBtn.on click {
+    pw = ""
+    repeat 12 {
+        idx = r from 0 to top
+        pw = pw + [idx] from chars
+    }
+    passOut.text = pw
+}
+
+// ================= app 8: grade checker =================
+pageGrade = add a panel
+pageGrade.x = 12
+pageGrade.y = 52
+pageGrade.width = 756
+pageGrade.height = 540
+pageGrade.hide
+
+gradeTitle = add a text titled "Grade checker" to pageGrade
+gradeTitle.x = 20
+gradeTitle.y = 15
+gradeTitle.width = 550
+gradeTitle.height = 45
+gradeTitle.font_size = 26
+gradeTitle.bold = true
+
+scoreInput = add an input box titled "Score 0-100..." to pageGrade
+scoreInput.x = 20
+scoreInput.y = 75
+scoreInput.width = 350
+scoreInput.height = 45
+
+gradeBtn = add a button titled "Grade" to pageGrade
+gradeBtn.x = 385
+gradeBtn.y = 75
+gradeBtn.width = 205
+gradeBtn.height = 45
+gradeBtn.background = "blue"
+gradeBtn.text_color = "white"
+
+gradeOut = add an output box to pageGrade
+gradeOut.x = 20
+gradeOut.y = 140
+gradeOut.width = 570
+gradeOut.height = 90
+gradeOut.text = "Type a score and grade it."
+
+gradeBtn.on click {
+    try {
+        score = number of scoreInput.text
+        if score >= 90 {
+            gradeOut.text = "A - excellent!"
+        } else if score >= 80 {
+            gradeOut.text = "B - good!"
+        } else if score >= 70 {
+            gradeOut.text = "C - okay."
+        } else if score >= 60 {
+            gradeOut.text = "D - pass."
+        } else {
+            gradeOut.text = "F - try again."
+        }
+    } error {
+        gradeOut.text = "That is not a number."
+    }
+}
+
+// ================= app 9: clicker game =================
+pageClick = add a panel
+pageClick.x = 12
+pageClick.y = 52
+pageClick.width = 756
+pageClick.height = 540
+pageClick.hide
+
+clickLabel = add a text titled "0 clicks" to pageClick
+clickLabel.x = 20
+clickLabel.y = 15
+clickLabel.width = 570
+clickLabel.height = 60
+clickLabel.font_size = 32
+clickLabel.bold = true
+clickLabel.alignment = "center"
+
+clickBtn = add a button titled "CLICK ME!" to pageClick
+clickBtn.x = 130
+clickBtn.y = 100
+clickBtn.width = 350
+clickBtn.height = 150
+clickBtn.font_size = 28
+clickBtn.background = "blue"
+clickBtn.text_color = "white"
+
+clickReset = add a button titled "Reset score" to pageClick
+clickReset.x = 130
+clickReset.y = 270
+clickReset.width = 350
+clickReset.height = 50
+
+taps = 0
+
+clickBtn.on click {
+    taps = taps + 1
+    clickLabel.text = "" + taps + " clicks"
+}
+
+clickReset.on click {
+    taps = 0
+    clickLabel.text = "0 clicks"
+}
+
+// ================= app 10: about =================
+pageAbout = add a panel
+pageAbout.x = 12
+pageAbout.y = 52
+pageAbout.width = 756
+pageAbout.height = 540
+pageAbout.hide
+
+aboutTitle = add a text titled "Vexel MultiApp 2.9" to pageAbout
+aboutTitle.x = 20
+aboutTitle.y = 15
+aboutTitle.width = 550
+aboutTitle.height = 50
+aboutTitle.font_size = 28
+aboutTitle.bold = true
+
+aboutText = add a text titled "Ten tiny apps behind a sign-in gate. Calculator, notes, dice, stopwatch, counter, converter, passwords, grades, clicker and this page." to pageAbout
+aboutText.x = 20
+aboutText.y = 75
+aboutText.width = 550
+aboutText.height = 70
+
+hiBtn = add a button titled "Say Hi" to pageAbout
+hiBtn.x = 20
+hiBtn.y = 160
+hiBtn.width = 220
+hiBtn.height = 55
+
+aboutOut = add an output box to pageAbout
+aboutOut.x = 20
+aboutOut.y = 230
+aboutOut.width = 570
+aboutOut.height = 100
+
+hiBtn.on click {
+    aboutOut.text = "Build. Compile. Create."
+}
+
+// ================= tab switching =================
+tabCalc.on click {
+    pageCalc.show
+    pageNotes.hide
+    pageDice.hide
+    pageTimer.hide
+    pageCount.hide
+    pageUnits.hide
+    pagePass.hide
+    pageGrade.hide
+    pageClick.hide
+    pageAbout.hide
+}
+
+tabNotes.on click {
+    pageCalc.hide
+    pageNotes.show
+    pageDice.hide
+    pageTimer.hide
+    pageCount.hide
+    pageUnits.hide
+    pagePass.hide
+    pageGrade.hide
+    pageClick.hide
+    pageAbout.hide
+}
+
+tabDice.on click {
+    pageCalc.hide
+    pageNotes.hide
+    pageDice.show
+    pageTimer.hide
+    pageCount.hide
+    pageUnits.hide
+    pagePass.hide
+    pageGrade.hide
+    pageClick.hide
+    pageAbout.hide
+}
+
+tabTimer.on click {
+    pageCalc.hide
+    pageNotes.hide
+    pageDice.hide
+    pageTimer.show
+    pageCount.hide
+    pageUnits.hide
+    pagePass.hide
+    pageGrade.hide
+    pageClick.hide
+    pageAbout.hide
+}
+
+tabCount.on click {
+    pageCalc.hide
+    pageNotes.hide
+    pageDice.hide
+    pageTimer.hide
+    pageCount.show
+    pageUnits.hide
+    pagePass.hide
+    pageGrade.hide
+    pageClick.hide
+    pageAbout.hide
+}
+
+tabUnits.on click {
+    pageCalc.hide
+    pageNotes.hide
+    pageDice.hide
+    pageTimer.hide
+    pageCount.hide
+    pageUnits.show
+    pagePass.hide
+    pageGrade.hide
+    pageClick.hide
+    pageAbout.hide
+}
+
+tabPass.on click {
+    pageCalc.hide
+    pageNotes.hide
+    pageDice.hide
+    pageTimer.hide
+    pageCount.hide
+    pageUnits.hide
+    pagePass.show
+    pageGrade.hide
+    pageClick.hide
+    pageAbout.hide
+}
+
+tabGrade.on click {
+    pageCalc.hide
+    pageNotes.hide
+    pageDice.hide
+    pageTimer.hide
+    pageCount.hide
+    pageUnits.hide
+    pagePass.hide
+    pageGrade.show
+    pageClick.hide
+    pageAbout.hide
+}
+
+tabClick.on click {
+    pageCalc.hide
+    pageNotes.hide
+    pageDice.hide
+    pageTimer.hide
+    pageCount.hide
+    pageUnits.hide
+    pagePass.hide
+    pageGrade.hide
+    pageClick.show
+    pageAbout.hide
+}
+
+tabAbout.on click {
+    pageCalc.hide
+    pageNotes.hide
+    pageDice.hide
+    pageTimer.hide
+    pageCount.hide
+    pageUnits.hide
+    pagePass.hide
+    pageGrade.hide
+    pageClick.hide
+    pageAbout.show
+}
+
+// ================= auth gate (on top) =================
+users = []
+
+gate = add a panel
+gate.x = 0
+gate.y = 0
+gate.width = 780
+gate.height = 660
+gate.background = "#1E1E1E"
+
+gateCard = add a panel to gate
+gateCard.x = 180
+gateCard.y = 110
+gateCard.width = 420
+gateCard.height = 420
+
+gateTitle = add a text titled "Vexel MultiApp" to gateCard
+gateTitle.x = 40
+gateTitle.y = 25
+gateTitle.width = 340
+gateTitle.height = 50
+gateTitle.font_size = 30
+gateTitle.bold = true
+gateTitle.alignment = "center"
+
+gateSub = add a text titled "Sign in to open your apps" to gateCard
+gateSub.x = 40
+gateSub.y = 80
+gateSub.width = 340
+gateSub.height = 28
+gateSub.alignment = "center"
+
+gateUser = add an input box titled "Username..." to gateCard
+gateUser.x = 40
+gateUser.y = 125
+gateUser.width = 340
+gateUser.height = 45
+
+gatePass = add an input box to gateCard
+gatePass.x = 40
+gatePass.y = 185
+gatePass.width = 340
+gatePass.height = 45
+gatePass.password = true
+
+gateGo = add a button titled "Unlock Apps" to gateCard
+gateGo.x = 40
+gateGo.y = 250
+gateGo.width = 340
+gateGo.height = 55
+gateGo.font_size = 18
+gateGo.background = "blue"
+gateGo.text_color = "white"
+gateGo.border_radius = 12
+
+gateMsg = add an output box to gateCard
+gateMsg.x = 40
+gateMsg.y = 320
+gateMsg.width = 340
+gateMsg.height = 55
+
+gateNew = add a button titled "No account? Sign up" to gateCard
+gateNew.x = 40
+gateNew.y = 385
+gateNew.width = 165
+gateNew.height = 35
+
+gateHelp = add a button titled "Just look around" to gateCard
+gateHelp.x = 215
+gateHelp.y = 385
+gateHelp.width = 165
+gateHelp.height = 35
+
+gateGo.on click {
+    if gateUser.text = "" {
+        gateMsg.text = "Enter your username."
+    } else if gatePass.text = "" {
+        gateMsg.text = "Enter your password."
+    } else {
+        try {
+            db = json read "accounts.json"
+            users = db.users
+        } error {
+            users = []
+        }
+        if length of users = 0 {
+            gateMsg.text = "No accounts yet. Sign up first!"
+        } else {
+            found = false
+            i = 0
+            repeat till i = length of users {
+                u = users[i]
+                if u.name = gateUser.text and u.pass = gatePass.text {
+                    found = true
+                }
+                i = i + 1
+            }
+            if found {
+                gate.hide
+            } else {
+                gateMsg.text = "Wrong details. Try again."
+            }
+        }
+    }
+}
+
+gateNew.on click {
+    if gateUser.text = "" {
+        gateMsg.text = "Type a username first."
+    } else if gatePass.text = "" {
+        gateMsg.text = "Type a password first."
+    } else {
+        try {
+            db2 = json read "accounts.json"
+            users = db2.users
+        } error {
+            users = []
+        }
+        taken = false
+        j = 0
+        repeat till j = length of users {
+            u2 = users[j]
+            if u2.name = gateUser.text {
+                taken = true
+            }
+            j = j + 1
+        }
+        if taken {
+            gateMsg.text = "Name taken. Opening anyway!"
+            gate.hide
+        } else {
+            newUser = {
+                name = gateUser.text
+                pass = gatePass.text
+            }
+            users.add newUser
+            save = {
+                users = users
+            }
+            json write save to "accounts.json"
+            gate.hide
+        }
+    }
+}
+
+gateHelp.on click {
+    gate.hide
+}
+
+window.show

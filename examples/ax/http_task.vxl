@@ -1,0 +1,23 @@
+create a window titled "Ax Net"
+
+task fetch {
+    response = http get "https://example.com"
+    result = response.status
+}
+
+task broken {
+    response = http get "https://nonexistent.invalid"
+    result = response.status
+}
+
+watcher = every 1 second {
+    if fetch.state = "completed" {
+        json write fetch.result to "ax_net.json"
+    }
+    if broken.state = "failed" {
+        json write broken.error.message to "ax_net_error.json"
+        watcher.cancel
+    }
+}
+
+window.show

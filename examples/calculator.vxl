@@ -1,0 +1,72 @@
+// Vexel calculator — type your own numbers when asked.
+function add a, b {
+    return a + b
+}
+
+function sub a, b {
+    return a - b
+}
+
+function mul a, b {
+    return a * b
+}
+
+function divide a, b {
+    if b = 0 {
+        error "Cannot divide by zero"
+    }
+    return a / b
+}
+
+add input "First number:"
+set output = first
+
+add input "Second number:"
+set output = second
+
+try {
+    a = number of first
+} error {
+    print error
+    a = 0
+}
+
+try {
+    b = number of second
+} error {
+    print error
+    b = 0
+}
+
+print "Results:"
+print "Add:"
+print add a, b
+print "Subtract:"
+print sub a, b
+print "Multiply:"
+print mul a, b
+print "Divide:"
+try {
+    print divide a, b
+} error {
+    print error
+}
+
+add input "Pick operation (+ - * /):"
+set output = op
+
+if op = "+" {
+    print add a, b
+} else if op = "-" {
+    print sub a, b
+} else if op = "*" {
+    print mul a, b
+} else if op = "/" {
+    try {
+        print divide a, b
+    } error {
+        print error
+    }
+} else {
+    print "Unknown operation"
+}

@@ -1,0 +1,191 @@
+// ============================================================
+// STARPET — a tiny virtual pet + mini adventure in Vexel
+// Structs, pure functions, lists, strings, random,
+// loops, JSON, and error handling. No input needed.
+// Note: Vexel functions are pure — they use only params.
+// ============================================================
+
+struct Pet {
+    name
+    hunger
+    happy
+    energy
+}
+
+function showStatus name, hunger, happy, energy {
+    print "--- Nova status ---"
+    print "Name: " + name
+    print "Hunger: " + hunger
+    print "Happy: " + happy
+    print "Energy: " + energy
+}
+
+function feedHunger hunger, amount {
+    result = hunger - amount
+    if result < 0 {
+        result = 0
+    }
+    return result
+}
+
+function happyAfterPlay happy, minutes {
+    return happy + minutes
+}
+
+function energyAfterPlay energy, minutes {
+    return energy - minutes
+}
+
+function energyAfterNap energy, hours {
+    out = energy + hours * 10
+    if out > 100 {
+        out = 100
+    }
+    return out
+}
+
+function divide a, b {
+    if b = 0 {
+        error "Cannot divide by zero"
+    }
+    return a / b
+}
+
+// ---------------- start ----------------
+print "Welcome to STARPET!"
+print ""
+
+pet = Pet {
+    name = "Nova"
+    hunger = 50
+    happy = 50
+    energy = 80
+}
+
+showStatus pet.name, pet.hunger, pet.happy, pet.energy
+
+// strings
+print ""
+print "Letters in name: "
+print length of pet.name
+print "First letter: "
+print [0] from pet.name
+banner = pet.name
+make banner upper
+print "Banner: " + banner
+make banner lower
+print "Whisper: " + banner
+
+// lists — toy box
+print ""
+toys = ["ball", "laser", "rope"]
+print "Toys: " + toys.length
+print toys[0]
+toys.add "snack"
+print "After snack: " + toys.length
+toys.remove 0
+print "After giving one away: " + toys.length
+print toys[0]
+
+// feeding + playing (pure functions, assign back)
+print ""
+pet.hunger = feedHunger pet.hunger, 15
+print "Nom! Hunger now " + pet.hunger
+pet.happy = happyAfterPlay pet.happy, 10
+pet.energy = energyAfterPlay pet.energy, 10
+pet.hunger = pet.hunger + 10
+print "Played 10 min. Happy " + pet.happy
+pet.energy = energyAfterNap pet.energy, 2
+print "Napped. Energy " + pet.energy
+showStatus pet.name, pet.hunger, pet.happy, pet.energy
+
+// logic + random adventure
+print ""
+print "--- Mini adventure ---"
+luck = r from 1 to 10
+print "Luck roll: " + luck
+if luck >= 7 and pet.energy > 30 {
+    print "Nova finds a secret star park!"
+    pet.happy = pet.happy + 15
+} else if luck <= 3 or pet.hunger > 70 {
+    print "Nova finds only mud... and eats it."
+    pet.hunger = pet.hunger - 5
+} else {
+    print "A normal walk. Nice breeze."
+    pet.happy = pet.happy + 5
+}
+
+if not pet.happy > 100 {
+    print "Nova wags tail."
+}
+
+// loops
+print ""
+print "Training..."
+repeat 3 {
+    print "Practice fetch!"
+    pet.happy = pet.happy + 1
+}
+
+print "Snack time till full:"
+repeat till pet.hunger <= 0 or pet.happy > 120 {
+    pet.hunger = pet.hunger - 10
+    pet.happy = pet.happy + 1
+    if pet.hunger < 0 {
+        pet.hunger = 0
+    }
+    print "Hunger " + pet.hunger
+}
+
+// numbers from text with make
+print ""
+lvlText = "21"
+make lvlText number
+print lvlText + 1
+pts = 7
+make pts string
+print "pts=" + pts
+
+// objects + JSON save file
+print ""
+save = {
+    name = pet.name
+    hunger = pet.hunger
+    happy = pet.happy
+    energy = pet.energy
+    toys = toys
+}
+json write save to "starpet.json"
+print "Saved!"
+
+loaded = json read "starpet.json"
+print "Loaded back:"
+print loaded.name
+print loaded.happy
+print [0] from loaded.toys
+
+// error handling
+print ""
+try {
+    print nodir/missing.txt
+} error {
+    print "Caught:"
+    print error
+    print error.type
+}
+
+try {
+    print divide 10, 0
+} error {
+    print "Math says:"
+    print error
+}
+
+half = divide 10, 4
+print "10 / 4 is:"
+print half
+
+print ""
+print "--- Final ---"
+showStatus pet.name, pet.hunger, pet.happy, pet.energy
+print "Thanks for playing STARPET!"

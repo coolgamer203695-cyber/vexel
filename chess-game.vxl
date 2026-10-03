@@ -1,0 +1,1557 @@
+// Chess - two-player console chess with full rules (Vexel).
+// White moves first. Type moves like e2 e4 (or e2e4). Type quit to stop.
+// Castling: e1 g1, e1 c1, e8 g8, e8 c8. En passant works.
+// Pawn promotion asks which piece. Check, checkmate and stalemate detected.
+
+// The board is a 64-char string (row 0 is rank 8). Uppercase is white.
+// All functions are pure: the board travels as an argument.
+
+// ---------- coordinates ----------
+
+function colOf sq {
+    n = sq
+    repeat till n < 8 {
+        n = n - 8
+    }
+    return n
+}
+
+function rowOf sq {
+    rw = 0
+    n = sq
+    repeat till n < 8 {
+        n = n - 8
+        rw = rw + 1
+    }
+    return rw
+}
+
+function sqAt b, i {
+    return [i] from b
+}
+
+function setSq b, i, p {
+    left = ""
+    k = 0
+    repeat till k = i {
+        left = left + [k] from b
+        k = k + 1
+    }
+    right = ""
+    k = i + 1
+    repeat till k = 64 {
+        right = right + [k] from b
+        k = k + 1
+    }
+    left = left + p
+    left = left + right
+    return left
+}
+
+function pieceColor p {
+    if p = " " {
+        return "none"
+    }
+    if p = "K" {
+        return "white"
+    }
+    if p = "Q" {
+        return "white"
+    }
+    if p = "R" {
+        return "white"
+    }
+    if p = "B" {
+        return "white"
+    }
+    if p = "N" {
+        return "white"
+    }
+    if p = "P" {
+        return "white"
+    }
+    return "black"
+}
+
+function absVal n {
+    if n < 0 {
+        return 0 - n
+    }
+    return n
+}
+
+function onBoard rw, cl {
+    if rw < 0 {
+        return false
+    }
+    if rw > 7 {
+        return false
+    }
+    if cl < 0 {
+        return false
+    }
+    if cl > 7 {
+        return false
+    }
+    return true
+}
+
+// ---------- attacks ----------
+
+function isAttacked b, sq, byW {
+    rw = rowOf sq
+    cl = colOf sq
+    // pawns
+    if byW {
+        pr = rw + 1
+        ok = onBoard pr, cl - 1
+        if ok {
+            cell = sqAt b, pr * 8 + cl - 1
+            if cell = "P" {
+                return true
+            }
+        }
+        ok = onBoard pr, cl + 1
+        if ok {
+            cell = sqAt b, pr * 8 + cl + 1
+            if cell = "P" {
+                return true
+            }
+        }
+    } else {
+        pr = rw - 1
+        ok = onBoard pr, cl - 1
+        if ok {
+            cell = sqAt b, pr * 8 + cl - 1
+            if cell = "p" {
+                return true
+            }
+        }
+        ok = onBoard pr, cl + 1
+        if ok {
+            cell = sqAt b, pr * 8 + cl + 1
+            if cell = "p" {
+                return true
+            }
+        }
+    }
+    // knights
+    want = "N"
+    if byW = false {
+        want = "n"
+    }
+    tr = rw + 2
+    tc = cl + 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw + 2
+    tc = cl - 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw - 2
+    tc = cl + 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw - 2
+    tc = cl - 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw + 1
+    tc = cl + 2
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw + 1
+    tc = cl - 2
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw - 1
+    tc = cl + 2
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw - 1
+    tc = cl - 2
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    // king
+    want = "K"
+    if byW = false {
+        want = "k"
+    }
+    tr = rw + 1
+    tc = cl
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw - 1
+    tc = cl
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw
+    tc = cl + 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw
+    tc = cl - 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw + 1
+    tc = cl + 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw + 1
+    tc = cl - 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw - 1
+    tc = cl + 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    tr = rw - 1
+    tc = cl - 1
+    ok = onBoard tr, tc
+    if ok {
+        cell = sqAt b, tr * 8 + tc
+        if cell = want {
+            return true
+        }
+    }
+    // bishop / queen diagonals
+    hit = slideHit b, rw, cl, 1, 1, byW, true
+    if hit {
+        return true
+    }
+    hit = slideHit b, rw, cl, 1, -1, byW, true
+    if hit {
+        return true
+    }
+    hit = slideHit b, rw, cl, -1, 1, byW, true
+    if hit {
+        return true
+    }
+    hit = slideHit b, rw, cl, -1, -1, byW, true
+    if hit {
+        return true
+    }
+    // rook / queen straights
+    hit = slideHit b, rw, cl, 1, 0, byW, false
+    if hit {
+        return true
+    }
+    hit = slideHit b, rw, cl, -1, 0, byW, false
+    if hit {
+        return true
+    }
+    hit = slideHit b, rw, cl, 0, 1, byW, false
+    if hit {
+        return true
+    }
+    hit = slideHit b, rw, cl, 0, -1, byW, false
+    if hit {
+        return true
+    }
+    return false
+}
+
+function slideHit b, rw, cl, stepR, stepC, byW, diag {
+    tr = rw + stepR
+    tc = cl + stepC
+    stop = false
+    found = false
+    repeat till stop {
+        ok = onBoard tr, tc
+        if ok {
+            cell = sqAt b, tr * 8 + tc
+            if cell = " " {
+                tr = tr + stepR
+                tc = tc + stepC
+            } else {
+                stop = true
+                if diag {
+                    if byW {
+                        if cell = "B" {
+                            found = true
+                        }
+                        if cell = "Q" {
+                            found = true
+                        }
+                    } else {
+                        if cell = "b" {
+                            found = true
+                        }
+                        if cell = "q" {
+                            found = true
+                        }
+                    }
+                } else {
+                    if byW {
+                        if cell = "R" {
+                            found = true
+                        }
+                        if cell = "Q" {
+                            found = true
+                        }
+                    } else {
+                        if cell = "r" {
+                            found = true
+                        }
+                        if cell = "q" {
+                            found = true
+                        }
+                    }
+                }
+            }
+        } else {
+            stop = true
+        }
+    }
+    return found
+}
+
+function kingSq b, isW {
+    k = "K"
+    if isW = false {
+        k = "k"
+    }
+    i = 0
+    repeat till i = 64 {
+        cell = sqAt b, i
+        if cell = k {
+            return i
+        }
+        i = i + 1
+    }
+    return -1
+}
+
+function inCheck b, isW {
+    k = kingSq b, isW
+    foe = true
+    if isW {
+        foe = false
+    }
+    bad = isAttacked b, k, foe
+    return bad
+}
+
+// ---------- move rules ----------
+
+function pathClear b, sr, sc, dr2, dc, stepR, stepC {
+    tr = sr + stepR
+    tc = sc + stepC
+    stop = false
+    blocked = false
+    repeat till stop {
+        atDest = false
+        if tr = dr2 {
+            if tc = dc {
+                atDest = true
+            }
+        }
+        if atDest {
+            stop = true
+        } else {
+            cell = sqAt b, tr * 8 + tc
+            if cell != " " {
+                blocked = true
+                stop = true
+            } else {
+                tr = tr + stepR
+                tc = tc + stepC
+            }
+        }
+    }
+    if blocked {
+        return false
+    }
+    return true
+}
+
+function castleOk b, src, dst, isW, wk, wq, bk, bq {
+    if isW {
+        if src != 60 {
+            return false
+        }
+        chk = inCheck b, true
+        if chk {
+            return false
+        }
+        if dst = 62 {
+            if wk = false {
+                return false
+            }
+            c1 = sqAt b, 61
+            if c1 != " " {
+                return false
+            }
+            c2 = sqAt b, 62
+            if c2 != " " {
+                return false
+            }
+            rk = sqAt b, 63
+            if rk != "R" {
+                return false
+            }
+            a1 = isAttacked b, 61, false
+            if a1 {
+                return false
+            }
+            a2 = isAttacked b, 62, false
+            if a2 {
+                return false
+            }
+            return true
+        }
+        if dst = 58 {
+            if wq = false {
+                return false
+            }
+            c1 = sqAt b, 59
+            if c1 != " " {
+                return false
+            }
+            c2 = sqAt b, 58
+            if c2 != " " {
+                return false
+            }
+            c3 = sqAt b, 57
+            if c3 != " " {
+                return false
+            }
+            rk = sqAt b, 56
+            if rk != "R" {
+                return false
+            }
+            a1 = isAttacked b, 59, false
+            if a1 {
+                return false
+            }
+            a2 = isAttacked b, 58, false
+            if a2 {
+                return false
+            }
+            return true
+        }
+        return false
+    }
+    if src != 4 {
+        return false
+    }
+    chk = inCheck b, false
+    if chk {
+        return false
+    }
+    if dst = 6 {
+        if bk = false {
+            return false
+        }
+        c1 = sqAt b, 5
+        if c1 != " " {
+            return false
+        }
+        c2 = sqAt b, 6
+        if c2 != " " {
+            return false
+        }
+        rk = sqAt b, 7
+        if rk != "r" {
+            return false
+        }
+        a1 = isAttacked b, 5, true
+        if a1 {
+            return false
+        }
+        a2 = isAttacked b, 6, true
+        if a2 {
+            return false
+        }
+        return true
+    }
+    if dst = 2 {
+        if bq = false {
+            return false
+        }
+        c1 = sqAt b, 3
+        if c1 != " " {
+            return false
+        }
+        c2 = sqAt b, 2
+        if c2 != " " {
+            return false
+        }
+        c3 = sqAt b, 1
+        if c3 != " " {
+            return false
+        }
+        rk = sqAt b, 0
+        if rk != "r" {
+            return false
+        }
+        a1 = isAttacked b, 3, true
+        if a1 {
+            return false
+        }
+        a2 = isAttacked b, 2, true
+        if a2 {
+            return false
+        }
+        return true
+    }
+    return false
+}
+
+function pseudoOk b, src, dst, isW, ep, wk, wq, bk, bq {
+    if dst < 0 {
+        return false
+    }
+    if dst > 63 {
+        return false
+    }
+    if src = dst {
+        return false
+    }
+    moving = sqAt b, src
+    target = sqAt b, dst
+    mine = "white"
+    foe = "black"
+    if isW = false {
+        mine = "black"
+        foe = "white"
+    }
+    mc = pieceColor moving
+    if mc != mine {
+        return false
+    }
+    tc2 = pieceColor target
+    if tc2 = mine {
+        return false
+    }
+    sr = rowOf src
+    sc = colOf src
+    dr2 = rowOf dst
+    dc = colOf dst
+    drow = dr2 - sr
+    dcol = dc - sc
+    adrow = absVal drow
+    adcol = absVal dcol
+    low = moving
+    make low lower
+    if low = "p" {
+        if isW {
+            if dcol = 0 {
+                if drow = -1 {
+                    if target = " " {
+                        return true
+                    }
+                }
+                if drow = -2 {
+                    if sr = 6 {
+                        if target = " " {
+                            mid = src - 8
+                            midCell = sqAt b, mid
+                            if midCell = " " {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+            if adcol = 1 {
+                if drow = -1 {
+                    if tc2 = foe {
+                        return true
+                    }
+                    if dst = ep {
+                        return true
+                    }
+                }
+            }
+        } else {
+            if dcol = 0 {
+                if drow = 1 {
+                    if target = " " {
+                        return true
+                    }
+                }
+                if drow = 2 {
+                    if sr = 1 {
+                        if target = " " {
+                            mid = src + 8
+                            midCell = sqAt b, mid
+                            if midCell = " " {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+            if adcol = 1 {
+                if drow = 1 {
+                    if tc2 = foe {
+                        return true
+                    }
+                    if dst = ep {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    if low = "n" {
+        if adrow = 2 {
+            if adcol = 1 {
+                return true
+            }
+        }
+        if adrow = 1 {
+            if adcol = 2 {
+                return true
+            }
+        }
+        return false
+    }
+    if low = "b" {
+        if adrow = adcol {
+            if adrow > 0 {
+                stepR = 1
+                if drow < 0 {
+                    stepR = -1
+                }
+                stepC = 1
+                if dcol < 0 {
+                    stepC = -1
+                }
+                clear = pathClear b, sr, sc, dr2, dc, stepR, stepC
+                if clear {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    if low = "r" {
+        if drow = 0 {
+            if adcol > 0 {
+                stepC = 1
+                if dcol < 0 {
+                    stepC = -1
+                }
+                clear = pathClear b, sr, sc, dr2, dc, 0, stepC
+                if clear {
+                    return true
+                }
+            }
+        }
+        if dcol = 0 {
+            if adrow > 0 {
+                stepR = 1
+                if drow < 0 {
+                    stepR = -1
+                }
+                clear = pathClear b, sr, sc, dr2, dc, stepR, 0
+                if clear {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    if low = "q" {
+        if adrow = adcol {
+            if adrow > 0 {
+                stepR = 1
+                if drow < 0 {
+                    stepR = -1
+                }
+                stepC = 1
+                if dcol < 0 {
+                    stepC = -1
+                }
+                clear = pathClear b, sr, sc, dr2, dc, stepR, stepC
+                if clear {
+                    return true
+                }
+            }
+        }
+        if drow = 0 {
+            if adcol > 0 {
+                stepC = 1
+                if dcol < 0 {
+                    stepC = -1
+                }
+                clear = pathClear b, sr, sc, dr2, dc, 0, stepC
+                if clear {
+                    return true
+                }
+            }
+        }
+        if dcol = 0 {
+            if adrow > 0 {
+                stepR = 1
+                if drow < 0 {
+                    stepR = -1
+                }
+                clear = pathClear b, sr, sc, dr2, dc, stepR, 0
+                if clear {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    if low = "k" {
+        if adrow <= 1 {
+            if adcol <= 1 {
+                if adrow + adcol > 0 {
+                    return true
+                }
+            }
+        }
+        if drow = 0 {
+            if adcol = 2 {
+                ok = castleOk b, src, dst, isW, wk, wq, bk, bq
+                if ok {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    return false
+}
+
+function safeAfter b, src, dst, isW, ep {
+    moving = sqAt b, src
+    sr = rowOf src
+    sc = colOf src
+    dc = colOf dst
+    nb = setSq b, src, " "
+    nb = setSq nb, dst, moving
+    if moving = "P" {
+        if sc != dc {
+            was = sqAt b, dst
+            if was = " " {
+                if dst = ep {
+                    nb = setSq nb, sr * 8 + dc, " "
+                }
+            }
+        }
+    }
+    if moving = "p" {
+        if sc != dc {
+            was = sqAt b, dst
+            if was = " " {
+                if dst = ep {
+                    nb = setSq nb, sr * 8 + dc, " "
+                }
+            }
+        }
+    }
+    if moving = "K" {
+        if dst = 62 {
+            nb = setSq nb, 63, " "
+            nb = setSq nb, 61, "R"
+        }
+        if dst = 58 {
+            nb = setSq nb, 56, " "
+            nb = setSq nb, 59, "R"
+        }
+    }
+    if moving = "k" {
+        if dst = 6 {
+            nb = setSq nb, 7, " "
+            nb = setSq nb, 5, "r"
+        }
+        if dst = 2 {
+            nb = setSq nb, 0, " "
+            nb = setSq nb, 3, "r"
+        }
+    }
+    bad = inCheck nb, isW
+    if bad {
+        return false
+    }
+    return true
+}
+
+function hasAny b, isW, ep, wk, wq, bk, bq {
+    src = 0
+    repeat till src = 64 {
+        p = sqAt b, src
+        mine = false
+        if isW {
+            pc = pieceColor p
+            if pc = "white" {
+                mine = true
+            }
+        } else {
+            pc = pieceColor p
+            if pc = "black" {
+                mine = true
+            }
+        }
+        if mine {
+            dst = 0
+            repeat till dst = 64 {
+                pok = pseudoOk b, src, dst, isW, ep, wk, wq, bk, bq
+                if pok {
+                    sf = safeAfter b, src, dst, isW, ep
+                    if sf {
+                        return true
+                    }
+                }
+                dst = dst + 1
+            }
+        }
+        src = src + 1
+    }
+    return false
+}
+
+// ---------- input parsing ----------
+
+function fileToCol f {
+    if f = "a" {
+        return 0
+    }
+    if f = "b" {
+        return 1
+    }
+    if f = "c" {
+        return 2
+    }
+    if f = "d" {
+        return 3
+    }
+    if f = "e" {
+        return 4
+    }
+    if f = "f" {
+        return 5
+    }
+    if f = "g" {
+        return 6
+    }
+    if f = "h" {
+        return 7
+    }
+    return -1
+}
+
+function rankToRow rc {
+    if rc = "1" {
+        return 7
+    }
+    if rc = "2" {
+        return 6
+    }
+    if rc = "3" {
+        return 5
+    }
+    if rc = "4" {
+        return 4
+    }
+    if rc = "5" {
+        return 3
+    }
+    if rc = "6" {
+        return 2
+    }
+    if rc = "7" {
+        return 1
+    }
+    if rc = "8" {
+        return 0
+    }
+    return -1
+}
+
+function parseMove mv {
+    n = length of mv
+    if n = 4 {
+        f1 = [0] from mv
+        r1 = [1] from mv
+        f2 = [2] from mv
+        r2 = [3] from mv
+    } else if n = 5 {
+        sp = [2] from mv
+        if sp != " " {
+            return -1
+        }
+        f1 = [0] from mv
+        r1 = [1] from mv
+        f2 = [3] from mv
+        r2 = [4] from mv
+    } else {
+        return -1
+    }
+    c1 = fileToCol f1
+    c2 = fileToCol f2
+    w1 = rankToRow r1
+    w2 = rankToRow r2
+    if c1 = -1 {
+        return -1
+    }
+    if c2 = -1 {
+        return -1
+    }
+    if w1 = -1 {
+        return -1
+    }
+    if w2 = -1 {
+        return -1
+    }
+    return w1 * 512 + c1 * 64 + w2 * 8 + c2
+}
+
+// ---------- display ----------
+
+function printBoard b {
+    print "  a b c d e f g h"
+    rw = 0
+    repeat till rw = 8 {
+        num = 8 - rw
+        label = "" + num
+        line = label + " "
+        cl = 0
+        repeat till cl = 8 {
+            cell = sqAt b, rw * 8 + cl
+            line = line + cell
+            line = line + " "
+            cl = cl + 1
+        }
+        line = line + label
+        print line
+        rw = rw + 1
+    }
+    print "  a b c d e f g h"
+}
+
+// ---------- computer opponent (pure search, black only) ----------
+
+function pieceValue cell {
+    if cell = "P" {
+        return 100
+    }
+    if cell = "N" {
+        return 300
+    }
+    if cell = "B" {
+        return 300
+    }
+    if cell = "R" {
+        return 500
+    }
+    if cell = "Q" {
+        return 900
+    }
+    if cell = "p" {
+        return -100
+    }
+    if cell = "n" {
+        return -300
+    }
+    if cell = "b" {
+        return -300
+    }
+    if cell = "r" {
+        return -500
+    }
+    if cell = "q" {
+        return -900
+    }
+    return 0
+}
+
+function centralTie sq {
+    rw = rowOf sq
+    cl = colOf sq
+    dr = 3 - rw
+    dc = 3 - cl
+    ad1 = absVal dr
+    ad2 = absVal dc
+    return 8 - ad1 - ad2
+}
+
+function staticEval b {
+    score = 0
+    i = 0
+    repeat till i = 64 {
+        cell = sqAt b, i
+        v = pieceValue cell
+        score = score + v
+        if cell != " " {
+            if cell != "K" {
+                if cell != "k" {
+                    rw = rowOf i
+                    cl = colOf i
+                    dr = 3 - rw
+                    dc = 3 - cl
+                    ad1 = absVal dr
+                    ad2 = absVal dc
+                    pos = 6 - ad1 - ad2
+                    col = pieceColor cell
+                    if col = "white" {
+                        score = score + pos * 4
+                    } else {
+                        score = score - pos * 4
+                    }
+                }
+            }
+            if cell = "P" {
+                rw = rowOf i
+                adv = 6 - rw
+                score = score + adv * 10
+            }
+            if cell = "p" {
+                rw = rowOf i
+                adv = rw - 1
+                score = score - adv * 10
+            }
+        }
+        i = i + 1
+    }
+    return score
+}
+
+function applyBoard b, src, dst {
+    moving = sqAt b, src
+    sr = rowOf src
+    sc = colOf src
+    dc = colOf dst
+    drr = rowOf dst
+    nb = setSq b, src, " "
+    nb = setSq nb, dst, moving
+    if moving = "P" {
+        if sc != dc {
+            was = sqAt b, dst
+            if was = " " {
+                nb = setSq nb, sr * 8 + dc, " "
+            }
+        }
+        if drr = 0 {
+            nb = setSq nb, dst, "Q"
+        }
+    }
+    if moving = "p" {
+        if sc != dc {
+            was = sqAt b, dst
+            if was = " " {
+                nb = setSq nb, sr * 8 + dc, " "
+            }
+        }
+        if drr = 7 {
+            nb = setSq nb, dst, "q"
+        }
+    }
+    if moving = "K" {
+        if dst = 62 {
+            nb = setSq nb, 63, " "
+            nb = setSq nb, 61, "R"
+        }
+        if dst = 58 {
+            nb = setSq nb, 56, " "
+            nb = setSq nb, 59, "R"
+        }
+    }
+    if moving = "k" {
+        if dst = 6 {
+            nb = setSq nb, 7, " "
+            nb = setSq nb, 5, "r"
+        }
+        if dst = 2 {
+            nb = setSq nb, 0, " "
+            nb = setSq nb, 3, "r"
+        }
+    }
+    return nb
+}
+
+function whiteReplyBest b, ep, wk, wq, bk, bq {
+    ck = inCheck b, true
+    any = hasAny b, true, ep, wk, wq, bk, bq
+    if any = false {
+        if ck {
+            return -100000
+        }
+        return 0
+    }
+    best = -100000
+    src = 0
+    repeat till src = 64 {
+        p = sqAt b, src
+        pc = pieceColor p
+        if pc = "white" {
+            dst = 0
+            repeat till dst = 64 {
+                pok = pseudoOk b, src, dst, true, ep, wk, wq, bk, bq
+                if pok {
+                    sf = safeAfter b, src, dst, true, ep
+                    if sf {
+                        nb = applyBoard b, src, dst
+                        v = staticEval nb
+                        if v > best {
+                            best = v
+                        }
+                    }
+                }
+                dst = dst + 1
+            }
+        }
+        src = src + 1
+    }
+    return best
+}
+
+function aiMoveText b, ep, wk, wq, bk, bq {
+    bestSrc = -1
+    bestDst = -1
+    bestVal = 1000000
+    bestTie = -1
+    src = 0
+    repeat till src = 64 {
+        p = sqAt b, src
+        pc = pieceColor p
+        if pc = "black" {
+            dst = 0
+            repeat till dst = 64 {
+                pok = pseudoOk b, src, dst, false, ep, wk, wq, bk, bq
+                if pok {
+                    sf = safeAfter b, src, dst, false, ep
+                    if sf {
+                        nb = applyBoard b, src, dst
+                        moving = sqAt b, src
+                        sr = rowOf src
+                        dr2 = rowOf dst
+                        dc = colOf dst
+                        newep = -1
+                        if moving = "p" {
+                            if sr = 1 {
+                                if dr2 = 3 {
+                                    er = sr + 1
+                                    newep = er * 8 + dc
+                                }
+                            }
+                        }
+                        nwk = wk
+                        nwq = wq
+                        nbk = bk
+                        nbq = bq
+                        if moving = "k" {
+                            nbk = false
+                            nbq = false
+                        }
+                        if src = 7 {
+                            nbk = false
+                        }
+                        if dst = 7 {
+                            nbk = false
+                        }
+                        if src = 0 {
+                            nbq = false
+                        }
+                        if dst = 0 {
+                            nbq = false
+                        }
+                        v = whiteReplyBest nb, newep, nwk, nwq, nbk, nbq
+                        if v < bestVal {
+                            bestVal = v
+                            bestTie = centralTie dst
+                            bestSrc = src
+                            bestDst = dst
+                        } else if v = bestVal {
+                            tie = centralTie dst
+                            if tie > bestTie {
+                                bestTie = tie
+                                bestSrc = src
+                                bestDst = dst
+                            }
+                        }
+                    }
+                }
+                dst = dst + 1
+            }
+        }
+        src = src + 1
+    }
+    if bestSrc = -1 {
+        return ""
+    }
+    return sqToText bestSrc, bestDst
+}
+
+function sqToText src, dst {
+    sr = rowOf src
+    sc = colOf src
+    dr2 = rowOf dst
+    dc = colOf dst
+    f1 = [sc] from "abcdefgh"
+    f2 = [dc] from "abcdefgh"
+    r1 = 8 - sr
+    r2 = 8 - dr2
+    mv = f1
+    mv = mv + r1
+    mv = mv + " "
+    mv = mv + f2
+    mv = mv + r2
+    return mv
+}
+
+// ---------- game state (top level: only here may globals change) ----------
+
+mid = ""
+i = 0
+repeat 32 {
+    mid = mid + " "
+    i = i + 1
+}
+board = "rnbqkbnrpppppppp" + mid
+board = board + "PPPPPPPPRNBQKBNR"
+turn = "white"
+wk = true
+wq = true
+bk = true
+bq = true
+ep = -1
+over = false
+
+print "Chess - White moves first. Type e2 e4. Type quit to stop."
+print "Play against the computer? (y/n)"
+add input "mode"
+set output = modeAns
+make modeAns lower
+vsAI = false
+if modeAns = "y" {
+    vsAI = true
+}
+if modeAns = "yes" {
+    vsAI = true
+}
+if vsAI {
+    print "You are White. The computer is Black."
+}
+print ""
+
+repeat till over {
+    printBoard board
+    print ""
+    isW = false
+    if turn = "white" {
+        isW = true
+    }
+    chk = inCheck board, isW
+    if chk {
+        print "Check!"
+    }
+    if isW {
+        print "White to move:"
+    } else {
+        print "Black to move:"
+    }
+    aiTurn = false
+    if vsAI {
+        if turn = "black" {
+            aiTurn = true
+        }
+    }
+    if aiTurn {
+        print "Computer is thinking..."
+        mv = aiMoveText board, ep, wk, wq, bk, bq
+        if mv = "" {
+            print "Computer has no move."
+            over = true
+        }
+    } else {
+        add input "move"
+        set output = mv
+        make mv lower
+    }
+    if mv = "" {
+        over = true
+    } else if mv = "quit" {
+        over = true
+    } else {
+        code = parseMove mv
+        if code = -1 {
+            print "Bad format. Use e2 e4."
+        } else {
+            src = 0
+            rest = code
+            repeat till rest < 64 {
+                rest = rest - 64
+                src = src + 1
+            }
+            dst = rest
+            p = sqAt board, src
+            mine = false
+            if isW {
+                pc = pieceColor p
+                if pc = "white" {
+                    mine = true
+                }
+            } else {
+                pc = pieceColor p
+                if pc = "black" {
+                    mine = true
+                }
+            }
+            if mine = false {
+                print "That is not your piece."
+            } else {
+                pok = pseudoOk board, src, dst, isW, ep, wk, wq, bk, bq
+                if pok = false {
+                    print "Illegal move."
+                } else {
+                    sf = safeAfter board, src, dst, isW, ep
+                    if sf = false {
+                        print "Illegal move. Your king would be in check."
+                    } else {
+                        moving = sqAt board, src
+                        sr = rowOf src
+                        sc = colOf src
+                        dr2 = rowOf dst
+                        dc = colOf dst
+                        nb = setSq board, src, " "
+                        nb = setSq nb, dst, moving
+                        if moving = "P" {
+                            if sc != dc {
+                                was = sqAt board, dst
+                                if was = " " {
+                                    if dst = ep {
+                                        nb = setSq nb, sr * 8 + dc, " "
+                                        print "En passant!"
+                                    }
+                                }
+                            }
+                        }
+                        if moving = "p" {
+                            if sc != dc {
+                                was = sqAt board, dst
+                                if was = " " {
+                                    if dst = ep {
+                                        nb = setSq nb, sr * 8 + dc, " "
+                                        print "En passant!"
+                                    }
+                                }
+                            }
+                        }
+                        if moving = "K" {
+                            if dst = 62 {
+                                nb = setSq nb, 63, " "
+                                nb = setSq nb, 61, "R"
+                                print "White castles kingside."
+                            }
+                            if dst = 58 {
+                                nb = setSq nb, 56, " "
+                                nb = setSq nb, 59, "R"
+                                print "White castles queenside."
+                            }
+                        }
+                        if moving = "k" {
+                            if dst = 6 {
+                                nb = setSq nb, 7, " "
+                                nb = setSq nb, 5, "r"
+                                print "Black castles kingside."
+                            }
+                            if dst = 2 {
+                                nb = setSq nb, 0, " "
+                                nb = setSq nb, 3, "r"
+                                print "Black castles queenside."
+                            }
+                        }
+                        board = nb
+                        ep = -1
+                        if moving = "P" {
+                            if sr = 6 {
+                                if dr2 = 4 {
+                                    er = sr - 1
+                                    ep = er * 8 + dc
+                                }
+                            }
+                        }
+                        if moving = "p" {
+                            if sr = 1 {
+                                if dr2 = 3 {
+                                    er = sr + 1
+                                    ep = er * 8 + dc
+                                }
+                            }
+                        }
+                        if moving = "K" {
+                            wk = false
+                            wq = false
+                        }
+                        if moving = "k" {
+                            bk = false
+                            bq = false
+                        }
+                        if src = 63 {
+                            wk = false
+                        }
+                        if dst = 63 {
+                            wk = false
+                        }
+                        if src = 56 {
+                            wq = false
+                        }
+                        if dst = 56 {
+                            wq = false
+                        }
+                        if src = 7 {
+                            bk = false
+                        }
+                        if dst = 7 {
+                            bk = false
+                        }
+                        if src = 0 {
+                            bq = false
+                        }
+                        if dst = 0 {
+                            bq = false
+                        }
+                        if moving = "P" {
+                            if dr2 = 0 {
+                                add input "Promote to q, r, b or n:"
+                                set output = choice
+                                make choice lower
+                                np = "Q"
+                                if choice = "r" {
+                                    np = "R"
+                                }
+                                if choice = "b" {
+                                    np = "B"
+                                }
+                                if choice = "n" {
+                                    np = "N"
+                                }
+                                board = setSq board, dst, np
+                            }
+                        }
+                        if moving = "p" {
+                            if dr2 = 7 {
+                                if aiTurn {
+                                    board = setSq board, dst, "q"
+                                    print "Computer promotes to queen."
+                                } else {
+                                    add input "Promote to q, r, b or n:"
+                                    set output = choice
+                                    make choice lower
+                                    np = "q"
+                                    if choice = "r" {
+                                        np = "r"
+                                    }
+                                    if choice = "b" {
+                                        np = "b"
+                                    }
+                                    if choice = "n" {
+                                        np = "n"
+                                    }
+                                    board = setSq board, dst, np
+                                }
+                            }
+                        }
+                        if turn = "white" {
+                            turn = "black"
+                        } else {
+                            turn = "white"
+                        }
+                        foeW = false
+                        if turn = "white" {
+                            foeW = true
+                        }
+                        chk2 = inCheck board, foeW
+                        any = hasAny board, foeW, ep, wk, wq, bk, bq
+                        if any = false {
+                            if chk2 {
+                                if foeW {
+                                    print "Checkmate! Black wins."
+                                } else {
+                                    print "Checkmate! White wins."
+                                }
+                            } else {
+                                print "Stalemate! Draw."
+                            }
+                            over = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+print "Thanks for playing."

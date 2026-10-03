@@ -1,0 +1,9 @@
+name = "Zen"
+print "Hello " + name
+print length of name
+print [0] from name
+name = "zen"
+make name upper
+print name
+make name lower
+print name

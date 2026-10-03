@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vexel 2.2 Examples — position test, calculator, windows, timers</title>
+<meta name="description" content="Copy-paste Vexel 2.2 examples: positioning regression test, calculator, multiple windows, timers, tasks, events.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><b>Vexel</b> 2.2</a>
+    <span class="badge">2.2.0</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html" class="active">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Examples</h1>
+    <p class="lead">Each one runs with <kbd>vexel</kbd> + filename. The first two double as 2.2 regression tests.</p>
+  </div>
+
+  <section class="block">
+    <h2>Position regression test</h2>
+    <p class="sub">Four buttons, one row, no scrollbars. If this drifts, the coordinate system regressed.</p>
+    <pre><code>create a window titled "Position Test"
+
+a = add a button titled "A"
+a.x = 20
+a.y = 20
+a.width = 50
+a.height = 50
+
+b = add a button titled "B"
+b.x = 100
+b.y = 20
+b.width = 50
+b.height = 50
+
+c = add a button titled "C"
+c.x = 180
+c.y = 20
+c.width = 50
+c.height = 50
+
+d = add a button titled "D"
+d.x = 260
+d.y = 20
+d.width = 50
+d.height = 50
+
+window.show</code></pre>
+  </section>
+
+  <section class="block">
+    <h2>Calculator (UI regression)</h2>
+    <p class="sub">Every key stays inside the window: no cumulative x/y, no DPI explosion.</p>
+    <pre><code>create a window titled "Calculator"
+
+display = add an output box
+display.x = 20
+display.y = 20
+display.width = 360
+display.height = 60
+
+seven = add a button titled "7"
+seven.x = 20
+seven.y = 100
+seven.width = 80
+seven.height = 60
+
+eight = add a button titled "8"
+eight.x = 110
+eight.y = 100
+eight.width = 80
+eight.height = 60
+
+nine = add a button titled "9"
+nine.x = 200
+nine.y = 100
+nine.width = 80
+nine.height = 60
+
+divide = add a button titled "/"
+divide.x = 290
+divide.y = 100
+divide.width = 80
+divide.height = 60
+
+window.show</code></pre>
+  </section>
+
+  <section class="block">
+    <h2>Multiple windows</h2>
+    <pre><code>main = create a window titled "Main"
+settings = create a window titled "Settings"
+
+main.width = 600
+main.height = 400
+settings.width = 400
+settings.height = 300
+
+main.show
+settings.show</code></pre>
+  </section>
+
+  <section class="block">
+    <h2>Timer with cancellation</h2>
+    <pre><code>timer = every 1 second {
+    print "tick"
+}
+
+after 5 seconds {
+    timer.cancel
+}</code></pre>
+  </section>
+
+  <section class="block">
+    <h2>Background task + safe UI update</h2>
+    <pre><code>go = add a button titled "Load"
+
+go.on click {
+    task load_data {
+        data = http get "https://example.com/data"
+    }
+}</code></pre>
+    <p class="sub">The window stays responsive while the request runs; the result is delivered through the UI event queue.</p>
+  </section>
+
+  <section class="block">
+    <h2>Window events</h2>
+    <pre><code>window.on resize {
+    print "Window resized"
+}
+
+window.on close {
+    print "Goodbye"
+}</code></pre>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Vexel 2.2.0 examples — run any file with <kbd>vexel</kbd>.</div>
+</footer>
+<script src="site.js"></script>
+</body>
+</html>

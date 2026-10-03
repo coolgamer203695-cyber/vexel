@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Download Vexel — native executables from readable code</title>
+<meta name="description" content="Get Vexel: install on Windows, Linux, or macOS. Build native console apps and desktop GUI apps from simple English-like .vxl source.">
+<meta property="og:title" content="Download Vexel">
+<meta property="og:description" content="Install Vexel and build your first native app in minutes.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f6feb'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='monospace'%3EV%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--border:#30363d;--text:#e6edf3;--muted:#9aa4b2;--accent:#58a6ff;--green:#3fb950;--code-bg:#0a0d12;--kw:#ff7b72;--str:#a5d6ff;--num:#79c0ff;--com:#8b949e;--bool:#d2a8ff}
+[data-theme="light"]{--bg:#fff;--panel:#f6f8fa;--panel2:#eaeef2;--border:#d0d7de;--text:#1f2328;--muted:#59636e;--accent:#0969da;--green:#1a7f37;--code-bg:#f6f8fa;--kw:#cf222e;--str:#0a3069;--num:#0550ae;--com:#59636e;--bool:#8250df}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--accent)}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:8px;top:8px;background:var(--accent);color:#fff;padding:8px 12px;border-radius:6px}
+nav.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+nav.top a.brand{font-weight:700;color:var(--text);text-decoration:none}
+nav.top a.link{color:var(--muted);text-decoration:none}
+nav.top a.link:hover{color:var(--accent)}
+nav.top .spacer{flex:1}
+button.theme{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer}
+main{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+h1{font-size:2.2rem}h2{border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:40px}
+pre.code{position:relative;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px;padding-top:40px;overflow-x:auto;font-family:Consolas,Menlo,monospace;font-size:.9rem}
+pre.code code{white-space:pre}
+button.copy-btn{position:absolute;top:8px;right:8px;background:var(--panel2);color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:.8rem;cursor:pointer}
+button.copy-btn:hover{color:var(--text)}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:var(--panel)}
+code.inline{background:var(--panel2);padding:2px 6px;border-radius:4px;font-size:.88em}
+.note{border-left:4px solid var(--accent);background:var(--panel);padding:10px 14px;border-radius:0 8px 8px 0;margin:16px 0}
+footer{text-align:center;color:var(--muted);padding:28px;border-top:1px solid var(--border);font-size:.9rem}
+@media (max-width:600px){h1{font-size:1.7rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="top" aria-label="Site">
+  <a class="brand" href="index.html">Vexel <span id="ver"></span></a>
+  <a class="link" href="learn.html">Learn</a>
+  <a class="link" href="docs.html">Docs</a>
+  <a class="link" href="examples.html">Examples</a>
+  <a class="link" href="download.html">Download</a>
+  <span class="spacer"></span>
+  <button class="theme" id="themeBtn" aria-label="Toggle light and dark mode">Light mode</button>
+</nav>
+<main id="main">
+<h1>Download Vexel</h1>
+<p>Vexel ships as source you build in minutes — there are no binary
+installers to trust. You need <strong>Node.js 18+</strong> everywhere,
+plus <strong>Rust</strong> (console apps) and, on Windows,
+<strong>.NET Framework + csc.exe</strong> (already inside Windows 10/11)
+for GUI apps.</p>
+
+<h2 id="windows">Windows</h2>
+<table>
+<tr><th>Step</th><th>What to do</th></tr>
+<tr><td>1. Node.js</td><td>Install LTS from <a href="https://nodejs.org">nodejs.org</a>, then <code class="inline">node --version</code> (≥ 18).</td></tr>
+<tr><td>2. Rust</td><td>Run <code class="inline">rustup-init.exe</code> from <a href="https://rustup.rs">rustup.rs</a>, then <code class="inline">rustc --version</code>.</td></tr>
+<tr><td>3. GUI</td><td>Nothing to install: check <code class="inline">C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe</code> exists.</td></tr>
+<tr><td>4. Vexel</td><td>Copy the <code class="inline">vexel/</code> folder anywhere, add it to user PATH, open a <em>fresh</em> terminal.</td></tr>
+</table>
+<pre class="code"><code>[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path","User") + ";C:\path\to\vexel", "User")
+vexel version</code></pre>
+
+<h2 id="linux">Linux</h2>
+<p>Console programs work today; desktop GUI output targets Windows
+(WinForms). Install Node.js 18+ and Rust via your package manager
+and <code>rustup</code>, copy the <code>vexel/</code> folder, and add
+it to <code>PATH</code>:</p>
+<pre class="code"><code>node --version   # needs 18+
+rustc --version
+export PATH="$PATH:/path/to/vexel"
+vexel version</code></pre>
+
+<h2 id="macos">macOS</h2>
+<p>Same as Linux: Node.js 18+ and Rust, then:</p>
+<pre class="code"><code>node --version   # needs 18+
+rustc --version
+export PATH="$PATH:/path/to/vexel"
+vexel version</code></pre>
+<div class="note"><strong>Note:</strong> GUI compilation (<code>csc.exe</code>)
+is Windows-only in 2.0. On Linux/macOS, console programs, <code>check</code>,
+and the full test suite work; GUI <em>source</em> still type-checks.</div>
+
+<h2 id="first-run">First run</h2>
+<pre class="code"><code>vexel hello.vxl        # compile + run
+vexel build hello.vxl  # native executable next to the source
+vexel check hello.vxl  # type-check only</code></pre>
+<p>Continue with the <a href="learn.html">14-lesson learning path</a>.</p>
+</main>
+<footer>Vexel <span class="ver-foot"></span> — Build. Create. Simplify.</footer>
+<script>
+(function(){
+  var root=document.documentElement;
+  function paint(){var t=root.getAttribute('data-theme')||'dark';document.getElementById('themeBtn').textContent=t==='dark'?'Light mode':'Dark mode';}
+  try{var s=localStorage.getItem('vexel-theme');if(s)root.setAttribute('data-theme',s);}catch(e){}
+  paint();
+  document.getElementById('themeBtn').addEventListener('click',function(){var n=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('vexel-theme',n);}catch(e){}paint();});
+  function setVer(v){document.getElementById('ver').textContent=v;var f=document.querySelector('.ver-foot');if(f)f.textContent=v;}
+  fetch('version.json').then(function(r){return r.json();}).then(function(j){if(j&&j.version)setVer('v'+j.version);}).catch(function(){});
+  document.querySelectorAll('pre.code').forEach(function(pre){
+    var code=pre.querySelector('code');var text=code?code.textContent:pre.textContent;
+    var btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+    btn.addEventListener('click',function(){
+      function done(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy';},1500);}
+      function fb(){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){btn.textContent='Select manually';}document.body.removeChild(ta);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fb);}else{fb();}
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

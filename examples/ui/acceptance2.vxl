@@ -1,0 +1,34 @@
+create a window titled "Vexel 2.0"
+
+window.width = 600
+window.height = 400
+
+title = add a text titled "Welcome to Vexel 2.0"
+
+title.x = 200
+title.y = 50
+
+name = add an input box
+
+name.x = 150
+name.y = 120
+name.width = 300
+name.height = 40
+
+button = add a button titled "Say Hello"
+
+button.x = 200
+button.y = 200
+button.width = 200
+button.height = 50
+
+output = add an output box
+
+output.x = 100
+output.y = 280
+output.width = 400
+output.height = 50
+
+button.on click {
+    output.text = "Hello " + name.text
+}

@@ -1,0 +1,382 @@
+// Vexel auth demo: smooth animated background, sign-in + sign-up,
+// accounts saved to accounts.json.
+create a window titled "Vexel Auth"
+
+use theme "light"
+
+set window position to 200, 60
+window.width = 600
+window.height = 680
+
+fade window
+    duration 0.5 seconds
+
+// ---------- smooth background drift (60fps, ping-pong) ----------
+dot1 = add a button titled ""
+dot1.x = 30
+dot1.y = 80
+dot1.width = 46
+dot1.height = 46
+dot1.background = "#c7d8ff"
+dot1.border_radius = 23
+
+dot2 = add a button titled ""
+dot2.x = 500
+dot2.y = 200
+dot2.width = 64
+dot2.height = 64
+dot2.background = "#ffd9e8"
+dot2.border_radius = 32
+
+dot3 = add a button titled ""
+dot3.x = 80
+dot3.y = 500
+dot3.width = 38
+dot3.height = 38
+dot3.background = "#d9f2e3"
+dot3.border_radius = 19
+
+dot4 = add a button titled ""
+dot4.x = 460
+dot4.y = 540
+dot4.width = 52
+dot4.height = 52
+dot4.background = "#fff0c7"
+dot4.border_radius = 26
+
+dot5 = add a button titled ""
+dot5.x = 260
+dot5.y = 20
+dot5.width = 30
+dot5.height = 30
+dot5.background = "#e3d9ff"
+dot5.border_radius = 15
+
+animate dot1 {
+    move to x 500
+    duration 8 seconds
+}
+
+animate dot2 {
+    move to x 60
+    duration 10 seconds
+}
+
+animate dot3 {
+    move to x 510
+    duration 9 seconds
+}
+
+animate dot4 {
+    move to x 70
+    duration 11 seconds
+}
+
+animate dot5 {
+    move to x 520
+    duration 7 seconds
+}
+
+driftRight = true
+
+every 9 seconds {
+    if driftRight {
+        animate dot1 {
+            move to x 500
+            duration 8 seconds
+        }
+        animate dot2 {
+            move to x 60
+            duration 10 seconds
+        }
+        animate dot3 {
+            move to x 510
+            duration 9 seconds
+        }
+        animate dot4 {
+            move to x 70
+            duration 11 seconds
+        }
+        animate dot5 {
+            move to x 520
+            duration 7 seconds
+        }
+    } else {
+        animate dot1 {
+            move to x 30
+            duration 8 seconds
+        }
+        animate dot2 {
+            move to x 500
+            duration 10 seconds
+        }
+        animate dot3 {
+            move to x 80
+            duration 9 seconds
+        }
+        animate dot4 {
+            move to x 460
+            duration 11 seconds
+        }
+        animate dot5 {
+            move to x 260
+            duration 7 seconds
+        }
+    }
+    driftRight = not driftRight
+}
+
+// ---------- shared account store ----------
+users = []
+
+// ---------- sign-in page ----------
+signinPage = add a panel
+signinPage.x = 90
+signinPage.y = 70
+signinPage.width = 420
+signinPage.height = 500
+
+siTitle = add a text titled "Welcome back" to signinPage
+siTitle.x = 40
+siTitle.y = 25
+siTitle.width = 340
+siTitle.height = 50
+siTitle.font_size = 30
+siTitle.bold = true
+siTitle.alignment = "center"
+
+siSub = add a text titled "Sign in to continue" to signinPage
+siSub.x = 40
+siSub.y = 80
+siSub.width = 340
+siSub.height = 28
+siSub.alignment = "center"
+
+siUserLabel = add a text titled "Username" to signinPage
+siUserLabel.x = 40
+siUserLabel.y = 125
+siUserLabel.width = 340
+siUserLabel.height = 25
+siUserLabel.bold = true
+
+siUser = add an input box titled "you@example.com" to signinPage
+siUser.x = 40
+siUser.y = 155
+siUser.width = 340
+siUser.height = 45
+
+siPassLabel = add a text titled "Password" to signinPage
+siPassLabel.x = 40
+siPassLabel.y = 215
+siPassLabel.width = 340
+siPassLabel.height = 25
+siPassLabel.bold = true
+
+siPass = add an input box to signinPage
+siPass.x = 40
+siPass.y = 245
+siPass.width = 340
+siPass.height = 45
+siPass.password = true
+
+siGo = add a button titled "Sign In" to signinPage
+siGo.x = 40
+siGo.y = 315
+siGo.width = 340
+siGo.height = 55
+siGo.font_size = 18
+siGo.background = "blue"
+siGo.text_color = "white"
+siGo.border_radius = 12
+
+siMsg = add an output box to signinPage
+siMsg.x = 40
+siMsg.y = 385
+siMsg.width = 340
+siMsg.height = 55
+
+toSignup = add a button titled "New here? Create account" to signinPage
+toSignup.x = 40
+toSignup.y = 450
+toSignup.width = 340
+toSignup.height = 35
+
+animate signinPage {
+    move to y 70
+    duration 1 second
+}
+
+// ---------- sign-up page (hidden first) ----------
+signupPage = add a panel
+signupPage.x = 90
+signupPage.y = 70
+signupPage.width = 420
+signupPage.height = 540
+signupPage.hide
+
+suTitle = add a text titled "Join Vexel" to signupPage
+suTitle.x = 40
+suTitle.y = 20
+suTitle.width = 340
+suTitle.height = 50
+suTitle.font_size = 30
+suTitle.bold = true
+suTitle.alignment = "center"
+
+suSub = add a text titled "One account for every app" to signupPage
+suSub.x = 40
+suSub.y = 75
+suSub.width = 340
+suSub.height = 28
+suSub.alignment = "center"
+
+suUserLabel = add a text titled "Pick a username" to signupPage
+suUserLabel.x = 40
+suUserLabel.y = 118
+suUserLabel.width = 340
+suUserLabel.height = 25
+suUserLabel.bold = true
+
+suUser = add an input box titled "coolname123" to signupPage
+suUser.x = 40
+suUser.y = 148
+suUser.width = 340
+suUser.height = 45
+
+suPassLabel = add a text titled "Password" to signupPage
+suPassLabel.x = 40
+suPassLabel.y = 208
+suPassLabel.width = 340
+suPassLabel.height = 25
+suPassLabel.bold = true
+
+suPass = add an input box to signupPage
+suPass.x = 40
+suPass.y = 238
+suPass.width = 340
+suPass.height = 45
+suPass.password = true
+
+suPass2Label = add a text titled "Repeat password" to signupPage
+suPass2Label.x = 40
+suPass2Label.y = 298
+suPass2Label.width = 340
+suPass2Label.height = 25
+suPass2Label.bold = true
+
+suPass2 = add an input box to signupPage
+suPass2.x = 40
+suPass2.y = 328
+suPass2.width = 340
+suPass2.height = 45
+suPass2.password = true
+
+suGo = add a button titled "Create Account" to signupPage
+suGo.x = 40
+suGo.y = 390
+suGo.width = 340
+suGo.height = 50
+suGo.font_size = 18
+suGo.background = "green"
+suGo.text_color = "white"
+suGo.border_radius = 12
+
+suMsg = add an output box to signupPage
+suMsg.x = 40
+suMsg.y = 445
+suMsg.width = 340
+suMsg.height = 40
+
+toSignin = add a button titled "Have an account? Sign in" to signupPage
+toSignin.x = 40
+toSignin.y = 490
+toSignin.width = 340
+toSignin.height = 35
+
+// ---------- navigation + logic ----------
+toSignup.on click {
+    signinPage.hide
+    signupPage.show
+}
+
+toSignin.on click {
+    signupPage.hide
+    signinPage.show
+}
+
+siGo.on click {
+    if siUser.text = "" {
+        siMsg.text = "Please enter your username."
+    } else if siPass.text = "" {
+        siMsg.text = "Please enter your password."
+    } else {
+        try {
+            db = json read "accounts.json"
+            users = db.users
+        } error {
+            users = []
+        }
+        if length of users = 0 {
+            siMsg.text = "No accounts yet. Create one first!"
+        } else {
+            found = false
+            i = 0
+            repeat till i = length of users {
+                u = users[i]
+                if u.name = siUser.text and u.pass = siPass.text {
+                    found = true
+                }
+                i = i + 1
+            }
+            if found {
+                siMsg.text = "Welcome back, " + siUser.text + "! Signed in."
+                siGo.title = "Signed In!"
+                siGo.enabled = false
+            } else {
+                siMsg.text = "Wrong details. Try again or sign up."
+            }
+        }
+    }
+}
+
+suGo.on click {
+    if suUser.text = "" {
+        suMsg.text = "Pick a username first."
+    } else if suPass.text = "" {
+        suMsg.text = "Choose a password first."
+    } else if not suPass.text = suPass2.text {
+        suMsg.text = "Passwords do not match. Try again."
+    } else {
+        try {
+            db2 = json read "accounts.json"
+            users = db2.users
+        } error {
+            users = []
+        }
+        taken = false
+        j = 0
+        repeat till j = length of users {
+            u2 = users[j]
+            if u2.name = suUser.text {
+                taken = true
+            }
+            j = j + 1
+        }
+        if taken {
+            suMsg.text = "That name is taken. Pick another."
+        } else {
+            newUser = {
+                name = suUser.text
+                pass = suPass.text
+            }
+            users.add newUser
+            save = {
+                users = users
+            }
+            json write save to "accounts.json"
+            suMsg.text = "Welcome aboard, " + suUser.text + "! Now sign in."
+        }
+    }
+}
+
+window.show

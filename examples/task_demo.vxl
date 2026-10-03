@@ -1,0 +1,29 @@
+// Vexel 2.9: console background tasks with
+// start, state, wait, result and error.
+task calc {
+    total = 0
+    n = 1
+    repeat till n = 11 {
+        total = total + n
+        n = n + 1
+    }
+    result = total
+}
+
+print calc.state
+wait calc
+print calc.state
+print calc.result
+
+// Cancellation is cooperative.
+task slow {
+    wait 60 seconds
+    result = "done"
+}
+
+repeat till slow.state = "running" {
+}
+
+slow.cancel
+wait slow
+print slow.state

@@ -1,0 +1,14 @@
+age = 20
+ready = true
+if age >= 18 and ready {
+    print "Allowed"
+}
+hasPermission = false
+if age >= 18 or hasPermission {
+    print "Allowed2"
+}
+if not ready {
+    print "Not ready"
+} else {
+    print "Ready"
+}

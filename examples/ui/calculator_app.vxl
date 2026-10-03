@@ -1,0 +1,465 @@
+import calc/logic
+
+create a window titled "Calculator"
+
+window.width = 400
+window.height = 470
+
+display = add an output box
+
+display.x = 20
+display.y = 20
+display.width = 360
+display.height = 70
+display.font_size = 28
+display.text = "0"
+
+clearBtn = add a button titled "C"
+
+clearBtn.x = 20
+clearBtn.y = 110
+clearBtn.width = 82
+clearBtn.height = 55
+clearBtn.font_size = 16
+
+backBtn = add a button titled "<-"
+
+backBtn.x = 112
+backBtn.y = 110
+backBtn.width = 82
+backBtn.height = 55
+backBtn.font_size = 16
+
+negBtn = add a button titled "+/-"
+
+negBtn.x = 204
+negBtn.y = 110
+negBtn.width = 82
+negBtn.height = 55
+negBtn.font_size = 16
+
+divBtn = add a button titled "/"
+
+divBtn.x = 296
+divBtn.y = 110
+divBtn.width = 84
+divBtn.height = 55
+divBtn.font_size = 16
+
+seven = add a button titled "7"
+
+seven.x = 20
+seven.y = 175
+seven.width = 82
+seven.height = 55
+seven.font_size = 16
+
+eight = add a button titled "8"
+
+eight.x = 112
+eight.y = 175
+eight.width = 82
+eight.height = 55
+eight.font_size = 16
+
+nine = add a button titled "9"
+
+nine.x = 204
+nine.y = 175
+nine.width = 82
+nine.height = 55
+nine.font_size = 16
+
+mulBtn = add a button titled "*"
+
+mulBtn.x = 296
+mulBtn.y = 175
+mulBtn.width = 84
+mulBtn.height = 55
+mulBtn.font_size = 16
+
+four = add a button titled "4"
+
+four.x = 20
+four.y = 240
+four.width = 82
+four.height = 55
+four.font_size = 16
+
+five = add a button titled "5"
+
+five.x = 112
+five.y = 240
+five.width = 82
+five.height = 55
+five.font_size = 16
+
+six = add a button titled "6"
+
+six.x = 204
+six.y = 240
+six.width = 82
+six.height = 55
+six.font_size = 16
+
+subBtn = add a button titled "-"
+
+subBtn.x = 296
+subBtn.y = 240
+subBtn.width = 84
+subBtn.height = 55
+subBtn.font_size = 16
+
+one = add a button titled "1"
+
+one.x = 20
+one.y = 305
+one.width = 82
+one.height = 55
+one.font_size = 16
+
+two = add a button titled "2"
+
+two.x = 112
+two.y = 305
+two.width = 82
+two.height = 55
+two.font_size = 16
+
+three = add a button titled "3"
+
+three.x = 204
+three.y = 305
+three.width = 82
+three.height = 55
+three.font_size = 16
+
+plusBtn = add a button titled "+"
+
+plusBtn.x = 296
+plusBtn.y = 305
+plusBtn.width = 84
+plusBtn.height = 55
+plusBtn.font_size = 16
+
+zero = add a button titled "0"
+
+zero.x = 20
+zero.y = 370
+zero.width = 174
+zero.height = 55
+zero.font_size = 16
+
+dotBtn = add a button titled "."
+
+dotBtn.x = 204
+dotBtn.y = 370
+dotBtn.width = 82
+dotBtn.height = 55
+dotBtn.font_size = 16
+
+eqBtn = add a button titled "="
+
+eqBtn.x = 296
+eqBtn.y = 370
+eqBtn.width = 84
+eqBtn.height = 55
+eqBtn.font_size = 16
+
+first = ""
+op = ""
+fresh = true
+
+seven.on click {
+    display.text = logic.appendDigit display.text, "7", fresh
+    fresh = false
+}
+
+eight.on click {
+    display.text = logic.appendDigit display.text, "8", fresh
+    fresh = false
+}
+
+nine.on click {
+    display.text = logic.appendDigit display.text, "9", fresh
+    fresh = false
+}
+
+four.on click {
+    display.text = logic.appendDigit display.text, "4", fresh
+    fresh = false
+}
+
+five.on click {
+    display.text = logic.appendDigit display.text, "5", fresh
+    fresh = false
+}
+
+six.on click {
+    display.text = logic.appendDigit display.text, "6", fresh
+    fresh = false
+}
+
+one.on click {
+    display.text = logic.appendDigit display.text, "1", fresh
+    fresh = false
+}
+
+two.on click {
+    display.text = logic.appendDigit display.text, "2", fresh
+    fresh = false
+}
+
+three.on click {
+    display.text = logic.appendDigit display.text, "3", fresh
+    fresh = false
+}
+
+zero.on click {
+    display.text = logic.appendDigit display.text, "0", fresh
+    fresh = false
+}
+
+dotBtn.on click {
+    display.text = logic.appendDot display.text, fresh
+    fresh = false
+}
+
+plusBtn.on click {
+    if op = "" {
+        first = display.text
+    } else {
+        if fresh = false {
+            first = logic.compute first, op, display.text
+            display.text = first
+        }
+    }
+    op = "+"
+    fresh = true
+}
+
+subBtn.on click {
+    if op = "" {
+        first = display.text
+    } else {
+        if fresh = false {
+            first = logic.compute first, op, display.text
+            display.text = first
+        }
+    }
+    op = "-"
+    fresh = true
+}
+
+mulBtn.on click {
+    if op = "" {
+        first = display.text
+    } else {
+        if fresh = false {
+            first = logic.compute first, op, display.text
+            display.text = first
+        }
+    }
+    op = "*"
+    fresh = true
+}
+
+divBtn.on click {
+    if op = "" {
+        first = display.text
+    } else {
+        if fresh = false {
+            first = logic.compute first, op, display.text
+            display.text = first
+        }
+    }
+    op = "/"
+    fresh = true
+}
+
+eqBtn.on click {
+    if op = "" {
+        op = ""
+    } else {
+        display.text = logic.compute first, op, display.text
+        first = display.text
+        op = ""
+        fresh = true
+    }
+}
+
+clearBtn.on click {
+    display.text = "0"
+    first = ""
+    op = ""
+    fresh = true
+}
+
+backBtn.on click {
+    display.text = logic.backspace display.text
+    fresh = false
+}
+
+negBtn.on click {
+    display.text = logic.toggleSign display.text
+}
+
+window.on key press {
+    if key = "D0" {
+        display.text = logic.appendDigit display.text, "0", fresh
+        fresh = false
+    } else if key = "NumPad0" {
+        display.text = logic.appendDigit display.text, "0", fresh
+        fresh = false
+    } else if key = "D1" {
+        display.text = logic.appendDigit display.text, "1", fresh
+        fresh = false
+    } else if key = "NumPad1" {
+        display.text = logic.appendDigit display.text, "1", fresh
+        fresh = false
+    } else if key = "D2" {
+        display.text = logic.appendDigit display.text, "2", fresh
+        fresh = false
+    } else if key = "NumPad2" {
+        display.text = logic.appendDigit display.text, "2", fresh
+        fresh = false
+    } else if key = "D3" {
+        display.text = logic.appendDigit display.text, "3", fresh
+        fresh = false
+    } else if key = "NumPad3" {
+        display.text = logic.appendDigit display.text, "3", fresh
+        fresh = false
+    } else if key = "D4" {
+        display.text = logic.appendDigit display.text, "4", fresh
+        fresh = false
+    } else if key = "NumPad4" {
+        display.text = logic.appendDigit display.text, "4", fresh
+        fresh = false
+    } else if key = "D5" {
+        display.text = logic.appendDigit display.text, "5", fresh
+        fresh = false
+    } else if key = "NumPad5" {
+        display.text = logic.appendDigit display.text, "5", fresh
+        fresh = false
+    } else if key = "D6" {
+        display.text = logic.appendDigit display.text, "6", fresh
+        fresh = false
+    } else if key = "NumPad6" {
+        display.text = logic.appendDigit display.text, "6", fresh
+        fresh = false
+    } else if key = "D7" {
+        display.text = logic.appendDigit display.text, "7", fresh
+        fresh = false
+    } else if key = "NumPad7" {
+        display.text = logic.appendDigit display.text, "7", fresh
+        fresh = false
+    } else if key = "D8" {
+        display.text = logic.appendDigit display.text, "8", fresh
+        fresh = false
+    } else if key = "NumPad8" {
+        display.text = logic.appendDigit display.text, "8", fresh
+        fresh = false
+    } else if key = "D9" {
+        display.text = logic.appendDigit display.text, "9", fresh
+        fresh = false
+    } else if key = "NumPad9" {
+        display.text = logic.appendDigit display.text, "9", fresh
+        fresh = false
+    } else if key = "OemPeriod" {
+        display.text = logic.appendDot display.text, fresh
+        fresh = false
+    } else if key = "Decimal" {
+        display.text = logic.appendDot display.text, fresh
+        fresh = false
+    } else if key = "Add" {
+        if op = "" {
+            first = display.text
+        } else {
+            if fresh = false {
+                first = logic.compute first, op, display.text
+                display.text = first
+            }
+        }
+        op = "+"
+        fresh = true
+    } else if key = "Oemplus" {
+        if op = "" {
+            first = display.text
+        } else {
+            if fresh = false {
+                first = logic.compute first, op, display.text
+                display.text = first
+            }
+        }
+        op = "+"
+        fresh = true
+    } else if key = "Subtract" {
+        if op = "" {
+            first = display.text
+        } else {
+            if fresh = false {
+                first = logic.compute first, op, display.text
+                display.text = first
+            }
+        }
+        op = "-"
+        fresh = true
+    } else if key = "OemMinus" {
+        if op = "" {
+            first = display.text
+        } else {
+            if fresh = false {
+                first = logic.compute first, op, display.text
+                display.text = first
+            }
+        }
+        op = "-"
+        fresh = true
+    } else if key = "Multiply" {
+        if op = "" {
+            first = display.text
+        } else {
+            if fresh = false {
+                first = logic.compute first, op, display.text
+                display.text = first
+            }
+        }
+        op = "*"
+        fresh = true
+    } else if key = "Divide" {
+        if op = "" {
+            first = display.text
+        } else {
+            if fresh = false {
+                first = logic.compute first, op, display.text
+                display.text = first
+            }
+        }
+        op = "/"
+        fresh = true
+    } else if key = "Return" {
+        if op = "" {
+            op = ""
+        } else {
+            display.text = logic.compute first, op, display.text
+            first = display.text
+            op = ""
+            fresh = true
+        }
+    } else if key = "Back" {
+        display.text = logic.backspace display.text
+        fresh = false
+    } else if key = "Escape" {
+        display.text = "0"
+        first = ""
+        op = ""
+        fresh = true
+    } else if key = "C" {
+        display.text = "0"
+        first = ""
+        op = ""
+        fresh = true
+    }
+}
+
+window.show

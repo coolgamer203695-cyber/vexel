@@ -1,0 +1,19 @@
+# dependencies / caches
+node_modules/
+.config/
+.vexel-cache/
+
+# Rust build output
+gpu/target/
+*.pdb
+
+# compiled binaries (vexel build output)
+*.exe
+*.dll
+
+# npm pack artifacts
+*.tgz
+
+# runtime data / demo state (contains plain-text demo credentials)
+accounts.json
+starpet.json

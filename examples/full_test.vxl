@@ -1,0 +1,41 @@
+struct Player {
+    name
+    age
+    level
+}
+
+function add a, b {
+    return a + b
+}
+
+player = Player {
+    name = "Zen"
+    age = 25
+    level = 10
+}
+
+print "Player: " + player.name
+print player.age
+
+player.level = player.level + 1
+
+x = add 10, 20
+
+print "Result: " + x
+
+number = r from 1 to 10
+
+if number >= 5 {
+    print "High"
+} else {
+    print "Low"
+}
+
+repeat 3 {
+    print "Vexel"
+}
+
+add input "Enter your name:"
+set output = userName
+
+print "Hello " + userName

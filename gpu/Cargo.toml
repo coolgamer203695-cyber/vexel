@@ -1,0 +1,16 @@
+[package]
+name = "vex_gpu"
+version = "0.4.0"
+edition = "2021"
+description = "Atlas v0.4 GPU backend (wgpu) for the Vexel language"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wgpu = "25"
+pollster = "0.4"
+bytemuck = "1"
+
+[profile.release]
+opt-level = 3

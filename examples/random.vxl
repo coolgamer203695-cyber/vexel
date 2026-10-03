@@ -1,0 +1,7 @@
+x = r from 1 to 10
+print x
+number = r from 1 to 100
+print number
+if number >= 1 and number <= 100 {
+    print "Range OK"
+}

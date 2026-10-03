@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>index.html</loc></url>
+  <url><loc>learn.html</loc></url>
+  <url><loc>lesson.html</loc></url>
+  <url><loc>docs.html</loc></url>
+  <url><loc>doc.html</loc></url>
+  <url><loc>examples.html</loc></url>
+  <url><loc>example.html</loc></url>
+  <url><loc>playground.html</loc></url>
+  <url><loc>download.html</loc></url>
+  <url><loc>changelog.html</loc></url>
+  <url><loc>about.html</loc></url>
+  <url><loc>projects.html</loc></url>
+  <url><loc>reference.html</loc></url>
+</urlset>

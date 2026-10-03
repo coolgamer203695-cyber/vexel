@@ -1,0 +1,46 @@
+public struct Layer { w b }
+
+public function linear n, m {
+    w = random tensor [n, m]
+    b = zeros [1, m]
+    make w require gradients
+    make b require gradients
+    return Layer { w = w, b = b }
+}
+
+public function forward layer, x {
+    return x @ layer.w + layer.b
+}
+
+public function relu_layer layer, x {
+    return relu (x @ layer.w + layer.b)
+}
+
+public function sigmoid_layer layer, x {
+    return sigmoid (x @ layer.w + layer.b)
+}
+
+public function tanh_layer layer, x {
+    return tanh (x @ layer.w + layer.b)
+}
+
+public function mse pred, target {
+    d = pred - target
+    return (d * d).mean
+}
+
+public function step layer, lr {
+    g = layer.w.grad
+    nw = (layer.w - lr * g).detach
+    make nw require gradients
+    layer.w = nw
+    gb = layer.b.grad
+    nb = (layer.b - lr * gb).detach
+    make nb require gradients
+    layer.b = nb
+}
+
+public function zero layer {
+    layer.w.zero_grad
+    layer.b.zero_grad
+}

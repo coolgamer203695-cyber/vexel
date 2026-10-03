@@ -1,0 +1,435 @@
+// Vexel Desktop Hub — calculator, notes, dice, stopwatch, about.
+create a window titled "Vexel Hub"
+
+use theme "dark"
+
+window.width = 560
+window.height = 560
+
+tabs = add a tab bar
+tabs.x = 15
+tabs.y = 15
+tabs.width = 530
+tabs.height = 470
+
+calc = tabs.add "Calculator"
+notes = tabs.add "Notes"
+dice = tabs.add "Dice"
+watch = tabs.add "Timer"
+about = tabs.add "About"
+
+// ---------- Calculator ----------
+calcDisplay = add an output box to calc
+calcDisplay.x = 20
+calcDisplay.y = 15
+calcDisplay.width = 470
+calcDisplay.height = 55
+calcDisplay.font_size = 22
+
+seven = add a button titled "7" to calc
+seven.x = 20
+seven.y = 85
+seven.width = 110
+seven.height = 55
+
+eight = add a button titled "8" to calc
+eight.x = 140
+eight.y = 85
+eight.width = 110
+eight.height = 55
+
+nine = add a button titled "9" to calc
+nine.x = 260
+nine.y = 85
+nine.width = 110
+nine.height = 55
+
+divideBtn = add a button titled "/" to calc
+divideBtn.x = 380
+divideBtn.y = 85
+divideBtn.width = 110
+divideBtn.height = 55
+
+four = add a button titled "4" to calc
+four.x = 20
+four.y = 150
+four.width = 110
+four.height = 55
+
+five = add a button titled "5" to calc
+five.x = 140
+five.y = 150
+five.width = 110
+five.height = 55
+
+six = add a button titled "6" to calc
+six.x = 260
+six.y = 150
+six.width = 110
+six.height = 55
+
+mulBtn = add a button titled "*" to calc
+mulBtn.x = 380
+mulBtn.y = 150
+mulBtn.width = 110
+mulBtn.height = 55
+
+one = add a button titled "1" to calc
+one.x = 20
+one.y = 215
+one.width = 110
+one.height = 55
+
+two = add a button titled "2" to calc
+two.x = 140
+two.y = 215
+two.width = 110
+two.height = 55
+
+three = add a button titled "3" to calc
+three.x = 260
+three.y = 215
+three.width = 110
+three.height = 55
+
+subBtn = add a button titled "-" to calc
+subBtn.x = 380
+subBtn.y = 215
+subBtn.width = 110
+subBtn.height = 55
+
+zero = add a button titled "0" to calc
+zero.x = 20
+zero.y = 280
+zero.width = 110
+zero.height = 55
+
+eqBtn = add a button titled "=" to calc
+eqBtn.x = 140
+eqBtn.y = 280
+eqBtn.width = 110
+eqBtn.height = 55
+eqBtn.background = "blue"
+eqBtn.text_color = "white"
+
+plusBtn = add a button titled "+" to calc
+plusBtn.x = 260
+plusBtn.y = 280
+plusBtn.width = 110
+plusBtn.height = 55
+
+clrBtn = add a button titled "C" to calc
+clrBtn.x = 380
+clrBtn.y = 280
+clrBtn.width = 110
+clrBtn.height = 55
+clrBtn.background = "red"
+clrBtn.text_color = "white"
+
+current = ""
+first = ""
+op = ""
+
+seven.on click {
+    current = current + "7"
+    calcDisplay.text = current
+}
+
+eight.on click {
+    current = current + "8"
+    calcDisplay.text = current
+}
+
+nine.on click {
+    current = current + "9"
+    calcDisplay.text = current
+}
+
+four.on click {
+    current = current + "4"
+    calcDisplay.text = current
+}
+
+five.on click {
+    current = current + "5"
+    calcDisplay.text = current
+}
+
+six.on click {
+    current = current + "6"
+    calcDisplay.text = current
+}
+
+one.on click {
+    current = current + "1"
+    calcDisplay.text = current
+}
+
+two.on click {
+    current = current + "2"
+    calcDisplay.text = current
+}
+
+three.on click {
+    current = current + "3"
+    calcDisplay.text = current
+}
+
+zero.on click {
+    current = current + "0"
+    calcDisplay.text = current
+}
+
+plusBtn.on click {
+    first = current
+    op = "+"
+    current = ""
+    calcDisplay.text = ""
+}
+
+subBtn.on click {
+    first = current
+    op = "-"
+    current = ""
+    calcDisplay.text = ""
+}
+
+mulBtn.on click {
+    first = current
+    op = "*"
+    current = ""
+    calcDisplay.text = ""
+}
+
+divideBtn.on click {
+    first = current
+    op = "/"
+    current = ""
+    calcDisplay.text = ""
+}
+
+eqBtn.on click {
+    second = calcDisplay.text
+    try {
+        f = number of first
+        s = number of second
+        if op = "+" {
+            result = f + s
+        } else if op = "-" {
+            result = f - s
+        } else if op = "*" {
+            result = f * s
+        } else if op = "/" {
+            if s = 0 {
+                result = "Nope"
+            } else {
+                result = f / s
+            }
+        } else {
+            result = s
+        }
+        calcDisplay.text = result
+        current = calcDisplay.text
+    } error {
+        calcDisplay.text = error.message
+    }
+}
+
+clrBtn.on click {
+    calcDisplay.text = ""
+    first = ""
+    op = ""
+    current = ""
+}
+
+// ---------- Notes ----------
+noteInput = add an input box titled "New note..." to notes
+noteInput.x = 20
+noteInput.y = 15
+noteInput.width = 330
+noteInput.height = 42
+
+addNoteBtn = add a button titled "Add" to notes
+addNoteBtn.x = 360
+addNoteBtn.y = 15
+addNoteBtn.width = 130
+addNoteBtn.height = 42
+addNoteBtn.background = "green"
+addNoteBtn.text_color = "white"
+
+noteList = add a list to notes
+noteList.x = 20
+noteList.y = 70
+noteList.width = 470
+noteList.height = 250
+
+noteCount = add a text titled "0 notes" to notes
+noteCount.x = 20
+noteCount.y = 330
+noteCount.width = 230
+noteCount.height = 30
+
+clearNotesBtn = add a button titled "Clear" to notes
+clearNotesBtn.x = 260
+clearNotesBtn.y = 330
+clearNotesBtn.width = 230
+clearNotesBtn.height = 40
+
+notesTotal = 0
+
+addNoteBtn.on click {
+    if noteInput.text = "" {
+        noteCount.text = "Type a note first!"
+    } else {
+        noteList.add noteInput.text
+        notesTotal = notesTotal + 1
+        noteCount.text = "Notes: " + notesTotal
+        noteInput.text = ""
+    }
+}
+
+clearNotesBtn.on click {
+    noteList.clear
+    notesTotal = 0
+    noteCount.text = "0 notes"
+}
+
+// ---------- Dice ----------
+diceTitle = add a text titled "Roll the dice!" to dice
+diceTitle.x = 20
+diceTitle.y = 15
+diceTitle.width = 470
+diceTitle.height = 40
+diceTitle.font_size = 24
+diceTitle.bold = true
+
+rollBtn = add a button titled "Roll D6" to dice
+rollBtn.x = 20
+rollBtn.y = 70
+rollBtn.width = 220
+rollBtn.height = 60
+rollBtn.font_size = 18
+
+roll20Btn = add a button titled "Roll D20" to dice
+roll20Btn.x = 270
+roll20Btn.y = 70
+roll20Btn.width = 220
+roll20Btn.height = 60
+roll20Btn.font_size = 18
+
+diceOut = add an output box to dice
+diceOut.x = 20
+diceOut.y = 150
+diceOut.width = 470
+diceOut.height = 140
+diceOut.text = "No rolls yet."
+
+rollBtn.on click {
+    roll = r from 1 to 6
+    diceOut.text = "D6: " + roll
+}
+
+roll20Btn.on click {
+    big = r from 1 to 20
+    if big = 20 {
+        diceOut.text = "D20: 20 CRITICAL!"
+    } else {
+        diceOut.text = "D20: " + big
+    }
+}
+
+// ---------- Stopwatch ----------
+watchLabel = add a text titled "0s" to watch
+watchLabel.x = 20
+watchLabel.y = 15
+watchLabel.width = 470
+watchLabel.height = 80
+watchLabel.font_size = 48
+watchLabel.bold = true
+watchLabel.alignment = "center"
+
+startBtn = add a button titled "Start" to watch
+startBtn.x = 20
+startBtn.y = 120
+startBtn.width = 220
+startBtn.height = 55
+startBtn.background = "green"
+startBtn.text_color = "white"
+
+stopBtn = add a button titled "Stop" to watch
+stopBtn.x = 270
+stopBtn.y = 120
+stopBtn.width = 220
+stopBtn.height = 55
+stopBtn.background = "red"
+stopBtn.text_color = "white"
+
+resetBtn = add a button titled "Reset" to watch
+resetBtn.x = 20
+resetBtn.y = 190
+resetBtn.width = 470
+resetBtn.height = 50
+
+secs = 0
+ticking = false
+
+ticker = every 1 second {
+    if ticking {
+        secs = secs + 1
+        watchLabel.text = "" + secs + "s"
+    }
+}
+
+startBtn.on click {
+    ticking = true
+}
+
+stopBtn.on click {
+    ticking = false
+}
+
+resetBtn.on click {
+    secs = 0
+    ticking = false
+    watchLabel.text = "0s"
+}
+
+// ---------- About ----------
+aboutTitle = add a text titled "Vexel Hub 2.9" to about
+aboutTitle.x = 20
+aboutTitle.y = 15
+aboutTitle.width = 470
+aboutTitle.height = 45
+aboutTitle.font_size = 26
+aboutTitle.bold = true
+
+aboutText = add a text titled "Five tiny apps, one window. Calculator, notes, dice, stopwatch and this page." to about
+aboutText.x = 20
+aboutText.y = 70
+aboutText.width = 470
+aboutText.height = 60
+
+aboutBtn = add a button titled "Say Hi" to about
+aboutBtn.x = 20
+aboutBtn.y = 150
+aboutBtn.width = 200
+aboutBtn.height = 50
+
+aboutOut = add an output box to about
+aboutOut.x = 20
+aboutOut.y = 215
+aboutOut.width = 470
+aboutOut.height = 100
+
+aboutBtn.on click {
+    aboutOut.text = "Build. Compile. Create."
+}
+
+status = add an output box
+status.x = 15
+status.y = 495
+status.width = 530
+status.height = 50
+status.text = "Hub ready. Pick a tab!"
+
+window.show

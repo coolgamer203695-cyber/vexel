@@ -1,0 +1,16 @@
+create a window titled "Ax TaskCtl"
+
+task work {
+    wait 30 seconds
+    result = "finished"
+}
+
+killer = after 2 seconds {
+    work.cancel
+}
+
+prober = every 1 second {
+    json write work.state to "ax_taskstate.json"
+}
+
+window.show

@@ -1,0 +1,57 @@
+// Vexel 3.6 — Atlas v0.4 GPU demo.
+// Runs everywhere: without a GPU it reports why and does nothing fake.
+// Run: vexel run examples/gpu_demo.vxl
+
+print ["GPU available:", gpu available]
+print ["GPU count:", gpu count]
+print ["GPU name:", gpu name]
+
+struct Layer {
+    w
+    b
+}
+
+if gpu available {
+    // Move a tensor to the GPU, compute there, read the result back.
+    a = tensor [1,2,3,4]
+    move a to gpu
+    print ["device:", a.device]
+    b = a * 10 + 1
+    move b to cpu
+    print ["a * 10 + 1 =", b]
+
+    // Matrix multiplication on the GPU.
+    m1 = tensor [[1,2],[3,4]]
+    m2 = tensor [[5,6],[7,8]]
+    move m1 to gpu
+    move m2 to gpu
+    mm = m1 @ m2
+    move mm to cpu
+    print ["m1 @ m2 =", mm]
+
+    // Autograd runs on the device too: gradients stay on the GPU.
+    x = tensor [2,3]
+    make x require gradients
+    move x to gpu
+    loss = (x * x).sum
+    loss.backward
+    print ["grad of sum(x*x):", x.grad]
+    print ["grad device:", x.grad.device]
+
+    // A whole model (struct of tensors) moves in one statement.
+    layer = Layer {
+        w = tensor [1,2]
+        b = tensor [10,20]
+    }
+    move layer to gpu
+    print ["layer.w device:", layer.w.device]
+    s = layer.w + layer.b
+    move s to cpu
+    print ["w + b =", s]
+
+    print "done — all work ran on the GPU"
+} else {
+    print "No usable GPU on this machine — nothing was faked."
+    print "On a GPU machine this demo moves tensors, runs matmul,"
+    print "and computes gradients entirely on the device."
+}

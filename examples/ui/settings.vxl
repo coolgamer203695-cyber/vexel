@@ -1,0 +1,50 @@
+create a window titled "Settings"
+
+use theme "dark"
+
+column = create a vertical container
+set column spacing to 10
+set column padding to 20
+set column alignment to center
+
+title = add a text titled "Settings" to column
+title.font_size = 24
+title.bold = true
+
+remember = add a checkbox titled "Remember me" to column
+
+volume = add a slider to column
+volume.minimum = 0
+volume.maximum = 100
+volume.value = 50
+
+progress = add a progress bar to column
+
+choice = add a dropdown to column
+choice.add "Rock"
+choice.add "Paper"
+choice.add "Scissors"
+
+items = add a list to column
+items.add "Apple"
+items.add "Banana"
+
+save = add a button titled "Save" to column
+save.background = "blue"
+save.text_color = "white"
+
+add column to window
+
+save.on click {
+    show a message "Saved!"
+}
+
+remember.on change {
+    print remember.checked
+}
+
+volume.on change {
+    progress.value = volume.value
+}
+
+window.show

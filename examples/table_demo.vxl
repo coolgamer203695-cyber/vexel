@@ -1,0 +1,40 @@
+// Vexel 2.9: data tables with columns, rows,
+// selection and change events.
+create a window titled "Table Demo"
+
+window.width = 520
+window.height = 420
+
+grid = add a table
+grid.x = 20
+grid.y = 20
+grid.width = 480
+grid.height = 240
+grid.add column "Name"
+grid.add column "Level"
+grid.add row ["Zen", 10]
+grid.add row ["Alex", 7]
+grid.add row ["Jo", 12]
+
+info = add a text titled "pick a row"
+info.x = 20
+info.y = 275
+info.width = 480
+info.height = 30
+
+grid.on change {
+    info.text = "row " + event.value
+}
+
+clearBtn = add a button titled "Clear"
+clearBtn.x = 20
+clearBtn.y = 320
+clearBtn.width = 150
+clearBtn.height = 45
+
+clearBtn.on click {
+    grid.clear
+    info.text = "cleared"
+}
+
+window.show

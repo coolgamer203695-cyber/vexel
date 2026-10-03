@@ -1,0 +1,2029 @@
+// ============================================================
+// RE:BORN II: THE SHATTERED SKY — A Vexel Saga
+// 40 main quests, 8 interludes, branching dialogue, 5 endings.
+// A sequel to RE:BORN. Your old saga echoes into this one.
+// ============================================================
+
+struct Hero {
+    name
+    hp
+    gold
+    level
+}
+
+// ---------------- PROLOGUE: Tides of Fate ----------------
+print "=================================================="
+print "RE:BORN II: THE SHATTERED SKY"
+print "=================================================="
+print ""
+print "Three moons once watched over Aerthys. Now they are cracked,"
+print "and through the cracks leaks the HOLLOW — a hunger unending."
+print "The bards still sing of the hero of the last war..."
+print "Was that hero... you?"
+print ""
+print "  1 = Yes — I bore the Dawn (the true ending)"
+print "  2 = Yes — I sealed the dark with my life"
+print "  3 = That is a tale for another fire"
+add input "Your legend (1-3)?"
+set output = recap
+hero = Hero {
+    name = "Nameless"
+    hp = 100
+    gold = 60
+    level = 5
+}
+potions = 3
+bonus = 0
+healAmt = 25
+if recap = "1" {
+    print "The moons remember you, Dawnbringer. Take this charm."
+    potions = potions + 2
+    print "Potions: " + potions
+} else if recap = "2" {
+    print "The seal remembers your sacrifice. Your old sword returns."
+    bonus = bonus + 2
+    print "Strike bonus: " + bonus
+    } else {
+        print "A stranger with no past. The road provides: +50 gold."
+        print "LUMINA squints at you. LUMINA: ...Have we met? Whatever. Onward!"
+        hero.gold = hero.gold + 50
+    }
+print ""
+print "GODDESS LUMINA: Darling! Back again! Dying agrees with you."
+print "GODDESS LUMINA: Name yourself anew, hero."
+add input "Your name, hero?"
+set output = nm
+hero.name = nm
+print "GODDESS LUMINA: Lovely. Now choose how you fight."
+print "  1 = WARRIOR (strike +3, sturdy)"
+print "  2 = ROGUE (strike +1, +80 gold, quick hands)"
+print "  3 = MAGE (strike +2, strong heals of 35)"
+add input "Class (1-3)?"
+set output = cls
+if cls = "1" {
+    bonus = bonus + 3
+    print "WAR-CAPTAIN SELKA salutes you. WARRIOR it is."
+} else if cls = "2" {
+    bonus = bonus + 1
+    hero.gold = hero.gold + 80
+    print "A masked FOX winks. ROGUE it is. Pockets heavier already."
+} else {
+    bonus = bonus + 2
+    healAmt = 35
+    print "ARCHMAGE VEY bows. MAGE it is. Your vials glow blue."
+}
+print "GODDESS LUMINA: Thirty-eight trials. Four Crown Shards to find."
+print "GODDESS LUMINA: One sleeps with water, one with fire and frost."
+print "GODDESS LUMINA: One hides in clouds, one in a phoenix breast."
+print "GODDESS LUMINA: Gather them, gather friends, and mind the Hollow."
+print "GODDESS LUMINA: It offers kindness first. That is how it eats."
+print ""
+print "GODDESS LUMINA: A scroll of instructions, since you always forget:"
+print "GODDESS LUMINA: Answer numbered choices by typing the number."
+print "GODDESS LUMINA: In battle, 1 strikes and 2 drinks a red potion."
+print "GODDESS LUMINA: Potions heal. Shops sell them. Death is forever."
+print "GODDESS LUMINA: Riddles want lowercase answers. Gold opens doors."
+print "GODDESS LUMINA: Now go. Be interesting!"
+print "GODDESS LUMINA: Seal the Hollow King — or join him. Try to be interesting!"
+print ""
+ending = "none"
+shard = 0
+mercy = false
+allies = 0
+relics = ["Old Coin"]
+party = ["You"]
+// ---------------- QUEST 1: Crabbing Rights ----------------
+if ending = "none" {
+    print ""
+    print "==========================="
+    print "QUEST 1: Crabbing Rights"
+    print "==========================="
+    print "You wash up on a singing beach. A crab the size of a dog"
+    print "claims your left boot as its bride."
+    print "CRAB: Clack. (Translation: battle.)"
+    foeHp = 25
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Giant Crab HP: " + foeHp
+        print "Your HP: " + hero.hp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 8 to 15
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 3 to 7
+            hero.hp = hero.hp - claw
+            print "Claws snap you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Pinched to death on page one. The bards laugh."
+        print "ENDING: FALLEN on Quest 1."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "Crab defeated! Dinner AND 25 gold."
+        hero.gold = hero.gold + 25
+        hero.level = hero.level + 1
+        print "You are now level " + hero.level
+    }
+}
+
+// ---------------- QUEST 2: Saltspire Village ----------------
+if ending = "none" {
+    print ""
+    print "=============================="
+    print "QUEST 2: Saltspire Village"
+    print "=============================="
+    print "Saltspray, gulls, and MAYOR PELL wringing his hat."
+    print "PELL: Our lighthouse ghost scares every ship! Talk to it?"
+    print "  1 = Climb the lighthouse (spooky)"
+    print "  2 = Patrol the market first (earn coin)"
+    add input "Lighthouse (1) or Market (2)?"
+    set output = choice
+    if choice = "2" {
+        print "You catch three pickpockets and a runaway goat."
+        print "The market pays 45 gold."
+        hero.gold = hero.gold + 45
+    } else {
+        print "You march straight to the haunted hill."
+        allies = allies + 1
+        print "PELL admires your nerve. The town watches hopefully."
+        print "PELL: My grandmother faced that ghost. Left her a whole pie."
+        print "PELL: Just so you know what courage looks like, hero."
+    }
+    print "Trader FENN waves from her stall."
+    print "FENN: Potions, 20 gold. Heroes always need potions."
+    print "Your gold: " + hero.gold
+    print "  1 = Buy a potion"
+    print "  2 = Save your money"
+    add input "Buy (1) or Save (2)?"
+    set output = buy
+    if buy = "1" and hero.gold >= 20 {
+        hero.gold = hero.gold - 20
+        potions = potions + 1
+        print "Bought! Potions: " + potions
+    } else {
+        print "FENN: Next time, then. Try not to die."
+    }
+}
+
+// ---------------- QUEST 3: The Drowned Light ----------------
+if ending = "none" {
+    print ""
+    print "================================"
+    print "QUEST 3: The Drowned Light"
+    print "================================"
+    print "The lighthouse lamp is cold. A GHOST keeps relighting it wrong."
+    print "GHOST: ...sss... the ships... must... see..."
+    print "  1 = Listen to her story"
+    print "  2 = Exorcise her on the spot"
+    add input "Listen (1) or Exorcise (2)?"
+    set output = choice
+    if choice = "1" {
+        print "She was KEEPER WREN. She died mid-storm, lamp unlit."
+        print "You light the lamp together. Dawn breaks over the waves."
+        print "WREN: At last... take my brass key. And my blessing."
+        hero.gold = hero.gold + 55
+        allies = allies + 1
+        print "Her blessing warms you. HP restored to 110."
+        hero.hp = 110
+    } else {
+        print "Your half-remembered rite mostly works. Mostly."
+        print "The ghost leaves, annoyed. The lamp stays dark one more night."
+        hero.hp = hero.hp - 8
+        print "Spiritual backlash! Your HP: " + hero.hp
+        if hero.hp <= 0 {
+            print "Exorcised yourself by accident. Awkward."
+            print "ENDING: FALLEN on Quest 3."
+            ending = "fallen"
+        }
+    }
+}
+
+// ---------------- QUEST 4: Tide Cave ----------------
+if ending = "none" {
+    print ""
+    print "========================="
+    print "QUEST 4: Tide Cave"
+    print "========================="
+    print "Fisher KID says the tide took his father into the cave."
+    print "Inside: a DROWNED KNIGHT guards the stranded sailors."
+    foeHp = 35
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Drowned Knight HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 8 to 15
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 4 to 8
+            hero.hp = hero.hp - claw
+            print "Rusted blade cuts you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "The tide keeps you too."
+        print "ENDING: FALLEN on Quest 4."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The knight kneels, freed, and fades into foam."
+        print "KID: FATHER! The sailors weep and laugh at once."
+        print "The sailors carry you home singing. +60 gold."
+        hero.gold = hero.gold + 60
+        allies = allies + 1
+    }
+}
+// ---------------- INTERLUDE 1: Campfire Dice ----------------
+if ending = "none" {
+    print ""
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Campfire: a dice game"
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Scout JUNO shakes a bone die. Even or odd, 10 gold a throw?"
+    print "  1 = Bet EVEN"
+    print "  2 = Bet ODD"
+    print "  3 = No gambling tonight"
+    add input "Even (1), Odd (2), Pass (3)?"
+    set output = choice
+    if choice = "3" {
+        print "JUNO pouts. The fire crackles. HP restored to 110."
+        hero.hp = 110
+    } else if hero.gold >= 10 {
+        roll = r from 1 to 6
+        print "The die shows " + roll
+        won = false
+        if roll % 2 == 0 and choice = "1" {
+            won = true
+        }
+        if roll % 2 == 1 and choice = "2" {
+            won = true
+        }
+        if won {
+            print "JUNO pays 20 gold, cursing beautifully."
+            hero.gold = hero.gold + 20
+        } else {
+            print "JUNO takes your 10 gold, grinning."
+            hero.gold = hero.gold - 10
+        }
+        print "Gold: " + hero.gold
+    } else {
+        print "Not enough gold. JUNO lends you her blanket instead."
+        hero.hp = 110
+    }
+}
+
+// ---------------- QUEST 5: Caravan of Dust ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 5: Caravan of Dust"
+    print "=================================="
+    print "The Ashen Desert. A caravan master, SABLE, hires blades."
+    print "SABLE: Bandits hit at the red dune. Ride with us?"
+    print "Bandit horns howl before she finishes."
+    foeHp = 40
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Bandit crew HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 9 to 16
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 4 to 9
+            hero.hp = hero.hp - claw
+            print "Curved blades nick you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "The desert keeps what it catches."
+        print "ENDING: FALLEN on Quest 5."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "SABLE laughs all the way back to the wagons."
+        print "SABLE: I once saw a hero fight a dune with a spoon. You are better."
+        print "SABLE: Marginally. Do not let it go to your head."
+        print "SABLE: You fight like a sandstorm! 70 gold and my blade besides."
+        print "SABLE joins your party!"
+        party.add "Sable"
+        hero.gold = hero.gold + 70
+        allies = allies + 1
+        print "Party members: " + party.length
+    }
+}
+
+// ---------------- QUEST 6: Oasis of Glass ----------------
+if ending = "none" {
+    print ""
+    print "================================"
+    print "QUEST 6: Oasis of Glass"
+    print "================================"
+    print "A girl made of living water blocks the oasis pool."
+    print "ONDINE: Travelers foul my pool. Prove you are different."
+    print "  1 = Clean the pool edge silently"
+    print "  2 = Offer her your own drinking water"
+    print "  3 = Push past — you are in a hurry"
+    add input "Clean (1), Offer (2), Push (3)?"
+    set output = choice
+    if choice = "3" {
+        print "ONDINE freezes the pool solid. Your boots stick. Your dignity cracks."
+        print "You chip yourself free, poorer in pride and 12 HP."
+        hero.hp = hero.hp - 12
+        print "Your HP: " + hero.hp
+        if hero.hp <= 0 {
+            print "Death by dignity. The desert is merciless."
+            print "ENDING: FALLEN on Quest 6."
+            ending = "fallen"
+        }
+    } else {
+        if choice = "1" {
+            print "You scrub algae till the pool mirrors the sky."
+        } else {
+            print "You pour your last flask in. ONDINE tastes it, solemn."
+        }
+        print "ONDINE: The first Crown Shard is yours, kind one."
+        shard = shard + 1
+        relics.add "Glass Shard"
+        print "Crown Shards: " + shard
+        hero.hp = 110
+    }
+}
+
+// ---------------- QUEST 7: The Pit ----------------
+if ending = "none" {
+    print ""
+    print "========================"
+    print "QUEST 7: The Pit"
+    print "========================"
+    print "Duneburg's fighting pit. PITBOSS GRIN counts teeth for purses."
+    print "GRIN: Last three rounds, win the Ember Crown Shard. Enter?"
+    print "  1 = Enter the pit"
+    print "  2 = Politely decline and shop instead"
+    add input "Enter (1) or Shop (2)?"
+    set output = choice
+    if choice = "2" {
+        print "GRIN shrugs. You buy dates and a spare buckle. +1 potion."
+        potions = potions + 1
+    } else {
+        round = 1
+        repeat 3 {
+            print "--- Pit bout " + round + " ---"
+            foeHp = 25 + round * 10
+            repeat till foeHp <= 0 or hero.hp <= 0 {
+                print "Pit foe HP: " + foeHp
+                add input "Strike (1) or Potion (2)?"
+                set output = move
+                if move = "2" and potions > 0 {
+                    potions = potions - 1
+                    hero.hp = hero.hp + healAmt
+                    print "You quaff a potion."
+                } else {
+                    hit = r from 9 to 16
+                    hit = hit + bonus
+                    foeHp = foeHp - hit
+                    print "You strike for " + hit
+                }
+                if foeHp > 0 {
+                    claw = r from 4 to 9
+                    hero.hp = hero.hp - claw
+                    print "You take " + claw + " damage"
+                }
+            }
+            if hero.hp <= 0 {
+                print "Carried out feet-first. The crowd boos the stretcher."
+                print "ENDING: FALLEN on Quest 7."
+                ending = "fallen"
+            }
+            if ending = "none" {
+                print "Bout won! Sawdust, sweat, cheers."
+                print "The pit doctor slaps you awake. +25 HP."
+                hero.hp = hero.hp + 25
+                round = round + 1
+            }
+        }
+        if ending = "none" {
+            print "GRIN: CHAMPION OF THE PIT! The Ember Crown Shard! +100 gold."
+            shard = shard + 1
+            relics.add "Ember Shard"
+            hero.gold = hero.gold + 100
+            hero.level = hero.level + 1
+            hero.hp = 110
+            print "You are now level " + hero.level
+        }
+    }
+}
+// ---------------- QUEST 8: Sandworm Hollow ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 8: Sandworm Hollow"
+    print "=================================="
+    print "The sand breathes. Then it OPENS — teeth first."
+    print "SABLE: Worm! Spread out! Aim for the soft rings!"
+    foeHp = 55
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Sandworm HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 9 to 16
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 5 to 10
+            hero.hp = hero.hp - claw
+            print "The worm slams you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Worm food. The desert does not write epitaphs."
+        print "ENDING: FALLEN on Quest 8."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The worm collapses into spice-scented rings. +90 gold."
+        hero.gold = hero.gold + 90
+    }
+}
+
+// ---------------- INTERLUDE 2: Campfire Stories ----------------
+if ending = "none" {
+    print ""
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Campfire: stories and stew"
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "JUNO: Tell us of the old war, hero. Were you really there?"
+    print "  1 = Tell the glorious version"
+    print "  2 = Tell the honest version"
+    add input "Glorious (1) or Honest (2)?"
+    set output = choice
+    if choice = "1" {
+        print "You juggle three swords while narrating. The crew applauds."
+        print "Morale soars. A scout joins you at dawn."
+        allies = allies + 1
+    } else {
+        print "You tell of mud, fear, and friends lost."
+        print "The fire burns lower. Everyone sits closer."
+        allies = allies + 1
+        potions = potions + 1
+        print "SABLE presses a spare potion on you."
+    }
+    print "JUNO the scout officially joins your party!"
+    party.add "Juno"
+    print "Party members: " + party.length
+    print "Full bellies, full HP. HP restored to 110."
+    hero.hp = 110
+}
+
+// ---------------- QUEST 9: Frostfall Pass ----------------
+if ending = "none" {
+    print ""
+    print "==============================="
+    print "QUEST 9: Frostfall Pass"
+    print "==============================="
+    print "Snow like powdered glass. Something huge moves between drifts."
+    print "YETI: GRAAAGH. (Translation: also battle.)"
+    foeHp = 50
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Yeti HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion. It is nearly frozen. Still works."
+        } else {
+            hit = r from 9 to 16
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 5 to 10
+            hero.hp = hero.hp - claw
+            print "Frozen fists pound you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "A graceful ice statue marks the spot."
+        print "ENDING: FALLEN on Quest 9."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The yeti bows — and shows you a hidden stair. +50 gold."
+        hero.gold = hero.gold + 50
+    }
+}
+
+// ---------------- QUEST 10: The Frozen Temple ----------------
+if ending = "none" {
+    print ""
+    print "====================================="
+    print "QUEST 10: The Frozen Temple"
+    print "====================================="
+    print "CARVED VOICE: None pass without answering."
+    print "CARVED VOICE: I have cities, but no houses. Forests, but no trees."
+    print "CARVED VOICE: Rivers without water. What am I? (lowercase)"
+    add input "Answer:"
+    set output = ans
+    if ans = "map" or ans = "Map" {
+        print "The ice doors sigh open. Inside: scrolls, soup, and 70 gold."
+        print "One scroll shows every road you have walked, glowing faintly."
+        print "You roll it up carefully. Best map you will ever own."
+        hero.gold = hero.gold + 70
+        hero.level = hero.level + 1
+        print "You are now level " + hero.level
+    } else {
+        print "The doors stay shut. Your nose hairs freeze. You move on."
+        hero.hp = hero.hp - 6
+        print "Your HP: " + hero.hp
+        if hero.hp <= 0 {
+            print "Frozen mid-shiver. A cautionary tale."
+            print "ENDING: FALLEN on Quest 10."
+            ending = "fallen"
+        }
+    }
+}
+// ---------------- QUEST 11: Village of Embersnow ----------------
+if ending = "none" {
+    print ""
+    print "=========================================="
+    print "QUEST 11: Village of Embersnow"
+    print "=========================================="
+    print "Chimneys smoke against the white. ELDER SOVA meets you."
+    print "SOVA: Our stores run thin. Will you share your rations?"
+    print "Your gold: " + hero.gold
+    print "  1 = Give 30 gold of food (kind)"
+    print "  2 = Keep everything (practical)"
+    add input "Share (1) or Keep (2)?"
+    set output = choice
+    if choice = "1" and hero.gold >= 30 {
+        hero.gold = hero.gold - 30
+        print "Children cheer around the stewpot. Two hunters join you."
+        allies = allies + 2
+    } else {
+        if choice = "1" {
+            print "You reach for coin you do not have. SOVA pretends not to notice."
+        } else {
+            print "You keep your packs. SOVA nods, understanding, but colder."
+        }
+        allies = allies + 1
+        print "One old tracker joins you anyway."
+    }
+}
+
+// ---------------- QUEST 12: Icewing Roost ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 12: Icewing Roost"
+    print "=================================="
+    print "The drake GLACIA guards the Frost Crown Shard."
+    print "GLACIA: MORTAL. KNEEL OR BURN BLUE."
+    foeHp = 70
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Glacia HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 11
+            hero.hp = hero.hp - claw
+            print "Blue fire washes over you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Blue ice keeps you, prettily, forever."
+        print "ENDING: FALLEN on Quest 12."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "GLACIA folds one great wing. You have earned the question."
+        print "  1 = Slay her (take hoard and shard)"
+        print "  2 = Spare her (ask for the shard)"
+        add input "Slay (1) or Spare (2)?"
+        set output = choice
+        if choice = "1" {
+            print "The hoard smokes. 140 gold and the Frost Crown Shard."
+            hero.gold = hero.gold + 140
+            shard = shard + 1
+            relics.add "Frost Shard"
+        } else {
+            print "GLACIA: ...No knight ever asked. Take it, little dawn."
+            print "The Frost Crown Shard. And my oath for the last war."
+            shard = shard + 1
+            relics.add "Frost Shard"
+            mercy = true
+            allies = allies + 2
+        }
+        print "Crown Shards: " + shard
+    }
+}
+
+// ---------------- INTERLUDE 3: Stargazing ----------------
+if ending = "none" {
+    print ""
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Interlude: the cracked moons"
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "LUMINA's voice drifts down with the snow."
+    print "LUMINA: See the cracks? That is where the Hollow leaks in."
+    print "LUMINA: How many Crown Shards rest in your pack?"
+    print "Shards: " + shard
+    print "Relics carried: " + relics.length
+    print "LUMINA: Good. Sleep. Tomorrow we fly."
+    hero.hp = 120
+    print "HP restored to 120."
+}
+
+// ---------------- QUEST 13: The Sky Docks ----------------
+if ending = "none" {
+    print ""
+    print "==============================="
+    print "QUEST 13: The Sky Docks"
+    print "==============================="
+    print "Harbor-master QUILL strokes his tariff board."
+    print "QUILL: Passage to the Floating Isles. 60 gold. No haggling. ...Some haggling."
+    print "QUILL: Fine! A story from the old war knocks off the dock fee!"
+    print "You tell the one about the slime. QUILL pretends it is worth 60 gold."
+    print "Your gold: " + hero.gold
+    print "  1 = Pay 60 gold"
+    print "  2 = Work the rigging (three hard days)"
+    add input "Pay (1) or Work (2)?"
+    set output = choice
+    if choice = "1" and hero.gold >= 60 {
+        hero.gold = hero.gold - 60
+        print "You sail in comfort, eating grapes. Suspiciously good grapes."
+    } else {
+        if choice = "1" {
+            print "Your purse is too light. QUILL grins: Rigging it is!"
+        } else {
+            print "You coil ropes till your hands sing."
+        }
+        repeat 3 {
+            print "Day of hauling rope and scrubbing cloud-deck."
+        }
+        print "Passage earned. QUILL respects calluses."
+        hero.hp = 120
+    }
+}
+// ---------------- QUEST 14: Sky Pirates ----------------
+if ending = "none" {
+    print ""
+    print "================================="
+    print "QUEST 14: Sky Pirates"
+    print "================================="
+    print "Black sails! CAPTAIN VEXA swings aboard, grinning steel."
+    print "VEXA: Your cargo or your eyebrows, hero!"
+    foeHp = 60
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Vexa HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 11
+            hero.hp = hero.hp - claw
+            print "Vexa's cutlass finds you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "You fall through the clouds, eyebrows intact, hero not."
+        print "ENDING: FALLEN on Quest 14."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "VEXA yields, laughing: Keep the cargo! Keep the eyebrows!"
+        print "VEXA: Any hero who fights fair at altitude earns my charts."
+        print "VEXA: Storms ahead, darling. Mind the third wave — it bites."
+        print "She pays 90 gold weregild and shares her storm charts."
+        hero.gold = hero.gold + 90
+        allies = allies + 1
+    }
+}
+
+// ---------------- QUEST 15: The Storm Trial ----------------
+if ending = "none" {
+    print ""
+    print "===================================="
+    print "QUEST 15: The Storm Trial"
+    print "===================================="
+    print "To earn the sky-lanes, you must outlast the tempest."
+    print "Three waves. Lash yourself down!"
+    round = 1
+    repeat 3 {
+        print "--- Storm wave " + round + " ---"
+        claw = r from 8 to 14
+        hero.hp = hero.hp - claw
+        print "Lightning and hail batter you for " + claw
+        print "Your HP: " + hero.hp
+        round = round + 1
+    }
+    if hero.hp <= 0 {
+        print "The storm keeps what it catches."
+        print "ENDING: FALLEN on Quest 15."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "Silence. Sun. The lanes are yours."
+        print "The crew drags you below and feeds you soup."
+        hero.hp = 120
+        hero.level = hero.level + 1
+        print "You are now level " + hero.level
+    }
+}
+
+// ---------------- QUEST 16: The Cloud Library ----------------
+if ending = "none" {
+    print ""
+    print "========================================"
+    print "QUEST 16: The Cloud Library"
+    print "========================================"
+    print "LIBRARIAN OSSUS stamps your forehead: LATE FINES WAIVED."
+    print "OSSUS: Do you know how few visitors we get? Three this century."
+    print "OSSUS: One was a cloud. It never returned its books."
+    print "OSSUS: The Gale Crown Shard sits in Restricted. Answer, borrower."
+    print "OSSUS: What runs but never walks, has a mouth but never talks,"
+    print "OSSUS: has a bed but never sleeps? (lowercase)"
+    add input "Answer:"
+    set output = ans
+    if ans = "river" or ans = "River" {
+        print "OSSUS: Exquisite. Take the shard. And a bookmark."
+        shard = shard + 1
+        relics.add "Gale Shard"
+        hero.gold = hero.gold + 60
+    } else {
+        print "OSSUS: We also accept groveling. And 20 gold in fees."
+        if hero.gold >= 20 {
+            hero.gold = hero.gold - 20
+            print "You pay the fee and read the atlas anyway."
+        } else {
+            print "Too poor for fees. You memorize the atlas through the window."
+        }
+    }
+    print "Crown Shards: " + shard
+}
+
+// ---------------- QUEST 17: The Traitor ----------------
+if ending = "none" {
+    print ""
+    print "=============================="
+    print "QUEST 17: The Traitor"
+    print "=============================="
+    print "Supplies vanish nightly. JUNO catches BRAM's cousin FENN with the maps!"
+    print "FENN: The Hollow promised my family back! Forgive me!"
+    print "Party members: " + party.length
+    print "  1 = Forgive and keep watch together"
+    print "  2 = Cast out the spy"
+    add input "Forgive (1) or Cast out (2)?"
+    set output = choice
+    if choice = "1" {
+        print "FENN weeps and burns the Hollow's letters himself."
+        print "No one sleeps alone on watch again."
+        mercy = true
+        allies = allies + 1
+    } else {
+        print "FENN is left at the next cloud-port with bread and silence."
+        print "The party feels lighter and colder."
+        party.remove 1
+        print "Party members: " + party.length
+    }
+}
+// ---------------- INTERLUDE 4: The Name on the Map ----------------
+if ending = "none" {
+    print ""
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Interlude: the name on the map"
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "QUILL's apprentice paints your name on the expedition charter."
+    print "Letters in your name: " + length of hero.name
+    print "First letter: " + [0] from hero.name
+    banner = hero.name
+    make banner upper
+    print "The charter reads: " + banner
+    print "It looks official. It feels heavy."
+    hero.hp = 120
+}
+
+// ---------------- QUEST 18: Descent to the Underroot ----------------
+if ending = "none" {
+    print ""
+    print "=============================================="
+    print "QUEST 18: Descent to the Underroot"
+    print "=============================================="
+    print "Down past the roots of the world. It smells of rain and pennies."
+    print "JUNO ties the rope. SABLE tests every knot twice."
+    print "JUNO: Last one down buys the first round back up top."
+    print "MOLDFIENDS unpeel from the walls!"
+    foeHp = 55
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Moldfiend mass HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 11
+            hero.hp = hero.hp - claw
+            print "Spores choke you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Compost. The Underroot wastes nothing."
+        print "ENDING: FALLEN on Quest 18."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "Torchlight again. The court of caps awaits."
+        hero.gold = hero.gold + 50
+    }
+}
+
+// ---------------- QUEST 19: The Mushroom Court ----------------
+if ending = "none" {
+    print ""
+    print "======================================="
+    print "QUEST 19: The Mushroom Court"
+    print "======================================="
+    print "KING PORCINO the Huge offers a feast the size of a house."
+    print "PORCINO: EAT, LITTLE SUN! Or do you fear my cooking?"
+    print "  1 = Feast royally (hearty)"
+    print "  2 = Decline politely (diplomatic)"
+    add input "Feast (1) or Decline (2)?"
+    set output = choice
+    if choice = "1" {
+        print "Seven courses. The cap choir sings the gravy song."
+        print "PORCINO: Seconds? There are ALWAYS seconds."
+        print "You dream in gravy. HP fully restored."
+        hero.hp = 120
+        hero.gold = hero.gold + 30
+        print "You pocket the gold-plated leftovers."
+    } else {
+        print "PORCINO respects restraint. He gifts a mooncap relic."
+        relics.add "Mooncap"
+        allies = allies + 1
+        print "Relics carried: " + relics.length
+    }
+}
+
+// ---------------- QUEST 20: The Root Bridge ----------------
+if ending = "none" {
+    print ""
+    print "===================================="
+    print "QUEST 20: The Root Bridge"
+    print "===================================="
+    print "TROLLKING GRUM blocks the living bridge, arms crossed."
+    print "GRUM: Toll. Fifty gold. Or a trouncing. Your pick."
+    print "Your gold: " + hero.gold
+    print "  1 = Pay 50 gold"
+    print "  2 = Trounce him"
+    add input "Pay (1) or Trounce (2)?"
+    set output = choice
+    if choice = "1" and hero.gold >= 50 {
+        hero.gold = hero.gold - 50
+        print "GRUM counts every coin twice, then waves you through."
+        print "GRUM: ...Nice boots, by the way."
+    } else {
+        if choice = "1" {
+            print "GRUM looks at your empty purse. GRUM chooses trounce."
+        } else {
+            print "GRUM cracks his knuckles like falling timber."
+        }
+        foeHp = 60
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "Trollking HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + healAmt
+                print "You quaff a potion."
+            } else {
+                hit = r from 10 to 17
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 6 to 11
+                hero.hp = hero.hp - claw
+                print "Timber fists fall for " + claw
+            }
+        }
+        if hero.hp <= 0 {
+            print "Trounced. Thoroughly. Historically."
+            print "ENDING: FALLEN on Quest 20."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "GRUM sits down hard. GRUM: ...Worth it. Pass, friend."
+            hero.gold = hero.gold + 40
+        }
+    }
+}
+// ---------------- QUEST 21: The Root Horror ----------------
+if ending = "none" {
+    print ""
+    print "======================================="
+    print "QUEST 21: The Root Horror"
+    print "======================================="
+    print "You bind your wounds by the last shaft of daylight."
+    print "HP restored to 130."
+    hero.hp = 130
+    print "The Hollow's rot wears a crown of branches here."
+    print "HORROR: JOIN THE QUIET. STOP ACHING. SLEEP."
+    print "A hundred sleepy voices join in, people the rot has kept."
+    print "JUNO covers her ears and keeps walking. So do you."
+    foeHp = 75
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Root Horror HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 12
+            hero.hp = hero.hp - claw
+            print "Thorns drink deep for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "You sleep. It was not so bad. That is the worst part."
+        print "ENDING: FALLEN on Quest 21."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "Dawnlight spears down the shaft. The rot screams and lets go."
+        hero.level = hero.level + 1
+        hero.gold = hero.gold + 110
+        print "You are now level " + hero.level
+    }
+}
+
+// ---------------- INTERLUDE 5: The Eve of War ----------------
+if ending = "none" {
+    print ""
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Interlude: the eve of war"
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "One fire for the whole army. JUNO tunes a fiddle."
+    print "SABLE: Whatever comes, it was an honor."
+    print "  1 = Vow to bring everyone home"
+    print "  2 = Vow to end it, whatever it costs"
+    add input "Vow (1-2)?"
+    set output = choice
+    if choice = "1" {
+        print "A cheer rolls through the camp like thunder."
+        allies = allies + 1
+    } else {
+        print "A hush. Then nodding. Steel faces all around."
+        bonus = bonus + 1
+    }
+    print "Priests bless every blade. HP restored to 130."
+    hero.hp = 130
+}
+
+// ---------------- QUEST 22: Cinder Fields ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 22: Cinder Fields"
+    print "=================================="
+    print "East of the Underroot, the world is ash and ember."
+    print "CINDER HOUNDS made of living soot circle your party."
+    print "SABLE: Back to back! Watch the embers!"
+    foeHp = 60
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Cinder pack HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 11
+            hero.hp = hero.hp - claw
+            print "Ember fangs sear you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Ash to ash. The fields do not even leave a shadow."
+        print "ENDING: FALLEN on Quest 22."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The pack scatters into sparks. A feather of living flame drifts down."
+        print "Something vast is nesting in the volcano ahead."
+        hero.gold = hero.gold + 60
+    }
+}
+
+// ---------------- QUEST 23: The Last Phoenix ----------------
+if ending = "none" {
+    print ""
+    print "======================================"
+    print "QUEST 23: The Last Phoenix"
+    print "======================================"
+    print "PYRA the phoenix lies with a broken wing, fire dimming."
+    print "PYRA: The Hollow clipped me... a_bound... little sun..."
+    print "Your potions: " + potions
+    print "  1 = Pour a potion on her wing (uses 1)"
+    print "  2 = Take one fallen feather and move on"
+    add input "Heal (1) or Feather (2)?"
+    set output = choice
+    if choice = "1" and potions > 0 {
+        potions = potions - 1
+        print "Her fire roars back gold and scarlet. She weeps light."
+        print "PYRA: The Cinder Crown Shard. And my sky-oath besides."
+        shard = shard + 1
+        relics.add "Cinder Shard"
+        allies = allies + 1
+        print "Crown Shards: " + shard
+    } else {
+        if choice = "1" {
+            print "No potions left. PYRA understands. It hurts worse than fire."
+        } else {
+            print "You take one warm feather. PYRA watches you go, silent."
+        }
+        hero.gold = hero.gold + 50
+        relics.add "Phoenix Feather"
+        print "Relics carried: " + relics.length
+    }
+}
+
+// ---------------- QUEST 24: The Ashen Twins ----------------
+if ending = "none" {
+    print ""
+    print "======================================"
+    print "QUEST 24: The Ashen Twins"
+    print "======================================"
+    print "Twin duelists ROOK and BREN block the lava bridge."
+    print "ROOK: Rules! Three of them! One: salute before steel."
+    print "BREN: Two: no hair-pulling. Three: loser buys skewers."
+    print "ROOK: None cross without kissing our blades."
+    print "BREN: Metaphorically! Mostly metaphorically."
+    print "--- First twin: ROOK ---"
+    foeHp = 40
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Rook HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 5 to 10
+            hero.hp = hero.hp - claw
+            print "Rook's rapier flickers for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Kissed by blades. Very thorough twins."
+        print "ENDING: FALLEN on Quest 24."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "ROOK yields with a flourishing bow."
+        print "BREN tosses you a wineskin out of respect. +20 HP."
+        hero.hp = hero.hp + 20
+        print "--- Second twin: BREN ---"
+        foeHp = 45
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "Bren HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + healAmt
+                print "You quaff a potion."
+            } else {
+                hit = r from 10 to 17
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 6 to 11
+                hero.hp = hero.hp - claw
+                print "Bren's sabre sings for " + claw
+            }
+        }
+        if hero.hp <= 0 {
+            print "The twins lay your sword across your chest. Respectful. Fatal."
+            print "ENDING: FALLEN on Quest 24."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "Both twins kneel. The bridge is yours. +80 gold."
+            hero.gold = hero.gold + 80
+            allies = allies + 1
+        }
+    }
+}
+
+// ---------------- QUEST 25: Charcoal Market ----------------
+if ending = "none" {
+    print ""
+    print "======================================"
+    print "QUEST 25: Charcoal Market"
+    print "======================================"
+    print "A black-glass bazaar. Pepper-smoke. Shouting in six languages."
+    print "FENN: Restock here, hero. Potions, 20 gold."
+    print "Your gold: " + hero.gold
+    print "  1 = Buy a potion"
+    print "  2 = Browse only"
+    add input "Buy (1) or Browse (2)?"
+    set output = buy
+    if buy = "1" and hero.gold >= 20 {
+        hero.gold = hero.gold - 20
+        potions = potions + 1
+        print "Bought! Potions: " + potions
+    } else {
+        print "You browse. A small hand fishes in YOUR purse!"
+        print "A street kid dangles your coinbag, grinning."
+        print "  1 = Chase the thief"
+        print "  2 = Let them keep a few coins"
+        add input "Chase (1) or Let go (2)?"
+        set output = choice
+        if choice = "1" {
+            print "Across awnings and chimneys! Cornered at last."
+            foeHp = 35
+            repeat till foeHp <= 0 or hero.hp <= 0 {
+                print "Cutpurse kid HP: " + foeHp
+                print "(You fight carefully. Mostly tripping hazards.)"
+                add input "Strike (1) or Potion (2)?"
+                set output = move
+                if move = "2" and potions > 0 {
+                    potions = potions - 1
+                    hero.hp = hero.hp + healAmt
+                    print "You quaff a potion."
+                } else {
+                    hit = r from 10 to 17
+                    hit = hit + bonus
+                    foeHp = foeHp - hit
+                    print "You strike for " + hit
+                }
+                if foeHp > 0 {
+                    claw = r from 3 to 6
+                    hero.hp = hero.hp - claw
+                    print "A thrown boot hits you for " + claw
+                }
+            }
+            if hero.hp <= 0 {
+                print "Defeated by a child with a boot. Tell no one."
+                print "ENDING: FALLEN on Quest 25."
+                ending = "fallen"
+            }
+            if ending = "none" {
+                print "The kid surrenders, laughing, and returns double."
+                hero.gold = hero.gold + 30
+            }
+        } else {
+            print "The kid blinks, bows low, and shadows you ever after."
+            print "No purse is safe from your enemies now."
+            allies = allies + 1
+        }
+    }
+}
+
+// ---------------- QUEST 26: Volcano Shrine ----------------
+if ending = "none" {
+    print ""
+    print "======================================"
+    print "QUEST 26: Volcano Shrine"
+    print "======================================"
+    print "An altar of cooled lava. An EMBER PRIEST tends it."
+    print "PRIEST: The mountain asks one question of every pilgrim."
+    print "PRIEST: I am always hungry. I must always be fed."
+    print "PRIEST: The finger I touch soon turns red. What am I? (lowercase)"
+    add input "Answer:"
+    set output = ans
+    if ans = "fire" or ans = "Fire" {
+        print "PRIEST: The mountain is pleased. Take its blessing."
+        relics.add "Cinderbell"
+        hero.gold = hero.gold + 60
+        hero.hp = 120
+        print "HP restored to 120."
+    } else {
+        print "PRIEST: The mountain is... disappointed. A cinder pops onto you."
+        hero.hp = hero.hp - 8
+        print "Your HP: " + hero.hp
+        if hero.hp <= 0 {
+            print "Done in by a pop quiz and a cinder."
+            print "ENDING: FALLEN on Quest 26."
+            ending = "fallen"
+        }
+    }
+}
+// ---------------- QUEST 27: The Sunken Galley ----------------
+if ending = "none" {
+    print ""
+    print "========================================="
+    print "QUEST 27: The Sunken Galley"
+    print "========================================="
+    print "Past the Wilds, the land simply STOPS. Black water below."
+    print "A wrecked galley floats crewless — until it does not."
+    print "DROWNED CREW: Braaains... no, wait. GOLD. Bring gold."
+    foeHp = 65
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Drowned crew HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 11
+            hero.hp = hero.hp - claw
+            print "Barnacled hands drag you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Reassigned to the crew. Forever. The pay is terrible."
+        print "ENDING: FALLEN on Quest 27."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The crew salutes and sinks, finally paid in peace."
+        print "Their captain's chest: 85 gold."
+        hero.gold = hero.gold + 85
+    }
+}
+
+// ---------------- QUEST 28: The Angler's Price ----------------
+if ending = "none" {
+    print ""
+    print "============================================="
+    print "QUEST 28: The Angler's Price"
+    print "============================================="
+    print "FERRYMAN VAIL poles a lantern-boat across the deep."
+    print "VAIL: Crossing costs. Coin... or cleverness."
+    print "Your gold: " + hero.gold
+    print "  1 = Pay 40 gold"
+    print "  2 = Answer his riddle instead"
+    add input "Pay (1) or Riddle (2)?"
+    set output = choice
+    if choice = "1" and hero.gold >= 40 {
+        hero.gold = hero.gold - 40
+        print "VAIL counts it twice and sings the whole way over."
+    } else {
+        if choice = "1" {
+            print "VAIL looks at your lint. Riddle it is, then."
+        } else {
+            print "VAIL smiles with too many teeth. Listen well."
+        }
+        print "VAIL: What has keys but opens no locks? (lowercase)"
+        add input "Answer:"
+        set output = ans
+        if ans = "piano" or ans = "Piano" {
+            print "VAIL laughs like river stones. Ride free, clever one."
+            allies = allies + 1
+        } else {
+            print "VAIL: Wrong. Swim, then. Mind the teeth."
+            hero.hp = hero.hp - 12
+            print "Your HP: " + hero.hp
+            if hero.hp <= 0 {
+                print "The teeth minded you back."
+                print "ENDING: FALLEN on Quest 28."
+                ending = "fallen"
+            }
+        }
+    }
+}
+
+// ---------------- QUEST 29: Leviathan and the Pearl ----------------
+if ending = "none" {
+    print ""
+    print "=================================================="
+    print "QUEST 29: Leviathan and the Pearl"
+    print "=================================================="
+    print "You beach the boat, wring out your boots, and breathe."
+    print "HP restored to 130."
+    hero.hp = 130
+    print "The deep bulges upward. An eye like a drowned moon."
+    print "LEVIATHAN: LITTLE SPARK. I COLLECT WORLDS. YOU ARE SMALL."
+    foeHp = 90
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Leviathan HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 11 to 18
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 7 to 13
+            hero.hp = hero.hp - claw
+            print "The tide itself strikes for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Added to the collection. Shelf three, jar nine."
+        print "ENDING: FALLEN on Quest 29."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The Leviathan sinks, and in its coiled beard: a pearl the size of a heart."
+        print "The pearl's tiny guardians click anxiously."
+        print "  1 = Return the pearl to the clutch"
+        print "  2 = Keep the pearl (it is VERY shiny)"
+        add input "Return (1) or Keep (2)?"
+        set output = choice
+        if choice = "1" {
+            print "The clutch sings. The deep itself will remember this."
+            print "A thousand tiny lights bow as you leave the trench."
+            relics.add "Pearl Oath"
+            allies = allies + 2
+            print "Relics carried: " + relics.length
+        } else {
+            print "Shiny. VERY shiny. Worth 120 gold to the right fence."
+            hero.gold = hero.gold + 120
+        }
+    }
+}
+
+// ---------------- INTERLUDE 6: Lantern Festival ----------------
+if ending = "none" {
+    print ""
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Interlude: the Lantern Festival"
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Floating lanterns. Fried everything. A COOKING CONTEST."
+    print "JUDGE: One basket, three ingredients, glory eternal!"
+    basket = ["mushroom"]
+    basket.add "pepper"
+    basket.add "sky-apple"
+    print "Your basket holds " + basket.length + " wonders:"
+    print basket[0]
+    print basket[1]
+    print basket[2]
+    print "The judges taste. The crowd holds its breath."
+    judge = r from 1 to 10
+    print "Score: " + judge + " out of 10"
+    if judge >= 6 {
+        print "FIRST PRIZE! 60 gold and the Golden Ladle (replica)!"
+        hero.gold = hero.gold + 60
+        relics.add "Golden Ladle"
+    } else {
+        print "Honorable mention. The ladle goes to a soup wizard."
+        hero.gold = hero.gold + 10
+    }
+    print "Then the DANCE-OFF. JUNO shoves you into the circle."
+    print "The crowd chants your name. Impress them: dance big (1) or smooth (2)?"
+    add input "Big (1) or Smooth (2)?"
+    set output = style
+    judge = r from 1 to 10
+    if style = "1" {
+        judge = judge + 2
+    }
+    print "The judges hold up " + judge
+    if judge >= 8 {
+        print "The circle ERUPTS. +30 gold thrown in hats!"
+        hero.gold = hero.gold + 30
+    } else {
+        print "Polite applause. A child out-dances you. Humbling."
+    }
+    print "Dancing till dawn. HP restored to 130."
+    hero.hp = 130
+}
+// ---------------- INTERLUDE 7: The Last Supper ----------------
+if ending = "none" {
+    print ""
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Interlude: the last supper"
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "One long table on the eve of war. Stew for hundreds."
+    print "VEY the archmage says grace to absolutely everyone."
+    print "VEY: To the moons, cracked but shining. To the road behind."
+    print "  1 = Toast the fallen"
+    print "  2 = Toast the living"
+    add input "Toast (1-2)?"
+    set output = choice
+    if choice = "1" {
+        print "Cups raise. Names are spoken into the steam."
+        print "Nobody cries. Everybody lies about not crying."
+    } else {
+        print "Laughter shakes the table. JUNO conducts with a spoon."
+        print "SABLE carves an extra helping for the road."
+        potions = potions + 1
+    }
+    print "Full hearts. Full HP. Sleep comes fast."
+    hero.hp = 140
+}
+// ---------------- INTERLUDE 8: The Cartographer's Debt ----------------
+if ending = "none" {
+    print ""
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "Interlude: the cartographer's debt"
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print "CARTOGRAPHER PETRA blocks the war-room door, arms crossed."
+    print "PETRA: Thirty-eight quests of my maps and not one thank-you!"
+    print "PETRA: Fifteen gold for the atlas. Pay up, legend."
+    print "Your gold: " + hero.gold
+    print "Relics carried: " + relics.length
+    print "  1 = Pay 15 gold"
+    print "  2 = Wash her brushes (two hours of scrubbing)"
+    print "  3 = Show off your relic collection instead"
+    add input "Pay (1), Wash (2), Show (3)?"
+    set output = choice
+    if choice = "1" and hero.gold >= 15 {
+        hero.gold = hero.gold - 15
+        print "PETRA stamps PAID across your forehead. Worth it."
+    } else if choice = "3" and relics.length >= 5 {
+        print "PETRA pages through your relics, spectacles fogging."
+        print "PETRA: The debt is FORGIVEN. And... may I sketch the Pearl Oath?"
+        allies = allies + 1
+    } else {
+        if choice = "1" {
+            print "PETRA looks at your lint. Brushes it is, then."
+        } else {
+            print "PETRA: The brushes! The ink pots! My poor assistant's day off!"
+        }
+        repeat 2 {
+            print "You scrub maps until the seas shine."
+        }
+        print "Debt paid in elbow grease. PETRA almost smiles."
+    }
+    print "MADAME ZOLA the fortune-teller grabs your wrist on the way out."
+    print "ZOLA: One omen, free, because your face worries me."
+    omen = r from 1 to 3
+    if omen = 1 {
+        print "ZOLA: I see GOLD. Boring. Accurate. Take 20 for luck."
+        hero.gold = hero.gold + 20
+    } else if omen = 2 {
+        print "ZOLA: I see SOUP. Eat some before the battle, darling."
+        potions = potions + 1
+    } else {
+        print "ZOLA: I see... YOU. Older. Smiling. That is the whole omen."
+        hero.hp = 140
+        print "You stand a little straighter. HP restored to 140."
+    }
+}
+// ---------------- QUEST 30: War Council ----------------
+if ending = "none" {
+    print ""
+    print "=============================="
+    print "QUEST 30: War Council"
+    print "=============================="
+    print "SELKA unrolls the map of the Hollow Throne."
+    print "SELKA: Three roads in. Pick our doctrine."
+    print "Allies sworn to you: " + allies
+    print "  1 = Hammerfall (sharpen all: +3 strike)"
+    print "  2 = Grand battery (wound the King first: -25 his HP)"
+    print "  3 = Shadow resupply (+3 potions)"
+    add input "Doctrine (1-3)?"
+    set output = plan
+    siege = false
+    if plan = "1" {
+        print "Grindstones sing till midnight. +3 strike."
+        bonus = bonus + 3
+    } else if plan = "2" {
+        print "The great engines will speak first."
+        siege = true
+    } else {
+        print "Smugglers, saints, and one suspicious nun deliver vials."
+        potions = potions + 3
+        print "Potions: " + potions
+    }
+}
+
+// ---------------- QUEST 31: The Star Forge ----------------
+if ending = "none" {
+    print ""
+    print "================================"
+    print "QUEST 31: The Star Forge"
+    print "================================"
+    print "MASTER SMITH NIX tends a forge lit by a fallen star."
+    print "NIX: One blessing left in the star. 100 gold. Worth it."
+    print "Your gold: " + hero.gold
+    print "  1 = Buy the star blessing (+2 strike)"
+    print "  2 = Save for the war effort"
+    add input "Blessing (1) or Save (2)?"
+    set output = choice
+    if choice = "1" and hero.gold >= 100 {
+        hero.gold = hero.gold - 100
+        bonus = bonus + 2
+        print "Starlight sinks into your weapon. It hums your name."
+        print "Strike bonus: " + bonus
+    } else {
+        if choice = "1" {
+            print "NIX: Come back rich, hero. The star will wait."
+        } else {
+            print "NIX: Aye, a saver. The quartermasters salute you."
+        }
+        hero.hp = 130
+        print "Army surgeons patch you up. HP: 130."
+    }
+}
+// ---------------- QUEST 32: The Hollow Feast ----------------
+if ending = "none" {
+    print ""
+    print "====================================="
+    print "QUEST 32: The Hollow Feast"
+    print "====================================="
+    print "The Hollow King invites you to dinner. The table is set with stars."
+    print "HOLLOW KING: Sit. Eat. Listen. Why bleed for a world that broke?"
+    print "HOLLOW KING: Kneel, and rule the quiet beside me. No more pain. Ever."
+    print "  1 = Hurl the plate in his face"
+    print "  2 = KNEEL (end the aching)"
+    print "  3 = Stall: ask what the quiet costs"
+    add input "Defy (1), Kneel (2), Stall (3)?"
+    set output = choice
+    if choice = "2" {
+        print "The quiet pours in like warm milk. It is gentle. It is final."
+        print "You rule nothing, forever, beside a smiling absence."
+        print "ENDING: HOLLOW. The kindest bad ending."
+        ending = "shadow"
+    } else {
+        if choice = "1" {
+            print "The plate shatters on his non-face. Dinner is OVER."
+        } else {
+            print "HOLLOW KING: Everything, little spark. ...You already knew."
+        }
+        print "The castle screams. The feast becomes a battlefield."
+        hero.level = hero.level + 1
+    }
+}
+
+// ---------------- QUEST 33: The Mirror Guard ----------------
+if ending = "none" {
+    print ""
+    print "========================================"
+    print "QUEST 33: The Mirror Guard"
+    print "========================================"
+    print "A knight with YOUR face bars the throne stair."
+    print "MIRROR: I know every letter of you, " + hero.name + "."
+    print "MIRROR: I am every doubt you ever swallowed. Yield."
+    foeHp = 70
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Mirror Self HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 12
+            hero.hp = hero.hp - claw
+            print "Your own moves undo you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "The mirror walks on wearing your boots."
+        print "ENDING: FALLEN on Quest 33."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "You forgive the reflection. It bows, and steps INTO you."
+        print "Whole at last. HP restored to 140."
+        hero.hp = 140
+    }
+}
+
+// ---------------- QUEST 34: The Skyfall Vanguard ----------------
+if ending = "none" {
+    print ""
+    print "=============================================="
+    print "QUEST 34: The Skyfall Vanguard"
+    print "=============================================="
+    print "Three star-fallen champions drop from the torn sky."
+    print "ASTER introduces herself mid-air. So do BRACK and little VES."
+    print "VANGUARD: THE KING DREAMS. WE KEEP IT QUIET."
+    foeHp = 85
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Vanguard HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 7 to 12
+            hero.hp = hero.hp - claw
+            print "Starfall blades rake you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Quiet, at last, under a stranger sky."
+        print "ENDING: FALLEN on Quest 34."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The vanguard kneels as one. The throne door grinds open."
+        hero.gold = hero.gold + 120
+    }
+}
+// ---------------- QUEST 35: The Hollow King ----------------
+if ending = "none" {
+    print ""
+    print "========================================="
+    print "QUEST 35: The Hollow King"
+    print "========================================="
+    print "No throne. No crown. Just a tired boy made of night."
+    print "HOLLOW KING: I only wanted the aching to stop. For everyone."
+    hero.hp = 160
+    print "Your heart steadies. HP restored to 160."
+    foeHp = 130
+    if siege {
+        foeHp = foeHp - 25
+        print "The grand battery speaks first! The King reels."
+    }
+    print "--- Phase one: Grief ---"
+    repeat till foeHp <= 65 or hero.hp <= 0 {
+        print "Hollow King HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 11 to 18
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 7 to 13
+            hero.hp = hero.hp - claw
+            print "Sorrow crushes you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Held, at the end, like something precious."
+        print "ENDING: FALLEN on Quest 35."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "--- Phase two: HUNGER ---"
+        print "The boy is gone. Only the appetite remains."
+        print "LUMINA, faint as breath: That is not him anymore. End it kindly."
+        print "JUNO, from the stairs: We are right here! All of us!"
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "Hunger HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + healAmt
+                print "You quaff a potion."
+            } else {
+                hit = r from 11 to 18
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 8 to 14
+                hero.hp = hero.hp - claw
+                print "The dark devours you for " + claw
+            }
+        }
+        if hero.hp <= 0 {
+            print "Eaten one step from morning."
+            print "ENDING: FALLEN on Quest 35."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "Silence. Real silence. The Hollow stills."
+            hero.level = hero.level + 1
+        }
+    }
+}
+
+// ---------------- QUEST 36: The Long Stair ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 36: The Long Stair"
+    print "=================================="
+    print "Ten thousand steps out of the dark. Your legs file a complaint."
+    print "JUNO counts landings. SABLE carries the sleepy ones."
+    print "Halfway up, survivors of the low villages huddle, hungry."
+    print "A girl no older than ten offers YOU her crust."
+    print "JUNO looks away fast. SABLE's jaw tightens."
+    print "Your gold: " + hero.gold
+    print "  1 = Share 50 gold of supplies"
+    print "  2 = Keep marching — the sky comes first"
+    add input "Share (1) or March (2)?"
+    set output = choice
+    if choice = "1" and hero.gold >= 50 {
+        hero.gold = hero.gold - 50
+        print "Bread appears like magic. Two climbers join your rope."
+        allies = allies + 2
+        relics.add "Survivor Lantern"
+    } else {
+        if choice = "1" {
+            print "Empty purse, full heart. They share THEIR bread with YOU."
+        } else {
+            print "You march on. Behind you, someone starts singing anyway."
+        }
+        allies = allies + 1
+    }
+    print "At the top: sky. Broken, beautiful, waiting."
+    hero.hp = 160
+    print "You breathe deep. HP restored to 160."
+}
+
+// ---------------- QUEST 37: The Hollow Market ----------------
+if ending = "none" {
+    print ""
+    print "======================================"
+    print "QUEST 37: The Hollow Market"
+    print "======================================"
+    print "One last market before the throne: the Hollow Market,"
+    print "where the stalls sell to both armies and ask no questions."
+    print "QUARTERMASTER IPPO polishes a board of wares."
+    print "IPPO: Final sale, hero. Everything must go. Possibly existence."
+    print "Your gold: " + hero.gold
+    print "Potions: " + potions
+    print "  1 = Red potion, 20 gold"
+    print "  2 = Star whetstone, 60 gold (+1 strike, once)"
+    print "  3 = Window shop only"
+    add input "Buy (1-3)?"
+    set output = buy
+    if buy = "1" and hero.gold >= 20 {
+        hero.gold = hero.gold - 20
+        potions = potions + 1
+        print "IPPO: A classic. Never goes out of style."
+        print "Potions: " + potions
+    } else if buy = "2" and hero.gold >= 60 {
+        hero.gold = hero.gold - 60
+        bonus = bonus + 1
+        print "IPPO: Freshly fallen! Hardly used to smite at all."
+        print "Strike bonus: " + bonus
+    } else {
+        if buy = "3" {
+            print "IPPO: Browsing is free. Judging my prices is extra."
+        } else {
+            print "IPPO: Light purse, heavy destiny. I know the type."
+        }
+    }
+    print "A too-familiar small hand tugs your sleeve."
+    print "It is the Charcoal Market kid — all grown up by two whole weeks."
+    print "KID: Heard you are ending the world tonight. Either way. Here."
+    print "The kid presses a Mori moss poultice into your hand. +1 potion."
+    potions = potions + 1
+    print "KID: Come back alive. You still owe me a rematch."
+    print "A pickpocket GANG mistakes your nostalgia for weakness!"
+    foeHp = 45
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Pickpocket gang HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + healAmt
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 4 to 8
+            hero.hp = hero.hp - claw
+            print "Flying elbows and knees cost you " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Mugged to death at the final market. The bards refuse to sing it."
+        print "ENDING: FALLEN on Quest 37."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The gang surrenders your own purse back, plus interest."
+        hero.gold = hero.gold + 25
+        print "The kid applauds wildly. Ready. At last. The throne awaits."
+    }
+}
+
+// ---------------- QUEST 38: Vigil of Blades ----------------
+if ending = "none" {
+    print ""
+    print "========================================"
+    print "QUEST 38: Vigil of Blades"
+    print "========================================="
+    print "The night before the end of the world. No fire. Just stars."
+    print "SELKA walks the line, touching each shoulder once."
+    print "SELKA: Roll call. Answer with your name and your promise."
+    idx = 0
+    repeat party.length {
+        print party[idx] + " stands ready."
+        idx = idx + 1
+    }
+    print "JUNO plays one slow tune. Nobody talks over it."
+    print "SABLE: Whatever we were — thieves, ghosts, farmers —"
+    print "SABLE: tomorrow we are the ones who showed up."
+    print "  1 = Promise to bring everyone home"
+    print "  2 = Promise to finish it"
+    add input "Promise (1-2)?"
+    set output = choice
+    if choice = "1" {
+        print "A hundred whispered promises answer yours."
+        allies = allies + 1
+    } else {
+        print "Blades slide an inch from sheaths, all down the line."
+        bonus = bonus + 1
+    }
+    print "LUMINA's voice, small and close: Sleep now. I will keep the dark off."
+    print "HP restored to 160. One extra potion at your pillow."
+    hero.hp = 160
+    potions = potions + 1
+}
+// ---------------- QUEST 39: The Mending ----------------
+if ending = "none" {
+    print ""
+    print "==============================="
+    print "QUEST 39: The Mending"
+    print "==============================="
+    print "The cracks in the moons gape. LUMINA descends, dimmer than ever."
+    print "Her light flickers like a candle carried upstairs."
+    print "LUMINA: Four Shards can reforge the sky. Or a life can seal it."
+    print "Crown Shards in your pack: " + shard
+    print "  1 = Reforge the sky with the Shards (needs 4)"
+    print "  2 = Seal it with your life"
+    print "  3 = Let the sky stay broken. Walk home."
+    add input "Choose (1-3)?"
+    set output = choice
+    if choice = "1" and shard >= 4 {
+        print "Four shards rise and knit the moons whole."
+        ending = "star"
+    } else if choice = "3" {
+        print "You turn your back on the broken sky and go fishing."
+        ending = "wanderer"
+    } else {
+        if choice = "1" {
+            print "You count your shards. Too few. The sky waits for no one."
+            print "So you give it the only whole thing left: yourself."
+        } else {
+            print "You lay yourself across the crack like a bridge."
+        }
+        ending = "guardian"
+    }
+}
+
+// ---------------- QUEST 40: Epilogue ----------------
+print ""
+print "======================"
+print "QUEST 40: Epilogue"
+print "======================"
+if ending = "star" {
+    print "STARFORGED — THE TRUE ENDING"
+    print "The moons shine whole, and your name is written across them."
+    print "No Hollow. No hunger. Just tides, and stew, and naps."
+    print "The phoenix nests atop the lighthouse. The river runs gin-clear."
+    print "GLACIA sends a postcard every winter. It just says: COLD. WORTH IT."
+    if mercy {
+        print "The spared and the forgiven raise the first toast."
+    }
+}
+if ending = "guardian" {
+    print "GUARDIAN — ENDING"
+    print "Your sword holds the sky shut. Gulls nest on the pommel."
+    print "Every spring, the villages polish it and tell your story wrong."
+    print "The sword never rusts. The flowers never stop coming."
+    if mercy {
+        print "They always remember the mercy part right, though."
+    }
+}
+if ending = "wanderer" {
+    print "WANDERER — ENDING"
+    print "Cracked sky, whole fish. A fair trade, you insist."
+    print "On clear nights you count the cracks and feel almost guilty."
+    print "Almost. The stew is excellent. The naps are legendary."
+}
+if ending = "shadow" {
+    print "HOLLOW — ENDING. Gentle. Final. Quiet."
+    print "Somewhere, a goddess keeps a seat warm you will never take."
+}
+if ending = "fallen" {
+    print "FALLEN — ENDING. Lumina files the paperwork. Again."
+    print "She keeps your file on top of the pile. Her favorite regular."
+}
+print ""
+print "--- Saga record ---"
+print "Name: " + hero.name
+print "Level: " + hero.level
+print "Gold: " + hero.gold
+print "Allies: " + allies
+print "Shards: " + shard
+print "Relics: " + relics.length
+print "Party members: " + party.length
+print "Potions left: " + potions
+print "Final strike bonus: " + bonus
+print "Thanks for playing RE:BORN II!"
+
+
+
+
+
+
+

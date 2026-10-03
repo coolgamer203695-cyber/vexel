@@ -1,0 +1,6 @@
+print data/info.txt
+try {
+    print data/missing.txt
+} error {
+    print error
+}

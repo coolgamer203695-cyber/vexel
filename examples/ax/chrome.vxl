@@ -1,0 +1,35 @@
+create a window titled "Ax Chrome"
+
+b = add a button titled "B"
+b.x = 20
+b.y = 20
+b.width = 140
+b.height = 50
+b.background = "blue"
+b.text_color = "white"
+b.border = true
+b.border_width = 2
+b.font_size = 18
+b.padding = 4
+b.bold = true
+
+t = add a text titled "Hi"
+t.x = 20
+t.y = 90
+t.width = 200
+t.alignment = "center"
+
+json write "styled" to "ax_chrome.json"
+
+opener = after 2 seconds {
+    copy "hello-clip"
+    got = paste
+    json write got to "ax_clip.json"
+}
+
+pick = after 4 seconds {
+    f = choose a file
+    json write f to "ax_pick.json"
+}
+
+window.show

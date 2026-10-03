@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vexel 2.2 — English-like compiled programming language</title>
+<meta name="description" content="Vexel 2.2: predictable UI coordinates, multiple windows, safe tasks and timers, rich diagnostics. English-like, strongly typed, compiled.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><b>Vexel</b> 2.2</a>
+    <span class="badge">2.2.0</span>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Simple words.<br>Predictable pixels.</h1>
+    <p class="lead">Vexel 2.2 is a runtime, UI-stability, and developer-experience release.
+      Manual positions mean exactly what they say, windows behave, background work stays off the UI thread,
+      and errors tell you the file, line, and why.</p>
+    <div class="cta">
+      <a class="btn primary" href="download.html">Get Vexel 2.2</a>
+      <a class="btn" href="docs.html">Read the docs</a>
+      <a class="btn" href="examples.html">See examples</a>
+    </div>
+  </div>
+
+  <section class="block">
+    <h2>What 2.2 guarantees</h2>
+    <p class="sub">Same language you know. A runtime you can trust.</p>
+    <div class="grid">
+      <div class="card"><h3>Exact coordinates</h3><p><code>x</code>, <code>y</code>, <code>width</code>, <code>height</code> are absolute client-area pixels. No hidden stacking, no cumulative offsets.</p></div>
+      <div class="card"><h3>Multiple windows</h3><p>Each window owns its controls, events, size, position, and lifecycle. Show, hide, minimize, maximize, close.</p></div>
+      <div class="card"><h3>Safe background work</h3><p>Tasks report <code>pending / running / completed / failed / cancelled</code>. UI updates are scheduled onto the UI thread.</p></div>
+      <div class="card"><h3>Cancellable timers</h3><p><code>every</code> and <code>after</code> return handles. <code>timer.cancel</code> really stops them and frees resources.</p></div>
+      <div class="card"><h3>Clean shutdown</h3><p>Quit stops timers, cancels tasks, closes windows, releases resources — deterministically.</p></div>
+      <div class="card"><h3>Rich diagnostics</h3><p>Compiler and runtime errors carry type, file, line, column, source excerpt, and a plain-English explanation.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Sixty seconds to a window</h2>
+    <pre><code>create a window titled "Hello"
+
+hello = add a button titled "Hi"
+hello.x = 20
+hello.y = 20
+hello.width = 120
+hello.height = 50
+
+hello.on click {
+    print "Clicked!"
+}
+
+window.show</code></pre>
+    <pre><code>vexel hello.vxl</code></pre>
+  </section>
+
+  <section class="block">
+    <h2>The positioning promise</h2>
+    <p>Four buttons, one row, no surprises:</p>
+    <pre><code>a.x = 20    b.x = 100   c.x = 180   d.x = 260
+a.y = 20    b.y = 20    c.y = 20    d.y = 20</code></pre>
+    <div class="diagram"><code>+--------------------------------------+<br>|&nbsp;&nbsp;[A]&nbsp;&nbsp;&nbsp;&nbsp;[B]&nbsp;&nbsp;&nbsp;&nbsp;[C]&nbsp;&nbsp;&nbsp;&nbsp;[D]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>+--------------------------------------+</code></div>
+    <div class="notice"><b>Rule:</b> explicit <code>x/y</code> wins. Containers only lay out children when you explicitly create one. Backends never override you silently.</div>
+  </section>
+
+  <section class="block">
+    <h2>Lifecycle at a glance</h2>
+    <div class="diagram"><code>Program starts &rarr; Runtime init &rarr; Modules init &rarr; UI init &rarr; Event loop<br>&nbsp;&nbsp;&rarr; Tasks / timers / events &rarr; App closes &rarr; Cancel tasks &rarr; Stop timers<br>&nbsp;&nbsp;&rarr; Close windows &rarr; Release resources &rarr; Shutdown</code></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Vexel 2.2.0 — English-like, strongly typed, compiled. New site, written from scratch for the 2.2 release.</div>
+</footer>
+<script src="site.js"></script>
+</body>
+</html>

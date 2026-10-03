@@ -1,0 +1,102 @@
+// ============================================================
+// MY TASKS — a tiny desktop todo app in Vexel
+// Run with: vexel myapp.vxl   (needs .NET 8 SDK for UI build)
+// ============================================================
+
+create a window titled "My Tasks"
+
+window.width = 500
+window.height = 620
+
+use theme "dark"
+
+title = add a text titled "My Tasks"
+title.font_size = 24
+title.bold = true
+title.x = 20
+title.y = 15
+title.width = 460
+title.height = 40
+
+subtitle = add a text titled "Small tasks, done daily."
+subtitle.x = 20
+subtitle.y = 55
+subtitle.width = 460
+subtitle.height = 25
+
+taskInput = add an input box titled "New task..."
+taskInput.x = 20
+taskInput.y = 95
+taskInput.width = 320
+taskInput.height = 40
+
+addBtn = add a button titled "Add"
+addBtn.x = 350
+addBtn.y = 95
+addBtn.width = 130
+addBtn.height = 40
+
+tasks = add a list
+tasks.x = 20
+tasks.y = 150
+tasks.width = 460
+tasks.height = 280
+
+countLabel = add a text titled "0 tasks"
+countLabel.x = 20
+countLabel.y = 440
+countLabel.width = 460
+countLabel.height = 30
+
+msg = add an output box
+msg.x = 20
+msg.y = 475
+msg.width = 460
+msg.height = 60
+msg.text = "Ready. Add your first task!"
+
+removeBtn = add a button titled "Remove First"
+removeBtn.x = 20
+removeBtn.y = 545
+removeBtn.width = 225
+removeBtn.height = 45
+
+clearBtn = add a button titled "Clear All"
+clearBtn.x = 255
+clearBtn.y = 545
+clearBtn.width = 225
+clearBtn.height = 45
+
+count = 0
+
+addBtn.on click {
+    if taskInput.text = "" {
+        msg.text = "Type a task first!"
+    } else {
+        tasks.add taskInput.text
+        count = count + 1
+        countLabel.text = "Tasks: " + count
+        msg.text = "Added: " + taskInput.text
+        taskInput.text = ""
+    }
+}
+
+removeBtn.on click {
+    if count <= 0 {
+        msg.text = "Nothing to remove."
+    } else {
+        tasks.remove 0
+        count = count - 1
+        countLabel.text = "Tasks: " + count
+        msg.text = "Removed oldest task."
+    }
+}
+
+clearBtn.on click {
+    tasks.clear
+    count = 0
+    countLabel.text = "0 tasks"
+    msg.text = "All clear. Fresh start!"
+}
+
+window.show

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example — Vexel 2.2.0</title>
+<meta name="description" content="Complete Vexel example program with explanation.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Vexel home"><span class="mark" aria-hidden="true">V</span>VEXEL <span class="ver">2.2.0</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation">☰</button>
+    <nav class="links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html" aria-current="page">Examples</a>
+      <a href="download.html">Download</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="search-btn" id="searchBtn" aria-label="Search the site"><span class="lbl">Search</span><kbd>/</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap read" id="exHost" style="padding-top:26px"></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark" aria-hidden="true">V</span>VEXEL</a>
+        <p style="color:var(--muted)">Build. Compile. Create.</p>
+        <p style="color:var(--faint);font-size:.9rem">Vexel 2.2.0 — a readable, compiled, UI-capable language.</p>
+      </div>
+      <div><h4>Learn</h4><ul><li><a href="learn.html">Course overview</a></li><li><a href="lesson.html?n=1">Lesson 1</a></li><li><a href="projects.html">Desktop Hub project</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="docs.html">Docs</a></li><li><a href="examples.html">Examples</a></li><li><a href="reference.html">Language index</a></li><li><a href="playground.html">Playground</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="download.html">Download</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="about.html">About</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>Current version: 2.2.0</span><span>Vexel source files use .vxl</span></div>
+  </div>
+</footer>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Search lessons, docs, examples…" aria-label="Search lessons, docs, examples" autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<script src="assets/js/highlight.js"></script>
+<script src="assets/js/lessons-1.js"></script>
+<script src="assets/js/lessons-2.js"></script>
+<script src="assets/js/lessons-3.js"></script>
+<script src="assets/js/lessons-4.js"></script>
+<script src="assets/js/lessons-5.js"></script>
+<script src="assets/js/lessons-6.js"></script>
+<script src="assets/js/lessons-7.js"></script>
+<script src="assets/js/docs.js"></script>
+<script src="assets/js/examples.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  function param(name) {
+    var m = new RegExp("[?&]" + name + "=([^&]*)").exec(location.search);
+    return m ? decodeURIComponent(m[1]) : "";
+  }
+  var host = document.getElementById("exHost");
+  var slug = param("e");
+  var X = window.EXAMPLES.filter(function (x) { return x.slug === slug; })[0];
+  if (!X) {
+    host.innerHTML = '<p class="eyebrow">Examples</p><h1>Example not found</h1><p>Browse all <a href="examples.html">examples</a>.</p>';
+    return;
+  }
+  document.title = X.title + " — Vexel Examples";
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  host.appendChild(el("p", "eyebrow", "Examples · " + X.level));
+  var h1 = el("h1", null, X.title);
+  h1.style.marginTop = "0";
+  host.appendChild(h1);
+  host.appendChild(el("p", "lead", X.desc));
+  var h2 = el("h2", null, "Complete code");
+  host.appendChild(h2);
+  var pre = document.createElement("pre");
+  pre.setAttribute("data-vxl", "");
+  pre.setAttribute("data-filename", X.slug + ".vxl");
+  pre.textContent = X.code;
+  host.appendChild(pre);
+  host.appendChild(el("h2", null, "How it works"));
+  var ul = el("ul", "checklist", "");
+  X.points.forEach(function (p) { ul.appendChild(el("li", null, p)); });
+  host.appendChild(ul);
+  var nav = el("div", "lesson-nav");
+  var idx = window.EXAMPLES.indexOf(X);
+  if (idx > 0) {
+    var prev = el("a", "btn ghost", "← " + window.EXAMPLES[idx - 1].title);
+    prev.href = "example.html?e=" + window.EXAMPLES[idx - 1].slug;
+    nav.appendChild(prev);
+  } else { nav.appendChild(el("span", null, "")); }
+  if (idx < window.EXAMPLES.length - 1) {
+    var next = el("a", "btn primary", window.EXAMPLES[idx + 1].title + " →");
+    next.href = "example.html?e=" + window.EXAMPLES[idx + 1].slug;
+    nav.appendChild(next);
+  }
+  host.appendChild(nav);
+  window.VexelEnhanceCode(host);
+})();
+</script>
+</body>
+</html>

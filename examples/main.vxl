@@ -1,0 +1,4 @@
+import entities/player
+
+print player.name
+player.greet

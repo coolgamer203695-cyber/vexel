@@ -1,0 +1,9 @@
+struct Player {
+    name
+    age
+}
+p = Player {
+    name = "Zen"
+    age = 25
+}
+print p.name

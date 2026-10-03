@@ -1,0 +1,919 @@
+// ============================================================
+// RE:BORN — A Vexel Isekai Adventure
+// 20 main quests, branching dialogue, 5 different endings.
+// Your choices (and your courage) decide the ending.
+// ============================================================
+
+// ---------------- PROLOGUE: Truck-kun ----------------
+struct Hero {
+    name
+    hp
+    gold
+    level
+}
+print "Episode 0: That Fateful Afternoon"
+print ""
+print "You step off the curb, phone in hand, when you hear it."
+print " tires... A horn... A roar..."
+print "TRUCK-KUN HAS STRUCK."
+print ""
+print "You wake on soft grass under two moons."
+print "???: Oh no. Not again. Um... welcome, otherworlder!"
+print "GODDESS LUMINA: I am Lumina. You died, sorry about that."
+print "GODDESS LUMINA: Rules are rules: I must send you to the realm of Aerthys."
+print "GODDESS LUMINA: But first, tell me your name, hero."
+print ""
+add input "Your name, hero?"
+set output = nm
+hero = Hero {
+    name = "Nameless"
+    hp = 100
+    gold = 50
+    level = 1
+}
+hero.name = nm
+print "GODDESS LUMINA: What a fine name!"
+print "GODDESS LUMINA: The letters of your name carry power."
+print length of hero.name
+print "GODDESS LUMINA: Choose one parting gift."
+print "  1 = Sunsteel Sword (strike +4)"
+print "  2 = Aegis Shield (start with 130 HP)"
+print "  3 = Merchant Tome (+100 gold)"
+add input "Gift (1-3)?"
+set output = gift
+bonus = 0
+if gift = "1" {
+    bonus = 4
+    print "You take the SUNSTEEL SWORD. It hums with dawn."
+} else if gift = "2" {
+    hero.hp = 130
+    print "You take the AEGIS SHIELD. You feel unbreakable."
+} else if gift = "3" {
+    hero.gold = hero.gold + 100
+    print "You take the MERCHANT TOME. Coins love you now."
+} else {
+    print "GODDESS LUMINA: Indecisive... take my blessing instead! (+2)"
+    bonus = 2
+}
+print "GODDESS LUMINA: Twenty trials await. The Demon Lord stirs."
+print "GODDESS LUMINA: Go, and do not die too fast this time!"
+print ""
+potions = 2
+ending = "none"
+tearRiver = false
+tearFlame = false
+tearStone = false
+mercy = false
+allies = 0
+party = ["You"]
+
+// ---------------- QUEST 1: Slime Meadows ----------------
+print "======================"
+print "QUEST 1: Slime Meadows"
+print "======================"
+print "You arrive in Aerthys. A green slime wobbles toward you."
+print "SLIME: Blorp... (it looks angry)"
+print "Time for your first battle! Strike (1) or Potion (2)?"
+foeHp = 25
+repeat till foeHp <= 0 or hero.hp <= 0 {
+    print "Slime HP: " + foeHp
+    print "Your HP: " + hero.hp
+    add input "Strike (1) or Potion (2)?"
+    set output = move
+    if move = "2" and potions > 0 {
+        potions = potions - 1
+        hero.hp = hero.hp + 25
+        print "You quaff a potion. Warmth spreads."
+    } else {
+        hit = r from 8 to 15
+        hit = hit + bonus
+        foeHp = foeHp - hit
+        print "You strike for " + hit
+    }
+    if foeHp > 0 {
+        claw = r from 3 to 7
+        hero.hp = hero.hp - claw
+        print "The slime bonks you for " + claw
+    }
+}
+if hero.hp <= 0 {
+    print "The slime absorbs you. A short isekai..."
+    print "ENDING: FALLEN on Quest 1."
+    ending = "fallen"
+}
+if ending = "none" {
+    print "Victory! The slime melts into goo and 30 gold."
+    hero.gold = hero.gold + 30
+    hero.level = hero.level + 1
+    print "You are now level " + hero.level
+}
+
+// ---------------- QUEST 2: Ember Village ----------------
+if ending = "none" {
+    print ""
+    print "======================"
+    print "QUEST 2: Ember Village"
+    print "======================"
+    print "Elder MARLA greets you at the gates."
+    print "MARLA: Rats eat our grain! Help us, hero?"
+    print "  1 = Help for free (kind)"
+    print "  2 = Demand 40 gold first"
+    add input "Help (1) or Demand (2)?"
+    set output = choice
+    if choice = "2" {
+        hero.gold = hero.gold + 40
+        print "MARLA sighs and pays. The villagers side-eye you."
+    } else {
+        print "MARLA: Bless you! The village will remember this."
+        allies = allies + 1
+    }
+    print "You descend into the cellar. Three giant rats hiss!"
+    foeHp = 30
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Rat swarm HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + 25
+            print "You quaff a potion."
+        } else {
+            hit = r from 8 to 15
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 3 to 8
+            hero.hp = hero.hp - claw
+            print "Rats nip you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "The rats feast. Ember Village mourns."
+        print "ENDING: FALLEN on Quest 2."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "Cellar cleared! MARLA pays 40 gold."
+        hero.gold = hero.gold + 40
+        print "Gold: " + hero.gold
+    }
+}
+// ---------------- QUEST 3: Whispering Forest ----------------
+if ending = "none" {
+    print ""
+    print "============================"
+    print "QUEST 3: Whispering Forest"
+    print "============================"
+    print "A crying boy runs up: his sister LIA is lost in the woods."
+    print "  1 = Search the deep woods (dangerous)"
+    print "  2 = Gather glow-herbs to light the paths (safe)"
+    add input "Search (1) or Herbs (2)?"
+    set output = choice
+    if choice = "1" {
+        print "You push into the dark. Wolves circle!"
+        foeHp = 35
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "Wolf pack HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + 25
+                print "You quaff a potion."
+            } else {
+                hit = r from 8 to 15
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 4 to 8
+                hero.hp = hero.hp - claw
+                print "Wolves bite you for " + claw
+            }
+        }
+        if hero.hp <= 0 {
+            print "The forest keeps you. LIA is never found."
+            print "ENDING: FALLEN on Quest 3."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "You find LIA hiding in a hollow tree!"
+            print "LIA: My brother will be so happy! Take my lucky charm."
+            hero.gold = hero.gold + 60
+            allies = allies + 1
+        }
+    } else {
+        print "You gather moonlit glow-herbs."
+        repeat 3 {
+            print "You pick glowing herbs. +1 potion brewed."
+            potions = potions + 1
+        }
+        print "Lanterns lit, the villagers find LIA at dawn."
+        print "Potions: " + potions
+        allies = allies + 1
+    }
+}
+
+// ---------------- QUEST 4: Goblin Ambush ----------------
+if ending = "none" {
+    print ""
+    print "=========================="
+    print "QUEST 4: Goblin Ambush"
+    print "=========================="
+    print "On the kingsroad, merchant DORF screams: goblins!"
+    foeHp = 40
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Goblin gang HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + 25
+            print "You quaff a potion."
+        } else {
+            hit = r from 8 to 15
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 4 to 9
+            hero.hp = hero.hp - claw
+            print "Goblins slash you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "The goblins loot your corpse. DORF flees."
+        print "ENDING: FALLEN on Quest 4."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "DORF: You saved my wagons! Take 70 gold!"
+        hero.gold = hero.gold + 70
+        print "DORF: Potions, get your potions! 20 gold each."
+        print "Your gold: " + hero.gold
+        print "  1 = Buy a potion (20 gold)"
+        print "  2 = Save your money"
+        add input "Buy (1) or Save (2)?"
+        set output = buy
+        if buy = "1" and hero.gold >= 20 {
+            hero.gold = hero.gold - 20
+            potions = potions + 1
+            print "Bought! Potions: " + potions
+        } else {
+            print "DORF: Suit yourself, hero."
+        }
+    }
+}
+
+// ---------------- QUEST 5: Guild Exam ----------------
+if ending = "none" {
+    print ""
+    print "========================"
+    print "QUEST 5: Guild Exam"
+    print "=========================="
+    print "At the Adventurers Guild, receptionist MIRA eyes you."
+    print "MIRA: To earn your Iron Rank, spar with the training dummy."
+    party.add "Mira"
+    print "MIRA joins your party! Members: " + party.length
+    banner = hero.name
+    make banner upper
+    print "The arena banner reads: " + banner
+    foeHp = 40
+    print "The dummy cannot fight back. Show your form!"
+    repeat till foeHp <= 0 {
+        add input "Strike (1)?"
+        set output = move
+        hit = r from 10 to 16
+        hit = hit + bonus
+        foeHp = foeHp - hit
+        print "You strike the dummy for " + hit
+    }
+    print "MIRA: Splendid footwork! IRON RANK granted."
+    hero.level = hero.level + 1
+    hero.hp = 100
+    print "You are now level " + hero.level + ". Wounds treated."
+}
+// ---------------- QUEST 6: Spirit of the River ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 6: Spirit of the River"
+    print "=================================="
+    print "The river runs black with factory sludge."
+    print "RIVER SPIRIT: My waters choke... will you help?"
+    print "  1 = Spend the day cleaning the banks"
+    print "  2 = Ignore her, push on to the capital"
+    add input "Help (1) or Ignore (2)?"
+    set output = choice
+    if choice = "1" {
+        print "You haul sludge till sunset. Fish leap again."
+        print "RIVER SPIRIT: Take my TEAR, kind soul."
+        tearRiver = true
+        hero.hp = 100
+        print "Her tear heals you fully."
+    } else {
+        print "You walk on. Behind you, the river weeps."
+    }
+}
+
+// ---------------- QUEST 7: Spirit of the Flame ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 7: Spirit of the Flame"
+    print "=================================="
+    print "A volcano roars. FLAME SPIRIT blazes with rage."
+    print "FLAME SPIRIT: WHO DARES CLIMB MY MOUNTAIN?"
+    print "  1 = Fight him honorably"
+    print "  2 = Sing the lullaby your mother taught you"
+    print "  3 = Mock his tiny sparks"
+    add input "Fight (1), Sing (2), Mock (3)?"
+    set output = choice
+    if choice = "3" {
+        print "FLAME SPIRIT: TINY? I WILL SHOW YOU TINY!"
+        foeHp = 45
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "Flame Spirit HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + 25
+                print "You quaff a potion."
+            } else {
+                hit = r from 8 to 15
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 5 to 10
+                hero.hp = hero.hp - claw
+                print "Flames scorch you for " + claw
+            }
+        }
+        if hero.hp <= 0 {
+            print "Ashes to ashes. The mountain forgets you."
+            print "ENDING: FALLEN on Quest 7."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "FLAME SPIRIT: ...Ha! Spirit! But no TEAR for mockers."
+        }
+    } else {
+        if choice = "1" {
+            print "You bow, draw steel, and spar for an hour."
+        } else {
+            print "Your lullaby echoes off the rocks. The flames soften."
+        }
+        print "FLAME SPIRIT: You have heart. Take my TEAR."
+        tearFlame = true
+        potions = potions + 1
+    }
+}
+
+// ---------------- QUEST 8: Spirit of the Stone ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 8: Spirit of the Stone"
+    print "=================================="
+    print "STONE SPIRIT: Answer, mortal, and earn my TEAR."
+    print "STONE SPIRIT: I speak without a mouth and hear without ears."
+    print "STONE SPIRIT: I have no body, but I come alive with wind."
+    print "STONE SPIRIT: What am I? (whisper it in lowercase)"
+    add input "Answer:"
+    set output = ans
+    if ans = "echo" or ans = "Echo" {
+        print "STONE SPIRIT: Correct. Take my TEAR."
+        tearStone = true
+    } else {
+        print "STONE SPIRIT: Wrong. The mountain dorms are closed to you."
+        print "Pebble golems pelt you as you leave!"
+        hero.hp = hero.hp - 10
+        print "Your HP: " + hero.hp
+        if hero.hp <= 0 {
+            print "Pelted to death by pebbles. Humiliating."
+            print "ENDING: FALLEN on Quest 8."
+            ending = "fallen"
+        }
+    }
+}
+// ---------------- QUEST 9: Haunted Mine ----------------
+if ending = "none" {
+    print ""
+    print "============================"
+    print "QUEST 9: Haunted Mine"
+    print "============================"
+    print "Miner BRAM begs for help: the dead walk the shafts."
+    print "BRAM: Save my crew and I will swing my hammer for you!"
+    foeHp = 55
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Wight horde HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + 25
+            print "You quaff a potion."
+        } else {
+            hit = r from 9 to 16
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 5 to 10
+            hero.hp = hero.hp - claw
+            print "Cold claws rake you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "You join the mine ghosts. BRAM weeps."
+        print "ENDING: FALLEN on Quest 9."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "The miners cheer! BRAM joins your party. +80 gold."
+        party.add "Bram"
+        hero.gold = hero.gold + 80
+        allies = allies + 1
+        print "Party members: " + party.length
+    }
+}
+
+// ---------------- QUEST 10: Tournament Arc ----------------
+if ending = "none" {
+    print ""
+    print "================================="
+    print "QUEST 10: Tournament Arc"
+    print "================================="
+    print "ANNOUNCER: Three bouts! Winner takes the Sun Cup!"
+    round = 1
+    repeat 3 {
+        print "--- Round " + round + " ---"
+        foeHp = 20 + round * 10
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "Foe HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + 25
+                print "You quaff a potion."
+            } else {
+                hit = r from 9 to 16
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 4 to 9
+                hero.hp = hero.hp - claw
+                print "You take " + claw + " damage"
+            }
+        }
+        if hero.hp <= 0 {
+            print "You fall in the arena sand. The crowd gasps."
+            print "ENDING: FALLEN on Quest 10."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "Round won! Priests heal you fully."
+            hero.hp = 100
+            round = round + 1
+        }
+    }
+    if ending = "none" {
+        print "ANNOUNCER: CHAMPION! The Sun Cup is yours! +120 gold."
+        hero.gold = hero.gold + 120
+        hero.level = hero.level + 1
+        print "You are now level " + hero.level
+    }
+}
+
+// ---------------- QUEST 11: Betrayal ----------------
+if ending = "none" {
+    print ""
+    print "=========================="
+    print "QUEST 11: Betrayal"
+    print "=========================="
+    print "At midnight, MIRA is caught selling your route to bandits!"
+    print "MIRA: They have my little brother! Forgive me!"
+    print "  1 = Forgive her (mercy)"
+    print "  2 = Banish her from the party"
+    add input "Forgive (1) or Banish (2)?"
+    set output = choice
+    if choice = "1" {
+        print "You forgive her. MIRA weeps and swears loyalty unto death."
+        mercy = true
+        allies = allies + 1
+        print "Her brother is rescued the next dawn."
+    } else {
+        print "MIRA leaves at dawn, head bowed. The party feels colder."
+        party.remove 1
+        print "Party members: " + party.length
+        print "Scout BRAM steps up: I will watch the trail now."
+    }
+}
+// ---------------- QUEST 12: Assault on the Capital ----------------
+if ending = "none" {
+    print ""
+    print "========================================="
+    print "QUEST 12: Assault on the Capital"
+    print "========================================="
+    print "Demon vanguard pours through the north pass!"
+    print "CAPTAIN: Hero! Hold the gate, or save the riverside folk?"
+    print "  1 = Hold the gate (battle)"
+    print "  2 = Save the people (no battle, more allies)"
+    add input "Gate (1) or People (2)?"
+    set output = choice
+    if choice = "1" {
+        print "You plant yourself before the gate, blade bared."
+        foeHp = 60
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "Siege Brute HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + 25
+                print "You quaff a potion."
+            } else {
+                hit = r from 9 to 16
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 5 to 11
+                hero.hp = hero.hp - claw
+                print "The brute smashes you for " + claw
+            }
+        }
+        if hero.hp <= 0 {
+            print "The gate holds... but you do not."
+            print "ENDING: FALLEN on Quest 12."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "The gate holds! The city roars your name. +100 gold."
+            hero.gold = hero.gold + 100
+            allies = allies + 1
+        }
+    } else {
+        print "You carry children from burning houses till dawn."
+        print "The riverside families swear their bows to you."
+        allies = allies + 2
+        hero.gold = hero.gold + 40
+        print "Grateful families press 40 gold on you."
+    }
+}
+
+// ---------------- QUEST 13: The Demon Town ----------------
+if ending = "none" {
+    print ""
+    print "=================================="
+    print "QUEST 13: The Demon Town"
+    print "=================================="
+    print "Disguised with horns from the costume shop, you enter KARZ."
+    print "SENTRY: Password, little imp?"
+    print "  1 = Nightshade blooms at midnight"
+    print "  2 = Uh... friendship?"
+    add input "Password (1-2)?"
+    set output = choice
+    if choice = "1" {
+        print "SENTRY: Correct. Move along."
+        print "You map the castle, steal battle plans, and lift 90 gold."
+        hero.gold = hero.gold + 90
+    } else {
+        print "SENTRY: FRIENDSHIP? Seize the spy!"
+        foeHp = 50
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "Patrol HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + 25
+                print "You quaff a potion."
+            } else {
+                hit = r from 9 to 16
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 5 to 10
+                hero.hp = hero.hp - claw
+                print "Halberds cut you for " + claw
+            }
+        }
+        if hero.hp <= 0 {
+            print "The cells of KARZ never open again."
+            print "ENDING: FALLEN on Quest 13."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "You escape over the wall with the plans. +50 gold."
+            hero.gold = hero.gold + 50
+        }
+    }
+}
+
+// ---------------- QUEST 14: The Offer ----------------
+if ending = "none" {
+    print ""
+    print "============================"
+    print "QUEST 14: The Offer"
+    print "============================"
+    print "In a dream of black glass, the DEMON LORD speaks."
+    print "DEMON LORD: Why bleed for ungrateful mortals?"
+    print "DEMON LORD: Kneel, and I will make you my SHADOW MONARCH."
+    print "  1 = KNEEL (power beyond measure)"
+    print "  2 = REFUSE (stay the course)"
+    add input "Kneel (1) or Refuse (2)?"
+    set output = choice
+    if choice = "1" {
+        print "Darkness pours into your veins. It feels... wonderful."
+        print "You raze the capital in a single night."
+        print "MIRA screams your name. You do not stop."
+        print "Centuries pass. Bards sing of the beautiful tyrant."
+        print "ENDING: SHADOW MONARCH. Power eternal, love never."
+        ending = "shadow"
+    } else {
+        print "You spit at his feet. The dream shatters like ice."
+        print "DEMON LORD: Then DIE with them, child of Lumina!"
+        print "His curse burns you for 20 HP."
+        hero.hp = hero.hp - 20
+        print "Your HP: " + hero.hp
+        if hero.hp <= 0 {
+            print "The curse was too much. Darkness takes you."
+            print "ENDING: FALLEN on Quest 14."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "But your resolve hardens into steel."
+            hero.level = hero.level + 1
+        }
+    }
+}
+// ---------------- QUEST 15: Sky Temple ----------------
+if ending = "none" {
+    print ""
+    print "=============================="
+    print "QUEST 15: Sky Temple"
+    print "=============================="
+    print "Above the clouds, the ORACLE waits between pillars of light."
+    print "ORACLE: One trial of wisdom. Answer true."
+    print "ORACLE: The more of me you take, the more you leave behind."
+    print "ORACLE: What am I? (whisper it in lowercase)"
+    add input "Answer:"
+    set output = ans
+    if ans = "footsteps" or ans = "Footsteps" {
+        print "ORACLE: Wisdom walks with you. Be blessed."
+        hero.level = hero.level + 1
+        hero.hp = 110
+        potions = potions + 2
+        print "Level " + hero.level + ". Potions: " + potions
+    } else {
+        print "ORACLE: Not quite. But effort earns bread."
+        hero.gold = hero.gold + 40
+        potions = potions + 1
+    }
+}
+
+// ---------------- QUEST 16: Dragon's Peak ----------------
+if ending = "none" {
+    print ""
+    print "================================="
+    print "QUEST 16: Dragon's Peak"
+    print "================================="
+    print "The wyrm VHEXAR coils around a mountain of gold."
+    print "VHEXAR: LITTLE KNIGHT. HAVE YOU COME TO STEAL OR TO TALK?"
+    foeHp = 80
+    repeat till foeHp <= 0 or hero.hp <= 0 {
+        print "Vhexar HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + 25
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 12
+            hero.hp = hero.hp - claw
+            print "Dragonfire burns you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Your saga ends in dragonfire. Bards will lie about it."
+        print "ENDING: FALLEN on Quest 16."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "VHEXAR kneels, bleeding starlight."
+        print "VHEXAR: FINISH IT... or show the mercy no knight ever has."
+        print "  1 = Slay the dragon (take the hoard)"
+        print "  2 = Spare the dragon (gain a friend)"
+        add input "Slay (1) or Spare (2)?"
+        set output = choice
+        if choice = "1" {
+            print "The hoard is yours. 150 gold!"
+            hero.gold = hero.gold + 150
+        } else {
+            print "VHEXAR: Then my wings are YOURS, little knight."
+            print "The dragon ally joins the final war."
+            mercy = true
+            allies = allies + 2
+        }
+    }
+}
+
+// ---------------- QUEST 17: War Council ----------------
+if ending = "none" {
+    print ""
+    print "=============================="
+    print "QUEST 17: War Council"
+    print "=============================="
+    print "Every ally you made gathers under one war-banner."
+    print "Allies sworn to you: " + allies
+    print "CAPTAIN: How do we strike the Demon Castle?"
+    print "  1 = Frontal assault (sharpen every blade: +3 strike)"
+    print "  2 = Siege engines (batter the Lord first: -20 his HP)"
+    print "  3 = Flanking tunnels (stock +2 potions)"
+    add input "Plan (1-3)?"
+    set output = plan
+    siege = false
+    if plan = "1" {
+        print "Hammers ring all night. Every blade bites deeper."
+        bonus = bonus + 3
+    } else if plan = "2" {
+        print "Trebuchets will open the battle. The Lord will bleed early."
+        siege = true
+    } else {
+        print "Smugglers pack your bags with red vials."
+        potions = potions + 2
+        print "Potions: " + potions
+    }
+    print "The army marches at dawn. Banners high."
+}
+// ---------------- QUEST 18: The Demon Lord ----------------
+if ending = "none" {
+    print ""
+    print "====================================="
+    print "QUEST 18: The Demon Lord"
+    print "====================================="
+    print "The black gates scream open. HE waits on a throne of swords."
+    print "DEMON LORD: COME, CHILD OF LUMINA. LET US FINISH THIS."
+    hero.hp = 140
+    print "Your heart steadies. HP restored to 140."
+    foeHp = 120
+    if siege {
+        foeHp = foeHp - 20
+        print "Trebuchet stones crash down! The Lord staggers."
+    }
+    print "--- Phase one: The Sword Storm ---"
+    repeat till foeHp <= 60 or hero.hp <= 0 {
+        print "Demon Lord HP: " + foeHp
+        add input "Strike (1) or Potion (2)?"
+        set output = move
+        if move = "2" and potions > 0 {
+            potions = potions - 1
+            hero.hp = hero.hp + 25
+            print "You quaff a potion."
+        } else {
+            hit = r from 10 to 17
+            hit = hit + bonus
+            foeHp = foeHp - hit
+            print "You strike for " + hit
+        }
+        if foeHp > 0 {
+            claw = r from 6 to 12
+            hero.hp = hero.hp - claw
+            print "Swords rain on you for " + claw
+        }
+    }
+    if hero.hp <= 0 {
+        print "Your light gutters out before the throne."
+        print "ENDING: FALLEN on Quest 18."
+        ending = "fallen"
+    }
+    if ending = "none" {
+        print "--- Phase two: The True Demon ---"
+        print "His crown cracks. WINGS OF NIGHT unfold."
+        repeat till foeHp <= 0 or hero.hp <= 0 {
+            print "True Demon HP: " + foeHp
+            add input "Strike (1) or Potion (2)?"
+            set output = move
+            if move = "2" and potions > 0 {
+                potions = potions - 1
+                hero.hp = hero.hp + 25
+                print "You quaff a potion."
+            } else {
+                hit = r from 10 to 17
+                hit = hit + bonus
+                foeHp = foeHp - hit
+                print "You strike for " + hit
+            }
+            if foeHp > 0 {
+                claw = r from 7 to 13
+                hero.hp = hero.hp - claw
+                print "Nightfire consumes you for " + claw
+            }
+        }
+        if hero.hp <= 0 {
+            print "So close. The night takes everything."
+            print "ENDING: FALLEN on Quest 18."
+            ending = "fallen"
+        }
+        if ending = "none" {
+            print "The Demon Lord falls to one knee, beaten at last."
+            hero.level = hero.level + 1
+        }
+    }
+}
+
+// ---------------- QUEST 19: The Choice ----------------
+if ending = "none" {
+    print ""
+    print "============================"
+    print "QUEST 19: The Choice"
+    print "============================"
+    print "LUMINA appears, weeping light."
+    print "LUMINA: The wound between worlds needs a seal. Three ways:"
+    print "  1 = Offer the three Goddess Tears (if you earned them)"
+    print "  2 = Offer your own life to seal him"
+    print "  3 = Walk away and let the worlds fend for themselves"
+    add input "Choose (1-3)?"
+    set output = choice
+    if choice = "1" and tearRiver and tearFlame and tearStone {
+        print "Three tears rise, singing. Dawn floods the castle."
+        ending = "dawn"
+    } else if choice = "3" {
+        print "You sheath your sword and walk into the grey morning."
+        ending = "wanderer"
+    } else {
+        if choice = "1" {
+            print "You hold out empty hands. The tears never came."
+            print "Then you offer the only thing you have: yourself."
+        } else {
+            print "You step forward and give your life for Aerthys."
+        }
+        ending = "guardian"
+    }
+}
+
+// ---------------- QUEST 20: Epilogue ----------------
+print ""
+print "=================="
+print "QUEST 20: Epilogue"
+print "=================="
+if ending = "dawn" {
+    print "DAWNBRINGER — THE TRUE ENDING"
+    print "The tears become three new moons."
+    print "No one must die. Not even him: the Demon Lord wakes, small and mortal,"
+    print "and LUMINA herself teaches him to farm turnips."
+    print "Statues of you hold hands across every plaza in Aerthys."
+}
+if ending = "guardian" {
+    print "GUARDIAN — ENDING"
+    print "Light seals the wound. Your sword stands in the seal stone."
+    print "Children leave flowers there every spring."
+    if mercy {
+        print "They say the forgiven ones guard it still."
+    }
+}
+if ending = "wanderer" {
+    print "WANDERER — ENDING"
+    print "You fish. You nap. You never pay tavern debts."
+    print "Sometimes, when the wind smells of smoke, you wonder."
+    print "The worlds survive. Probably. You never check."
+}
+if ending = "shadow" {
+    print "Thus the Shadow Monarch reigns. The end. (Truly.)"
+}
+if ending = "fallen" {
+    print "Thus the song ends early. Lumina files the paperwork."
+}
+if ending = "none" {
+    print "The tale frays here. The bards will improvise."
+}
+print ""
+print "--- Saga record ---"
+print "Name: " + hero.name
+print "Level: " + hero.level
+print "Gold: " + hero.gold
+print "Allies: " + allies
+print "Party members: " + party.length
+print "Thanks for playing RE:BORN!"

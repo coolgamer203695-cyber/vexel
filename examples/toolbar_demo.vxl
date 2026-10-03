@@ -1,0 +1,42 @@
+// Vexel 2.9: toolbars with buttons, separators,
+// labeled groups and keyboard shortcuts.
+create a window titled "Toolbar Demo"
+
+window.width = 640
+window.height = 200
+
+bar = add a toolbar
+bar.x = 0
+bar.y = 0
+bar.width = 640
+bar.height = 44
+
+save = bar.add a button titled "Save"
+save.shortcut = "Ctrl+S"
+
+bar.add separator
+
+grp = bar.add group "Edit"
+cut = grp.add a button titled "Cut"
+pasteBtn = grp.add a button titled "Paste"
+pasteBtn.shortcut = "Ctrl+V"
+
+status = add a text titled "ready"
+status.x = 20
+status.y = 70
+status.width = 600
+status.height = 30
+
+save.on click {
+    status.text = "saved!"
+}
+
+cut.on click {
+    status.text = "cut!"
+}
+
+pasteBtn.on click {
+    status.text = "pasted!"
+}
+
+window.show

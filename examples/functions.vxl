@@ -1,0 +1,18 @@
+function hello {
+    print "Hello World!"
+}
+hello
+function greet name {
+    print "Hello " + name
+}
+greet "Zen"
+function add a, b {
+    return a + b
+}
+result = add 10, 20
+print result
+function square x {
+    return x * x
+}
+number = square 5
+print number

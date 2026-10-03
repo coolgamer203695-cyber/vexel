@@ -1,0 +1,16 @@
+struct Player {
+    name
+    age
+    level
+}
+player = Player {
+    name = "Zen"
+    age = 25
+    level = 10
+}
+print "Player: " + player.name
+print player.age
+player.level = player.level + 1
+print player.level
+player.age = 26
+print player.age

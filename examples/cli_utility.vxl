@@ -1,0 +1,16 @@
+// Vexel 2.9: command-line arguments via args.
+// Run: vexel cli_utility.vxl Zen Developer
+if args.length = 0 {
+    print "Usage: vexel cli_utility.vxl <name> [title]"
+} else {
+    name = args[0]
+    print "Hello " + name
+    print "Args given:"
+    print args.length
+}
+
+i = 0
+repeat till i = args.length {
+    print args[i]
+    i = i + 1
+}

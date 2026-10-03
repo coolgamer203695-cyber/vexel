@@ -1,0 +1,4 @@
+add input "What is your name?"
+set output = x
+print x
+print "Hello " + x

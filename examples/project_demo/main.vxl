@@ -1,0 +1,12 @@
+// Vexel 2.9: project layout with modules and tests.
+// Run: vexel run (from project_demo/)
+// Check: vexel check
+// Test: vexel test
+import entities/player
+
+player.greet
+print player.name
+
+test "hero exists" {
+    assert player.name = "Zen"
+}

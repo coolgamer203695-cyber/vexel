@@ -1,0 +1,253 @@
+create a window titled "Vexel Calculator"
+
+window.width = 400
+window.height = 550
+
+display = add an output box
+
+display.x = 20
+display.y = 20
+display.width = 360
+display.height = 60
+
+seven = add a button titled "7"
+
+seven.x = 20
+seven.y = 100
+seven.width = 80
+seven.height = 60
+
+eight = add a button titled "8"
+
+eight.x = 110
+eight.y = 100
+eight.width = 80
+eight.height = 60
+
+nine = add a button titled "9"
+
+nine.x = 200
+nine.y = 100
+nine.width = 80
+nine.height = 60
+
+divide = add a button titled "/"
+
+divide.x = 290
+divide.y = 100
+divide.width = 80
+divide.height = 60
+
+four = add a button titled "4"
+
+four.x = 20
+four.y = 170
+four.width = 80
+four.height = 60
+
+five = add a button titled "5"
+
+five.x = 110
+five.y = 170
+five.width = 80
+five.height = 60
+
+six = add a button titled "6"
+
+six.x = 200
+six.y = 170
+six.width = 80
+six.height = 60
+
+multiply = add a button titled "*"
+
+multiply.x = 290
+multiply.y = 170
+multiply.width = 80
+multiply.height = 60
+
+one = add a button titled "1"
+
+one.x = 20
+one.y = 240
+one.width = 80
+one.height = 60
+
+two = add a button titled "2"
+
+two.x = 110
+two.y = 240
+two.width = 80
+two.height = 60
+
+three = add a button titled "3"
+
+three.x = 200
+three.y = 240
+three.width = 80
+three.height = 60
+
+subtract = add a button titled "-"
+
+subtract.x = 290
+subtract.y = 240
+subtract.width = 80
+subtract.height = 60
+
+zero = add a button titled "0"
+
+zero.x = 20
+zero.y = 310
+zero.width = 80
+zero.height = 60
+
+decimal = add a button titled "."
+
+decimal.x = 110
+decimal.y = 310
+decimal.width = 80
+decimal.height = 60
+
+equals = add a button titled "="
+
+equals.x = 200
+equals.y = 310
+equals.width = 80
+equals.height = 60
+
+plus = add a button titled "+"
+
+plus.x = 290
+plus.y = 310
+plus.width = 80
+plus.height = 60
+
+clearBtn = add a button titled "Clear"
+
+clearBtn.x = 20
+clearBtn.y = 380
+clearBtn.width = 350
+clearBtn.height = 50
+
+current = ""
+first = ""
+op = ""
+
+seven.on click {
+    current = current + "7"
+    display.text = current
+}
+
+eight.on click {
+    current = current + "8"
+    display.text = current
+}
+
+nine.on click {
+    current = current + "9"
+    display.text = current
+}
+
+four.on click {
+    current = current + "4"
+    display.text = current
+}
+
+five.on click {
+    current = current + "5"
+    display.text = current
+}
+
+six.on click {
+    current = current + "6"
+    display.text = current
+}
+
+one.on click {
+    current = current + "1"
+    display.text = current
+}
+
+two.on click {
+    current = current + "2"
+    display.text = current
+}
+
+three.on click {
+    current = current + "3"
+    display.text = current
+}
+
+zero.on click {
+    current = current + "0"
+    display.text = current
+}
+
+decimal.on click {
+    current = current + "."
+    display.text = current
+}
+
+plus.on click {
+    first = current
+    op = "+"
+    current = ""
+    display.text = ""
+}
+
+subtract.on click {
+    first = current
+    op = "-"
+    current = ""
+    display.text = ""
+}
+
+multiply.on click {
+    first = current
+    op = "*"
+    current = ""
+    display.text = ""
+}
+
+divide.on click {
+    first = current
+    op = "/"
+    current = ""
+    display.text = ""
+}
+
+equals.on click {
+    second = display.text
+    try {
+        f = number of first
+        s = number of second
+        if op = "+" {
+            result = f + s
+        } else if op = "-" {
+            result = f - s
+        } else if op = "*" {
+            result = f * s
+        } else if op = "/" {
+            if s = 0 {
+                result = "Cannot divide by zero"
+            } else {
+                result = f / s
+            }
+        } else {
+            result = s
+        }
+        display.text = result
+        current = display.text
+    } error {
+        display.text = error.message
+    }
+}
+
+clearBtn.on click {
+    display.text = ""
+    first = ""
+    op = ""
+    current = ""
+}
+
+window.show

@@ -1,0 +1,12 @@
+create a window titled "Ax HTTP"
+
+response = http get "https://example.com"
+
+display = add an output box
+display.x = 20
+display.y = 20
+display.width = 360
+display.height = 120
+display.text = response.status + " chars: " + response.text.length
+
+window.show

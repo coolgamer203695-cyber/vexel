@@ -1,0 +1,34 @@
+// Vexel 2.9: enums are strongly typed named values.
+enum State {
+    idle
+    running
+    finished
+}
+
+state = State.idle
+print state
+
+state = State.running
+
+if state = State.running {
+    print "Go!"
+}
+
+function isDone s {
+    return s = State.finished
+}
+
+print isDone State.finished
+print isDone state
+
+// Enums work in structs too.
+struct Job {
+    name
+    state
+}
+
+job = Job {
+    name = "build"
+    state = State.running
+}
+print job.name + " is " + job.state

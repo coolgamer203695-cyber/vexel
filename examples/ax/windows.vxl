@@ -1,0 +1,24 @@
+main = create a window titled "Ax Main"
+
+main.width = 600
+main.height = 400
+
+hello = add a button titled "Hi"
+hello.x = 20
+hello.y = 20
+hello.width = 120
+hello.height = 50
+
+settings = create a window titled "Ax Settings"
+
+settings.width = 400
+settings.height = 300
+
+opt = add a checkbox titled "Opt"
+opt.x = 20
+opt.y = 20
+opt.width = 120
+opt.height = 30
+
+main.show
+settings.show

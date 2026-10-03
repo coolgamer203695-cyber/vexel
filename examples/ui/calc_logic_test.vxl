@@ -1,0 +1,25 @@
+import calc/logic
+
+print logic.compute "7", "+", "8"
+print logic.compute "9.5", "-", "4"
+print logic.compute "6", "*", "7"
+print logic.compute "20", "/", "4"
+print logic.compute "5", "/", "0"
+print logic.compute "", "+", "1"
+print logic.compute "2", "?", "3"
+print logic.compute "10", "", "99"
+print logic.chopLast "hello"
+print logic.chopLast "5"
+print logic.chopLast ""
+print logic.toggleSign "5"
+print logic.toggleSign "-5"
+print logic.toggleSign ""
+print logic.toggleSign "0"
+print logic.appendDigit "0", "7", false
+print logic.appendDigit "12", "3", false
+print logic.appendDigit "12", "3", true
+print logic.appendDot "12", false
+print logic.appendDot "1.5", false
+print logic.appendDot "9", true
+print logic.backspace "123"
+print logic.backspace "5"

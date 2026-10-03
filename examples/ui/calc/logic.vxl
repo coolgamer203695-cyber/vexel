@@ -1,0 +1,96 @@
+// Shared calculator logic (pure functions — no UI here).
+// Used by calculator_app.vxl and by headless tests.
+
+public function compute a, op, b {
+    try {
+        x = number of a
+        y = number of b
+        if op = "+" {
+            out = x + y
+        } else if op = "-" {
+            out = x - y
+        } else if op = "*" {
+            out = x * y
+        } else if op = "/" {
+            if y = 0 {
+                out = "Cannot divide by zero"
+            } else {
+                out = x / y
+            }
+        } else {
+            out = y
+        }
+    } error {
+        out = error.message
+    }
+    return out
+}
+
+public function chopLast cur {
+    if cur = "" {
+        return ""
+    }
+    chopped = ""
+    i = 0
+    last = length of cur - 1
+    repeat till i = last {
+        chopped = chopped + [i] from cur
+        i = i + 1
+    }
+    return chopped
+}
+
+public function toggleSign cur {
+    if cur = "" {
+        return ""
+    }
+    if cur = "0" {
+        return "0"
+    }
+    if [0] from cur = "-" {
+        stripped = ""
+        i = 1
+        repeat till i = length of cur {
+            stripped = stripped + [i] from cur
+            i = i + 1
+        }
+        return stripped
+    } else {
+        return "-" + cur
+    }
+}
+
+public function appendDigit cur, digit, fresh {
+    if fresh {
+        return digit
+    }
+    if cur = "0" {
+        return digit
+    }
+    return cur + digit
+}
+
+public function appendDot cur, fresh {
+    if fresh {
+        return "0."
+    }
+    if cur = "" {
+        return "0."
+    }
+    i = 0
+    repeat till i = length of cur {
+        if [i] from cur = "." {
+            return cur
+        }
+        i = i + 1
+    }
+    return cur + "."
+}
+
+public function backspace cur {
+    chopped = chopLast cur
+    if chopped = "" {
+        return "0"
+    }
+    return chopped
+}

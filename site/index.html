@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vexel — Build. Create. Simplify.</title>
+<meta name="description" content="Vexel is a simple English-like programming language that compiles to native apps, including real desktop GUIs. Learn it, download it, build things.">
+<meta property="og:title" content="Vexel — Build. Create. Simplify.">
+<meta property="og:description" content="A simple programming language for building real things: console apps, GUI apps, games, tools.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f6feb'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='monospace'%3EV%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel2: #1c2330;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #9aa4b2;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --code-bg: #0a0d12;
+    --kw: #ff7b72;
+    --str: #a5d6ff;
+    --num: #79c0ff;
+    --com: #8b949e;
+    --bool: #d2a8ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header.hero {
+    padding: 64px 24px 48px;
+    text-align: center;
+    background: radial-gradient(ellipse 60% 90% at 50% 0%, #1c2a4a 0%, var(--bg) 70%);
+    border-bottom: 1px solid var(--border);
+  }
+  header.hero h1 { font-size: 3rem; margin: 0 0 8px; letter-spacing: -1px; }
+  header.hero h1 span { color: var(--accent); }
+  header.hero p { color: var(--muted); font-size: 1.15rem; max-width: 640px; margin: 0 auto 24px; }
+  .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: var(--panel);
+  }
+  .btn.primary { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+  .btn:hover { filter: brightness(1.15); }
+  nav.top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 0.95rem;
+  }
+  nav.top a { color: var(--muted); text-decoration: none; }
+  nav.top a:hover { color: var(--accent); }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
+  section { margin-bottom: 56px; }
+  h2 { font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  h3 { font-size: 1.25rem; margin-top: 32px; color: var(--accent); }
+  p, li { color: var(--text); }
+  .muted { color: var(--muted); }
+  pre.code {
+    position: relative;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    padding-top: 40px;
+    overflow-x: auto;
+    font-family: Consolas, "Cascadia Code", Menlo, monospace;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+  pre.code code { white-space: pre; }
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--panel2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .copy-btn:hover { color: var(--text); border-color: var(--accent); }
+  .tok-kw { color: var(--kw); }
+  .tok-str { color: var(--str); }
+  .tok-num { color: var(--num); }
+  .tok-com { color: var(--com); font-style: italic; }
+  .tok-bool { color: var(--bool); }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem; }
+  th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+  th { background: var(--panel); }
+  td code, p code, li code {
+    background: var(--panel2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: Consolas, monospace;
+    font-size: 0.88em;
+  }
+  .note {
+    border-left: 4px solid var(--orange);
+    background: var(--panel);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+  .tip {
+    border-left: 4px solid var(--green);
+    background: var(--panel);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+  details { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+  details summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+  ol.steps li { margin-bottom: 14px; }
+  footer { text-align: center; color: var(--muted); padding: 32px; border-top: 1px solid var(--border); font-size: 0.9rem; }
+  .toc { columns: 2; column-gap: 32px; }
+  .toc li { margin-bottom: 4px; }
+  @media (max-width: 600px) { header.hero h1 { font-size: 2.2rem; } .toc { columns: 1; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Vexel <span id="ver"></span></h1>
+  <p><strong>Build. Create. Simplify.</strong></p>
+  <p>A small, readable, English-like programming language that compiles to native executables — console apps and real desktop GUIs. No parentheses. No semicolons.</p>
+  <div class="btn-row">
+    <a class="btn primary" href="learn.html">Start Learning</a>
+    <a class="btn" href="download.html">Download Vexel</a>
+  </div>
+</header>
+
+<nav class="top">
+  <a href="learn.html">Learn</a>
+  <a href="docs.html">Docs</a>
+  <a href="examples.html">Examples</a>
+  <a href="download.html">Download</a>
+  <a href="#install">Install</a>
+  <a href="#start">Quick start</a>
+  <a href="#learn">Tutorial</a>
+  <a href="#exercises">Exercises</a>
+  <a href="#cheatsheet">Cheatsheet</a>
+  <a href="#faq">FAQ</a>
+</nav>
+
+<main>
+
+<section id="install">
+  <h2>Install Vexel</h2>
+  <p>You need two free tools first: <strong>Node.js 18+</strong> (runs the compiler) and <strong>rustc</strong> (builds native executables).</p>
+
+  <h3>Step 1 — Install Node.js</h3>
+  <p>Download the LTS version from <strong>nodejs.org</strong>, install it, then check:</p>
+  <pre class="code"><code>node --version</code></pre>
+
+  <h3>Step 2 — Install Rust</h3>
+  <p>On Windows, download and run <strong>rustup-init.exe</strong> from <strong>rustup.rs</strong> (accept the defaults). Then check:</p>
+  <pre class="code"><code>rustc --version</code></pre>
+  <p class="muted">macOS / Linux: <code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></p>
+
+  <h3>Step 3 — Get Vexel</h3>
+  <p>Copy the <code>vexel</code> folder onto your machine, e.g. <code>C:\Users\You\vexel</code>.</p>
+
+  <h3>Step 4 — Add Vexel to PATH (Windows)</h3>
+  <p>Run this in PowerShell (replace the path with your real one), then <strong>close and reopen the terminal</strong>:</p>
+  <pre class="code"><code>[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path","User") + ";C:\Users\You\vexel", "User")</code></pre>
+
+  <h3>Step 5 — Verify</h3>
+  <pre class="code"><code>vexel --version
+vexel --help</code></pre>
+  <div class="tip"><strong>Tip:</strong> if <code>vexel</code> is ever "not recognized", your terminal was opened before PATH changed — open a fresh one. As a fallback you can always run <code>node C:\path\to\vexel\bin\vexel.js ...</code></div>
+</section>
+
+<section id="start">
+  <h2>Quick start</h2>
+  <p>Create <code>hello.vxl</code>:</p>
+  <pre class="code"><code class="vex">print "Hello World!"</code></pre>
+  <p>Run it:</p>
+  <pre class="code"><code>vexel hello.vxl</code></pre>
+  <p>Expected output:</p>
+  <pre class="code"><code>Hello World!</code></pre>
+
+  <h3>Everyday commands</h3>
+  <table>
+    <tr><th>Command</th><th>What it does</th></tr>
+    <tr><td><code>vexel prog.vxl</code></td><td>Compile to a native executable and run it</td></tr>
+    <tr><td><code>vexel run prog.vxl</code></td><td>Same as above</td></tr>
+    <tr><td><code>vexel build prog.vxl</code></td><td>Compile only — produces <code>prog.exe</code> next to the source</td></tr>
+    <tr><td><code>vexel check prog.vxl</code></td><td>Type-check only, no compilation</td></tr>
+    <tr><td><code>vexel --version</code> / <code>--help</code></td><td>Version info / help</td></tr>
+  </table>
+</section>
+
+<section id="learn">
+  <h2>Tutorial</h2>
+  <p class="muted">On this page:</p>
+  <ul class="toc">
+    <li><a href="#t-comments">Comments &amp; print</a></li>
+    <li><a href="#t-vars">Variables &amp; types</a></li>
+    <li><a href="#t-arith">Arithmetic</a></li>
+    <li><a href="#t-if">Conditions</a></li>
+    <li><a href="#t-logic">Logic (and/or/not)</a></li>
+    <li><a href="#t-loops">Repeat loops</a></li>
+    <li><a href="#t-func">Functions</a></li>
+    <li><a href="#t-lists">Lists</a></li>
+    <li><a href="#t-strings">Strings</a></li>
+    <li><a href="#t-structs">Structs</a></li>
+    <li><a href="#t-input">Input &amp; random</a></li>
+    <li><a href="#t-errors">Error handling</a></li>
+    <li><a href="#t-modules">Modules</a></li>
+    <li><a href="#t-files">File reading</a></li>
+  </ul>
+
+  <h3 id="t-comments">Comments &amp; print</h3>
+  <p>Comments start with <code>//</code>. <code>print</code> takes no parentheses and no semicolon:</p>
+  <pre class="code"><code class="vex">// This is a comment
+print "Hello World!"
+name = "Zen"
+print name
+x = 10
+y = 20
+print x + y</code></pre>
+
+  <h3 id="t-vars">Variables &amp; types</h3>
+  <p>Just assign — the compiler infers <code>integer</code>, <code>decimal</code>, <code>boolean</code>, or <code>string</code>. Reassigning with a different type is a compile-time error.</p>
+  <pre class="code"><code class="vex">name = "Zen"
+age = 25
+ready = true
+price = 19.99
+age = "Zen"   // TypeError: cannot assign string to integer</code></pre>
+
+  <h3 id="t-arith">Arithmetic</h3>
+  <p><code>+ - * / %</code> with normal precedence (<code>()</code>, then <code>* / %</code>, then <code>+ -</code>). Division of integers gives a decimal.</p>
+  <pre class="code"><code class="vex">x = 10 + 5
+y = 20 * 3
+z = (100 - 20) / 4
+print z</code></pre>
+  <div class="note"><strong>Note:</strong> <code>print a / b</code> would be read as a <em>file path</em> (see <a href="#t-files">file reading</a>). Store division in a variable first, or write <code>print (a / b)</code>.</div>
+
+  <h3 id="t-if">Conditions</h3>
+  <pre class="code"><code class="vex">age = 18
+if age >= 18 {
+    print "Adult"
+} else if age >= 13 {
+    print "Teenager"
+} else {
+    print "Child"
+}</code></pre>
+  <p>Comparisons: <code>== != &gt; &lt; &gt;= &lt;=</code> (a single <code>=</code> also means equality inside conditions).</p>
+
+  <h3 id="t-logic">Logic</h3>
+  <p>English operators, precedence <code>not</code> &gt; <code>and</code> &gt; <code>or</code>:</p>
+  <pre class="code"><code class="vex">age = 20
+ready = true
+if age >= 18 and ready {
+    print "Allowed"
+}
+if not ready {
+    print "Not ready"
+}</code></pre>
+
+  <h3 id="t-loops">Repeat loops</h3>
+  <p>Vexel has no <code>for</code>/<code>while</code> — it has <code>repeat</code>:</p>
+  <pre class="code"><code class="vex">repeat 3 {
+    print "Vexel"
+}
+x = 0
+repeat till x = 3 {
+    print x
+    x = x + 1
+}</code></pre>
+
+  <h3 id="t-func">Functions</h3>
+  <p>No parentheses around parameters or arguments. Arguments must stay on the same line as the function name. Variables created inside a function stay inside it.</p>
+  <pre class="code"><code class="vex">function hello {
+    print "Hello World!"
+}
+hello
+function greet name {
+    print "Hello " + name
+}
+greet "Zen"
+function add a, b {
+    return a + b
+}
+result = add 10, 20
+print result</code></pre>
+  <div class="note"><strong>Note:</strong> for a negative argument use parens — <code>add (-5), 10</code> — because <code>a - b</code> is always subtraction.</div>
+
+  <h3 id="t-lists">Lists</h3>
+  <pre class="code"><code class="vex">names = ["Zen", "Alex", "John"]
+print names[0]
+names[1] = "Mike"
+names.add "Sarah"
+names.remove 0
+print names.length</code></pre>
+  <p>Bad indexes are safe runtime errors (catchable with <code>try/error</code>), never crashes.</p>
+
+  <h3 id="t-strings">Strings</h3>
+  <pre class="code"><code class="vex">name = "zen"
+print "Hello " + name
+print length of name
+print [0] from name
+make name upper
+print name
+make name lower
+print name</code></pre>
+
+  <h3 id="t-structs">Structs</h3>
+  <p>Type names start with an uppercase letter. Unknown fields are compile-time errors.</p>
+  <pre class="code"><code class="vex">struct Player {
+    name
+    age
+    level
+}
+hero = Player {
+    name = "Zen"
+    age = 25
+    level = 10
+}
+print hero.name
+hero.level = hero.level + 1
+print hero.level</code></pre>
+
+  <h3 id="t-input">Input &amp; random</h3>
+  <p>Input is always text — convert it with <code>number of</code> before doing math:</p>
+  <pre class="code"><code class="vex">add input "First number:"
+set output = first
+try {
+    a = number of first
+    print a + 1
+} error {
+    print error
+}
+roll = r from 1 to 6
+print roll</code></pre>
+
+  <h3 id="t-errors">Error handling</h3>
+  <pre class="code"><code class="vex">function divide a, b {
+    if b = 0 {
+        error "Cannot divide by zero"
+    }
+    return a / b
+}
+try {
+    print divide 10, 0
+} error {
+    print error
+}</code></pre>
+  <p>Inside the <code>error</code> block, <code>error</code> holds the message. Uncaught errors print to stderr and exit non-zero.</p>
+
+  <h3 id="t-modules">Modules</h3>
+  <p>A file is a module. <code>import</code> executes the module once and exposes only <code>public</code> names through the file's namespace:</p>
+  <pre class="code"><code class="vex">// entities/player.vxl
+public name = "Zen"
+public function greet {
+    print "Hello"
+}
+function secret {
+    print "Shh"
+}</code></pre>
+  <pre class="code"><code class="vex">// main.vxl (same folder as entities/)
+import entities/player
+print player.name
+player.greet
+// player.secret  -> VisibilityError: private</code></pre>
+
+  <h3 id="t-files">File reading</h3>
+  <p><code>print</code> with a path reads the file. <code>import</code> executes code; <code>print</code> only reads text.</p>
+  <pre class="code"><code class="vex">print data/info.txt
+try {
+    print data/missing.txt
+} error {
+    print error
+}</code></pre>
+</section>
+
+<section id="exercises">
+  <h2>Exercises (with solutions)</h2>
+  <p>Type each solution into a <code>.vxl</code> file and run it with <code>vexel file.vxl</code>.</p>
+
+  <details>
+    <summary>1 — Print your name and age from variables</summary>
+    <pre class="code"><code class="vex">name = "Ada"
+age = 36
+print name
+print age</code></pre>
+  </details>
+
+  <details>
+    <summary>2 — Even or odd: use % and if/else</summary>
+    <pre class="code"><code class="vex">n = 7
+if n % 2 == 0 {
+    print "even"
+} else {
+    print "odd"
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>3 — A square function plus a repeat loop</summary>
+    <pre class="code"><code class="vex">function square n {
+    return n * n
+}
+repeat 3 {
+    print square 4
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>4 — Guest list: add, remove, print the length</summary>
+    <pre class="code"><code class="vex">guests = ["Ada", "Bob"]
+guests.add "Cy"
+guests.remove 0
+print guests[0]
+print guests.length</code></pre>
+  </details>
+
+  <details>
+    <summary>5 — Player struct that levels up twice</summary>
+    <pre class="code"><code class="vex">struct Player {
+    name
+    level
+}
+hero = Player {
+    name = "Zen"
+    level = 1
+}
+repeat 2 {
+    hero.level = hero.level + 1
+}
+print hero.level</code></pre>
+  </details>
+
+  <details>
+    <summary>6 — Safe divide: function + try/error</summary>
+    <pre class="code"><code class="vex">function divide a, b {
+    if b = 0 {
+        error "Cannot divide by zero"
+    }
+    return a / b
+}
+try {
+    print divide 10, 0
+} error {
+    print error
+}</code></pre>
+  </details>
+</section>
+
+<section id="cheatsheet">
+  <h2>Cheatsheet</h2>
+  <table>
+    <tr><th>Task</th><th>Vexel</th></tr>
+    <tr><td>Print</td><td><code>print "Hi"</code> / <code>print x</code></td></tr>
+    <tr><td>Variables</td><td><code>age = 25</code></td></tr>
+    <tr><td>Arithmetic</td><td><code>+ - * / %</code>, parens for grouping</td></tr>
+    <tr><td>Compare</td><td><code>== != &gt; &lt; &gt;= &lt;=</code></td></tr>
+    <tr><td>Logic</td><td><code>and or not</code></td></tr>
+    <tr><td>Branch</td><td><code>if / else if / else</code> with <code>{ }</code></td></tr>
+    <tr><td>Loop</td><td><code>repeat 5 { }</code> / <code>repeat till x = 5 { }</code></td></tr>
+    <tr><td>Function</td><td><code>function add a, b { return a + b }</code>, call <code>add 2, 3</code></td></tr>
+    <tr><td>List</td><td><code>l = [1, 2]</code>, <code>l[0]</code>, <code>l.add 3</code>, <code>l.remove 0</code>, <code>l.length</code></td></tr>
+    <tr><td>String</td><td><code>length of s</code>, <code>[0] from s</code>, <code>make s upper</code></td></tr>
+    <tr><td>Convert</td><td><code>number of text</code></td></tr>
+    <tr><td>Input</td><td><code>add input "Name?"</code> then <code>set output = who</code></td></tr>
+    <tr><td>Random</td><td><code>r from 1 to 6</code></td></tr>
+    <tr><td>Struct</td><td><code>struct P { f }</code>, <code>p = P { f = 1 }</code>, <code>p.f</code></td></tr>
+    <tr><td>Module</td><td><code>import dir/file</code>, use <code>file.member</code>, share with <code>public</code></td></tr>
+    <tr><td>Errors</td><td><code>try { } error { }</code>, raise with <code>error "msg"</code></td></tr>
+    <tr><td>Files</td><td><code>print data/info.txt</code></td></tr>
+  </table>
+</section>
+
+<section id="faq">
+  <h2>FAQ &amp; limitations</h2>
+  <p><strong>Is Vexel interpreted?</strong> No. Your <code>.vxl</code> compiles through a real lexer, parser, AST, type checker, and Rust codegen into a native executable via <code>rustc</code>.</p>
+  <p><strong>Why "Cannot assign string to integer"?</strong> Types are inferred from the first assignment and then enforced. Use a new variable name instead.</p>
+  <p><strong>Why does <code>print a / b</code> fail?</strong> A <code>/</code> in print means "file path". Assign first (<code>x = a / b</code>) or use <code>print (a / b)</code>.</p>
+  <p><strong>How do I do math on input?</strong> Input is text — wrap it: <code>number of text</code> inside <code>try/error</code>.</p>
+  <p><strong>Current v0.1 limits:</strong> call arguments on one line; struct names Uppercase; <code>/</code> on integers gives decimal; no classes/threads/networking (by design).</p>
+</section>
+
+</main>
+
+<footer>
+  Vexel <span class="ver-foot"></span> — Build. Create. Simplify.<br>
+  Full reference: README.md and docs/ in the Vexel folder. Examples: examples/ folder.
+</footer>
+
+<script>
+// Tiny dependency-free Vexel highlighter + copy buttons.
+(function () {
+  try {
+    fetch('version.json').then(function (r) { return r.json(); }).then(function (j) {
+      if (j && j.version) {
+        document.getElementById('ver').textContent = 'v' + j.version;
+        var f = document.querySelector('.ver-foot');
+        if (f) f.textContent = 'v' + j.version;
+      }
+    }).catch(function () {});
+  } catch (e) {}
+  function highlight(code) {
+    var re = /(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|\b(\d+\.\d+|\d+)\b|\b(print|if|else|repeat|till|add|input|set|output|function|return|r|from|to|true|false|and|or|not|make|upper|lower|length|of|number|struct|import|public|try|error)\b/g;
+    var out = '';
+    var last = 0, m;
+    function esc(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    while ((m = re.exec(code)) !== null) {
+      out += esc(code.slice(last, m.index));
+      var tok = m[0];
+      if (m[1] !== undefined) out += '<span class="tok-com">' + esc(tok) + '</span>';
+      else if (m[2] !== undefined) out += '<span class="tok-str">' + esc(tok) + '</span>';
+      else if (m[3] !== undefined) out += '<span class="tok-num">' + esc(tok) + '</span>';
+      else if (tok === 'true' || tok === 'false') out += '<span class="tok-bool">' + esc(tok) + '</span>';
+      else out += '<span class="tok-kw">' + esc(tok) + '</span>';
+      last = m.index + tok.length;
+    }
+    out += esc(code.slice(last));
+    return out;
+  }
+
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    var code = pre.querySelector('code');
+    var text = code ? code.textContent : pre.textContent;
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.addEventListener('click', function () {
+      function done() { btn.textContent = 'Copied!'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+      } else { fallback(); }
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) { btn.textContent = 'Select manually'; }
+        document.body.removeChild(ta);
+      }
+    });
+    pre.appendChild(btn);
+    if (code && code.classList.contains('vex')) {
+      code.innerHTML = highlight(text);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

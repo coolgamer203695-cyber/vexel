@@ -1,0 +1,5 @@
+try {
+    print data/missing.txt
+} error {
+    print error
+}
